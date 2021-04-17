@@ -1,22 +1,20 @@
-import { useEffect } from "react"
-import { currentDomain } from "../config"
+import { useEffect } from "react";
+import { host } from "../config";
 
 export async function getServerSideProps() {
-	const res = await fetch(`${currentDomain}/hello`)
-	const data = await res.json()
+	const res = await fetch(`${host}/hello`);
+	const data = await res.json();
 	return {
 		props: {
-			data
-		}
-	}
+			data,
+		},
+	};
 }
 
 export default function Home({ data }) {
 	useEffect(() => {
-		document.documentElement.lang = "en"
-	}, [])
+		document.documentElement.lang = "en";
+	}, []);
 
-	return (
-		<h1>{data.message}</h1>
-	)
+	return <h1>{data.message}</h1>;
 }

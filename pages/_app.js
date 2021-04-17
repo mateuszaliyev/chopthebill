@@ -1,6 +1,6 @@
-import Head from "next/head"
+import Head from "next/head";
 
-import "../styles/globals.scss"
+import "../styles/globals.scss";
 
 function MyApp({ Component, pageProps }) {
 	return (
@@ -24,16 +24,13 @@ function MyApp({ Component, pageProps }) {
 				<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 				<meta name="description" content="Description" />
 				<meta name="keywords" content="Keywords" />
-				<meta
-					name="viewport"
-					content="width=device-width, initial-scale=1.0"
-				/>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<meta name="theme-color" content="#4ba0a5" />
 				<title>ChopTheBill</title>
 			</Head>
 			<Component {...pageProps} />
 		</>
-	)
+	);
 }
 
-export default MyApp
+export default MyApp;

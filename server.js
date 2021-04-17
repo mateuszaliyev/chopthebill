@@ -1,26 +1,26 @@
-const express = require("express")
-const next = require("next")
+const express = require("express");
+const next = require("next");
 
-const port = parseInt(process.env.PORT, 10) || 3000
-const dev = process.env.NODE_ENV !== "production"
-const app = next({ dev })
-const handle = app.getRequestHandler()
+const dev = process.env.NODE_ENV !== "production";
+const app = next({ dev });
+const handle = app.getRequestHandler();
 
 // Routes
 
-const exampleRoutes = require("./routes/exampleRoutes")
+const exampleRoutes = require("./routes/exampleRoutes");
 
 app.prepare().then(() => {
-	const server = express()
+	const port = parseInt(process.env.PORT, 10) || 3000;
+	const server = express();
 
-	server.use("/", exampleRoutes)
+	server.use("/", exampleRoutes);
 
 	server.all("*", (req, res) => {
-		return handle(req, res)
-	})
+		return handle(req, res);
+	});
 
 	server.listen(port, (err) => {
-		if (err) throw err
-		console.log(`> Ready on http://localhost:${port}`)
-	})
-})
+		if (err) throw err;
+		console.log(`> Ready on http://localhost:${port}`);
+	});
+});
