@@ -1,3 +1,5 @@
+import { appWithTranslation } from "next-i18next";
+
 import Head from "next/head";
 
 import "../styles/globals.scss";
@@ -33,4 +35,4 @@ function MyApp({ Component, pageProps }) {
 	);
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);
