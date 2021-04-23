@@ -7,13 +7,13 @@ const handle = app.getRequestHandler();
 
 // Routes
 
-const exampleRoutes = require("./routes/exampleRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 app.prepare().then(() => {
 	const port = parseInt(process.env.PORT, 10) || 3000;
 	const server = express();
 
-	server.use("/", exampleRoutes);
+	server.use("/", authRoutes);
 
 	server.all("*", (req, res) => {
 		return handle(req, res);
