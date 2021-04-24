@@ -3,11 +3,21 @@ import { host } from "../../config";
 import Button from "@material-ui/core/Button";
 import { FormControl } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
+import { useTranslation } from "next-i18next";
+
+const useStyles = makeStyles({
+	margin: {
+		marginTop: "1rem",
+	},
+});
 
 function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	const { t } = useTranslation("auth");
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -24,32 +34,40 @@ function LoginForm() {
 		// });
 	};
 
+	const classes = useStyles();
+
 	return (
 		<form onSubmit={handleSubmit} autoComplete="off">
-			<FormControl>
+			<FormControl fullWidth>
 				<TextField
 					id="email"
 					label="Email"
 					variant="filled"
 					type="email"
 					onChange={(e) => setEmail(e.target.value)}
+					className={classes.margin}
 				/>
 
 				<TextField
 					id="password"
-					label="Password"
+					label={t("password")}
 					variant="filled"
 					type="password"
 					onChange={(e) => setPassword(e.target.value)}
+					className={classes.margin}
 				/>
-				<br />
-				<Button variant="contained" type="submit">
-					Zaloguj się
+
+				<Button variant="contained" type="submit" className={classes.margin}>
+					{t("login")}
 				</Button>
-				<br />
-				<Link href="/">Zapomniałeś hasła?</Link>
-				<br />
-				<Link href="/">Nie masz konta? Zarejestruj się!</Link>
+
+				<Link href="/" className={classes.margin}>
+					{t("forgot-password")}
+				</Link>
+
+				<Link href="/register" className={classes.margin}>
+					{t("have-no-account")}
+				</Link>
 			</FormControl>
 		</form>
 	);
