@@ -16,7 +16,7 @@ export default function Home({ data }) {
 
 	return (
 		<>
-			<h2>{t("hello-world")}</h2>
+			<h1>Hello world</h1>
 		</>
 	);
 }

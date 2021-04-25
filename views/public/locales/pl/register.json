@@ -1,0 +1,13 @@
+{
+	"email-invalid": "Podany adres email jest nieprawidłowy",
+	"email-taken": "Użytkownik o podanym adresie email już istnieje",
+	"exclusion": "To ustawienie nie może być zaznaczone bez wprowadzenia nazwy użytkownika",
+	"internal-server-error": "Wewnętrzny Błąd Serwera",
+	"have-an-account": "Masz już konto? Zaloguj się",
+	"hide-email": "Ukryj mój adres e-mail",
+	"password-invalid": "Hasło musi zawierać małą literę, wielką literę, cyfrę oraz składać się z min. 6 znaków",
+	"register": "Zarejestruj się",
+	"username-invalid": "Nazwa użytkownika musi składać się tylko z liter i cyfr",
+	"username-length-invalid": "Nazwa użytkownika musi zawierać od 3 do 63 znaków",
+	"username-taken": "Konto z o podanej nazwie użytkownika już istnieje"
+}

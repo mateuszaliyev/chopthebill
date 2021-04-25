@@ -1,0 +1,13 @@
+{
+	"email-invalid": "This email address is invalid",
+	"email-taken": "An account with this email address already exists",
+	"exclusion": "This setting cannot be checked while the username is empty",
+	"have-an-account": "Already have an account? Log in",
+	"hide-email": "Hide my email address",
+	"internal-server-error": "Internal Server Error",
+	"password-invalid": "Password must contain a lowercase letter, an uppercase letter, a digit and be at least 6 characters long",
+	"register": "Register",
+	"username-invalid": "Username must contain only letters and numbers",
+	"username-length-invalid": "Username must be between 3 and 63 characters long",
+	"username-taken": "An account with this username already exists"
+}
