@@ -4,7 +4,7 @@ Aplikacja internetowa do łatwego podziału kosztów między ludźmi.
 Stworzona w ramach łączonego projektu kierunków Zarządzania oraz Informatyki Politechniki Rzeszowskiej im. Ignacego Łukasiewicza.
 
 ## Sposób użycia
-Aplikacja wymaga instalacji [Node.js](https://nodejs.org/) oraz [npm](https://www.npmjs.com/).
+Aplikacja wymaga instalacji [Node.js](https://nodejs.org/), [npm](https://www.npmjs.com/) oraz [PostgreSQL](https://www.postgresql.org/).
 
 ### Pobieranie
 
@@ -30,28 +30,68 @@ npm install
 npm i
 ```
 
+### Import bazy danych
+
+Korzystając z wiersza poleceń lub narzędzia [pgAdmin 4](https://www.pgadmin.org/) dostępnego po instalacji PostgreSQL należy utworzyć bazę danych.
+
+Przykładowy skrypt SQL tworzący bazę danych.
+
+```sql
+CREATE DATABASE chopthebill
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+```
+
+Import danych z pliku `data/db.sql` odbywa się poprzez polecenie `psql`. Po wykonaniu komendy może być konieczne wprowadzenie hasła dla podanego użytkownika.
+
+```
+psql -U <nazwa_uzytkownika> -d <nazwa_bazy_danych> < <sciezka_do_pliku>
+```
+
+Przykład dla wiersza poleceń systemów z rodziny Windows.
+
+```
+psql -U postgres -d chopthebill < C:\dev\P01-G01-ChopTheBill\data\db
+```
+
+### Zmienne środowiskowe
+
+Aplikacja do nawiązania połączenia z bazą danych PostgreSQL wymaga utworzenia pliku `.env` w katalogu głównym projektu oraz wprowadzenia zmiennych środowiskowych.
+
+- `PGHOST` - nazwa hosta, z którym aplikacja nawiązuje połączenie,
+- `PGUSER` - nazwa użytkownika PostgreSQL (domyślnie `postgres`),
+- `PGDATABASE` - nazwa bazy danych,
+- `PGPASSWORD` - hasło użytkownika `PGUSER`,
+- `PGPORT` - port, na którym można połączyć się z hostem.
+
+Przykładowa zawartość pliku `.env`.
+
+```
+PGHOST='localhost'
+PGUSER=postgres
+PGDATABASE=chopthebill
+PGPASSWORD=postgres
+PGPORT=5432
+```
+
 ### Uruchamianie
 
 Uruchomienie aplikacji w trybie *"development"*, zoptymalizowanym do edycji kodu (z automatycznym odświeżaniem strony po zapisaniu wprowadzonych zmian, wyświetlaniem błędów, etc.).
 
-```bash
+```
 npm run dev
 ```
 
 Tworzenie zoptymalizowanej wersji aplikacji do trybu *"production"*.
 
-```bash
+```
 npm run build
 ```
 
 Uruchomienie aplikacji w trybie *"production"*. Aplikacja powinna być najpierw zoptymalizowana za pomocą polecenia `npm run build`.
 
-```bash
+```
 npm run start
-```
-
-Aplikacja domyślnie uruchamia się pod adresem [localhost](http://localhost:3000) na porcie 3000. Aby zmienić port należy utworzyć plik `.env.local` w katalogu głównym projektu oraz przypisać wybraną wartość zmiennej środowiskowej `PORT` (poniżej przykład dla portu 8080).
-
-```
-PORT=8080
 ```
