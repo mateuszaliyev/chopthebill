@@ -17,7 +17,7 @@ function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const { t } = useTranslation("auth");
+	const { t } = useTranslation(["common", "login"]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -58,15 +58,15 @@ function LoginForm() {
 				/>
 
 				<Button variant="contained" type="submit" className={classes.margin}>
-					{t("login")}
+					{t("login:login")}
 				</Button>
 
 				<Link href="/" className={classes.margin}>
-					{t("forgot-password")}
+					{t("login:forgot-password")}
 				</Link>
 
 				<Link href="/register" className={classes.margin}>
-					{t("have-no-account")}
+					{t("login:have-no-account")}
 				</Link>
 			</FormControl>
 		</form>

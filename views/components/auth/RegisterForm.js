@@ -6,8 +6,10 @@ import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { makeStyles } from "@material-ui/core/styles";
-import Link from "@material-ui/core/Link";
+import Link from "next/link";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles({
 	margin: {
@@ -20,15 +22,24 @@ function RegisterForm() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [hideEmail, setHideEmail] = useState(false);
+	const [fieldsHelper, setFieldsHelper] = useState({
+		email: "",
+		username: "",
+		password: "",
+		hideEmail: "",
+	});
 
-	const { t } = useTranslation("auth");
+	const router = useRouter();
 
-	const handleSubmit = (e) => {
+	const { t } = useTranslation(["common", "register"]);
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		console.log(email, username, password, hideEmail);
-		fetch(`${host}/register`, {
+		const res = await fetch(`${host}/register`, {
 			method: "POST",
 			headers: {
+				Accept: "application/json",
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
@@ -36,8 +47,40 @@ function RegisterForm() {
 				username,
 				password,
 				hideEmail,
+				language: router.locale,
+				theme: "dark",
 			}),
 		});
+		const issues = await res.json();
+
+		if (issues.length > 0) {
+			const newFieldsHelper = {
+				email: "",
+				username: "",
+				password: "",
+				hideEmail: "",
+			};
+			issues.forEach((issue) => {
+				if (issue.indexOf("email") !== -1) {
+					newFieldsHelper.email += t(`register:${issue}`) + ". ";
+				}
+
+				if (issue.indexOf("username") !== -1) {
+					newFieldsHelper.username += t(`register:${issue}`) + ". ";
+				}
+
+				if (issue.indexOf("password") !== -1) {
+					newFieldsHelper.password += t(`register:${issue}`) + ". ";
+				}
+
+				if (issue.indexOf("exclusion") !== -1) {
+					newFieldsHelper.hideEmail += t(`register:${issue}`) + ". ";
+				}
+			});
+			setFieldsHelper(newFieldsHelper);
+		} else {
+			router.push("/login");
+		}
 	};
 
 	const classes = useStyles();
@@ -53,6 +96,8 @@ function RegisterForm() {
 					onChange={(e) => setEmail(e.target.value)}
 					fullWidth
 					className={classes.margin}
+					helperText={fieldsHelper.email}
+					error={fieldsHelper.email.length > 0}
 				/>
 
 				<TextField
@@ -63,6 +108,8 @@ function RegisterForm() {
 					onChange={(e) => setUsername(e.target.value)}
 					fullWidth
 					className={classes.margin}
+					helperText={fieldsHelper.username}
+					error={fieldsHelper.username.length > 0}
 				/>
 
 				<TextField
@@ -73,26 +120,33 @@ function RegisterForm() {
 					onChange={(e) => setPassword(e.target.value)}
 					fullWidth
 					className={classes.margin}
+					helperText={fieldsHelper.password}
+					error={fieldsHelper.password.length > 0}
 				/>
 
-				<FormControlLabel
-					control={
-						<Checkbox
-							id="hide-email"
-							checked={hideEmail}
-							onChange={(e) => setHideEmail(!hideEmail)}
-						/>
-					}
-					label={t("hide-email")}
-				/>
+				<FormControl error={fieldsHelper.hideEmail.length > 0}>
+					<FormControlLabel
+						control={
+							<Checkbox
+								id="hide-email"
+								checked={hideEmail}
+								onChange={(e) => setHideEmail(!hideEmail)}
+							/>
+						}
+						label={t("register:hide-email")}
+					/>
+					<FormHelperText>{fieldsHelper.hideEmail}</FormHelperText>
+				</FormControl>
 
 				<Button variant="contained" type="submit" size="large">
 					{t("register")}
 				</Button>
 
-				<Link href="/login" className={classes.margin}>
-					{t("have-an-account")}
-				</Link>
+				<div className="auth-link">
+					<Link href="/login">
+						<a>{t("register:have-an-account")}</a>
+					</Link>
+				</div>
 			</FormControl>
 		</form>
 	);
