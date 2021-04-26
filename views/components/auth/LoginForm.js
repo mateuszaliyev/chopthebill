@@ -1,9 +1,10 @@
 // React & Next
 import { useState } from "react";
+import Link from "next/link";
 import { useTranslation } from "next-i18next";
 
 // Material UI
-import { Button, FormControl, Link, TextField } from "@material-ui/core";
+import { Button, FormControl, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 // Config
@@ -63,13 +64,17 @@ function LoginForm() {
 					{t("login:login")}
 				</Button>
 
-				<Link href="/" className={classes.margin}>
-					{t("login:forgot-password")}
-				</Link>
+				<div className="auth-link">
+					<Link href="/">
+						<a>{t("login:forgot-password")}</a>
+					</Link>
+				</div>
 
-				<Link href="/register" className={classes.margin}>
-					{t("login:have-no-account")}
-				</Link>
+				<div className="auth-link">
+					<Link href="/register">
+						<a>{t("login:have-no-account")}</a>
+					</Link>
+				</div>
 			</FormControl>
 		</form>
 	);
