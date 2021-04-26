@@ -1,5 +1,8 @@
-import LoginForm from "../components/auth/LoginForm";
+// React & Next
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+// Components
+import LoginForm from "../components/auth/LoginForm";
 
 export async function getServerSideProps({ locale }) {
 	return {

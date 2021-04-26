@@ -1,6 +1,11 @@
-const { db } = require("../config/db");
-const { registerValidate } = require("../utils/authValidate");
+// Bcrypt
 const bcrypt = require("bcrypt");
+
+// Config
+const { db } = require("../config/db");
+
+// Validation
+const { registerValidate } = require("../utils/authValidate");
 
 async function register(req, res) {
 	try {

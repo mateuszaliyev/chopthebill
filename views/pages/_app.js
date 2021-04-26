@@ -1,7 +1,8 @@
+// React & Next
+import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 
-import Head from "next/head";
-
+// Styles
 import "../styles/globals.scss";
 
 function MyApp({ Component, pageProps }) {

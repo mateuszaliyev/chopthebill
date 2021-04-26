@@ -1,5 +1,8 @@
+// React & Next
 import React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
+
+// Material UI
 import { ServerStyleSheets } from "@material-ui/core/styles";
 
 export default class MyDocument extends Document {
@@ -21,6 +24,7 @@ export default class MyDocument extends Document {
 	}
 }
 
+// Injecting server-side rendered styles into <head> element
 MyDocument.getInitialProps = async (ctx) => {
 	const sheets = new ServerStyleSheets();
 	const originalRenderPage = ctx.renderPage;

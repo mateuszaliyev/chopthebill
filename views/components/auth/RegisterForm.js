@@ -1,15 +1,22 @@
+// React & Next
 import { useState } from "react";
-import { host } from "../../config";
-import Button from "@material-ui/core/Button";
-import { FormControl } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
-import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import { useTranslation } from "next-i18next";
+
+// Material UI
+import {
+	Button,
+	Checkbox,
+	FormControl,
+	FormControlLabel,
+	FormHelperText,
+	TextField,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+// Config
+import { host } from "../../config";
 
 const useStyles = makeStyles({
 	margin: {

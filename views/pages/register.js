@@ -1,5 +1,8 @@
-import RegisterForm from "../components/auth/RegisterForm";
+// React & Next
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+// Components
+import RegisterForm from "../components/auth/RegisterForm";
 
 export async function getServerSideProps({ locale }) {
 	return {

@@ -1,4 +1,7 @@
+// internationalization
 const { i18n } = require("./next-i18next.config");
+
+// Progressive Web App
 const withPWA = require("next-pwa");
 const runtimeCaching = require("next-pwa/cache");
 

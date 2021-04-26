@@ -1,3 +1,4 @@
+// Validator
 const validator = require("validator");
 
 function registerValidate({
