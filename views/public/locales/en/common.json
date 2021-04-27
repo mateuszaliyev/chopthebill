@@ -1,4 +1,9 @@
 {
-	"username": "Username",
-	"password": "Password"
+	"en": "English",
+	"language": "Language",
+	"login": "Login",
+	"password": "Password",
+	"pl": "Polish",
+	"register": "Register",
+	"username": "Username"
 }

@@ -60,7 +60,12 @@ function LoginForm() {
 					className={classes.margin}
 				/>
 
-				<Button variant="contained" type="submit" className={classes.margin}>
+				<Button
+					className={classes.margin}
+					color="primary"
+					type="submit"
+					variant="contained"
+				>
 					{t("login:login")}
 				</Button>
 

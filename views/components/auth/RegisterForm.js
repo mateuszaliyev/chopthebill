@@ -145,7 +145,7 @@ function RegisterForm() {
 					<FormHelperText>{fieldsHelper.hideEmail}</FormHelperText>
 				</FormControl>
 
-				<Button variant="contained" type="submit" size="large">
+				<Button color="primary" size="large" type="submit" variant="contained">
 					{t("register:register")}
 				</Button>
 

@@ -4,6 +4,15 @@
 	box-sizing: border-box;
 }
 
+.a-clear {
+	color: inherit;
+	text-decoration: none;
+
+	&:visited {
+		color: inherit;
+	}
+}
+
 body {
 	font-family: "Roboto", sans-serif;
 	margin: 0;
