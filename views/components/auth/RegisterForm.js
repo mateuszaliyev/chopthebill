@@ -146,7 +146,7 @@ function RegisterForm() {
 				</FormControl>
 
 				<Button variant="contained" type="submit" size="large">
-					{t("register")}
+					{t("register:register")}
 				</Button>
 
 				<div className="auth-link">
