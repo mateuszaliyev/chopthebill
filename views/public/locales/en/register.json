@@ -5,6 +5,7 @@
 	"have-an-account": "Already have an account? Log in",
 	"hide-email": "Hide my email address",
 	"internal-server-error": "Internal Server Error",
+	"meta-title": "Register",
 	"password-invalid": "Password must contain a lowercase letter, an uppercase letter, a digit and be at least 6 characters long",
 	"register": "Register",
 	"username-invalid": "Username must contain only letters and numbers",

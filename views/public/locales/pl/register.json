@@ -5,6 +5,7 @@
 	"internal-server-error": "Wewnętrzny Błąd Serwera",
 	"have-an-account": "Masz już konto? Zaloguj się",
 	"hide-email": "Ukryj mój adres e-mail",
+	"meta-title": "Rejestracja",
 	"password-invalid": "Hasło musi zawierać małą literę, wielką literę, cyfrę oraz składać się z min. 6 znaków",
 	"register": "Zarejestruj się",
 	"username-invalid": "Nazwa użytkownika musi składać się tylko z liter i cyfr",

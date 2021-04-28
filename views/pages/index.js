@@ -8,6 +8,7 @@ import { Button } from "@material-ui/core";
 
 // Components
 import Language from "../components/Language";
+import Meta from "../components/Meta";
 
 export async function getServerSideProps({ locale }) {
 	return {
@@ -22,6 +23,7 @@ export default function Home({ data }) {
 
 	return (
 		<>
+			<Meta title={t("meta-title")} />
 			<Language />
 			<Link href="/login">
 				<Button color="primary" variant="outlined">
