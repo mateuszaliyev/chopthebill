@@ -1,6 +1,5 @@
 // React & Next
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
@@ -14,6 +13,9 @@ import {
 	TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+// Components
+import Link from "../Link";
 
 // Config
 import { host } from "../../config";
@@ -149,11 +151,7 @@ function RegisterForm() {
 					{t("register:register")}
 				</Button>
 
-				<div className="auth-link">
-					<Link href="/login">
-						<a>{t("register:have-an-account")}</a>
-					</Link>
-				</div>
+				<Link href="/login">{t("register:have-an-account")}</Link>
 			</FormControl>
 		</form>
 	);
