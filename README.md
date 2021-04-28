@@ -53,7 +53,7 @@ psql -U <nazwa_uzytkownika> -d <nazwa_bazy_danych> < <sciezka_do_pliku>
 Przykład dla wiersza poleceń systemów z rodziny Windows.
 
 ```
-psql -U postgres -d chopthebill < C:\dev\P01-G01-ChopTheBill\data\db
+psql -U postgres -d chopthebill < C:\dev\P01-G01-ChopTheBill\data\db.sql
 ```
 
 ### Zmienne środowiskowe
