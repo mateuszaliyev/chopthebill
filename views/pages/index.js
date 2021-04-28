@@ -18,7 +18,7 @@ export async function getServerSideProps({ locale }) {
 	};
 }
 
-export default function Home({ data }) {
+export default function Home() {
 	const { t } = useTranslation("common");
 
 	return (
@@ -35,6 +35,7 @@ export default function Home({ data }) {
 					{t("register")}
 				</Button>
 			</Link>
+			<Link href="/dashboard">Dashboard</Link>
 		</>
 	);
 }
