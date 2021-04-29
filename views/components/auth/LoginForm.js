@@ -1,5 +1,6 @@
 // React & Next
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 // Material UI
@@ -12,6 +13,9 @@ import Link from "../Link";
 // Config
 import { host } from "../../config";
 
+// Context
+import { JWTContext } from "../../pages/_app";
+
 const useStyles = makeStyles({
 	margin: {
 		marginTop: "1rem",
@@ -21,22 +25,38 @@ const useStyles = makeStyles({
 function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [fieldsHelper, setFieldsHelper] = useState("");
+	const jwt = useContext(JWTContext);
 
 	const { t } = useTranslation(["common", "login"]);
+	const router = useRouter();
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(email, password);
-		// fetch(`${host}/login`, {
-		// 	method: "POST",
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 	},
-		// 	body: JSON.stringify({
-		// 		email,
-		// 		password,
-		// 	}),
-		// });
+		const res = await fetch(`${host}/login`, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				email,
+				password,
+			}),
+		});
+		const { accessToken, refreshToken, error } = await res.json();
+		if (error === "internal-server-error") {
+			router.push("/500");
+			return;
+		}
+
+		if (error === "login-data-invalid") {
+			setFieldsHelper(t(`login:${error}`));
+		} else {
+			jwt.setAccessToken(accessToken);
+			jwt.setRefreshToken(refreshToken);
+			router.push("/dashboard");
+		}
 	};
 
 	const classes = useStyles();
@@ -51,6 +71,7 @@ function LoginForm() {
 					type="email"
 					onChange={(e) => setEmail(e.target.value)}
 					className={classes.margin}
+					error={Boolean(fieldsHelper)}
 				/>
 
 				<TextField
@@ -60,6 +81,8 @@ function LoginForm() {
 					type="password"
 					onChange={(e) => setPassword(e.target.value)}
 					className={classes.margin}
+					helperText={fieldsHelper}
+					error={Boolean(fieldsHelper)}
 				/>
 
 				<Button

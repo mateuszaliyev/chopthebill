@@ -1,6 +1,7 @@
 {
-	"login": "Zaloguj się",
 	"forgot-password": "Zapomniałeś hasła?",
 	"have-no-account": "Nie masz konta? Zarejestruj się!",
+	"login": "Zaloguj się",
+	"login-data-invalid": "Nieprawidłowy adres email lub hasło",
 	"meta-title": "Logowanie"
 }

@@ -44,7 +44,6 @@ function RegisterForm() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(email, username, password, hideEmail);
 		const res = await fetch(`${host}/register`, {
 			method: "POST",
 			headers: {
@@ -137,6 +136,7 @@ function RegisterForm() {
 					<FormControlLabel
 						control={
 							<Checkbox
+								color="primary"
 								id="hide-email"
 								checked={hideEmail}
 								onChange={(e) => setHideEmail(!hideEmail)}

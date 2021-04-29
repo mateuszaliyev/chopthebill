@@ -1,5 +1,5 @@
 // React & Next
-import { useEffect } from "react";
+import { useEffect, useState, createContext } from "react";
 import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 import PropTypes from "prop-types";
@@ -12,7 +12,12 @@ import theme from "../config/theme";
 // Styles
 import "../styles/globals.scss";
 
+export const JWTContext = createContext();
+
 function MyApp({ Component, pageProps }) {
+	const [accessToken, setAccessToken] = useState("");
+	const [refreshToken, setRefreshToken] = useState("");
+
 	useEffect(() => {
 		// Remove the server-side injected CSS.
 		const jssStyles = document.querySelector("#jss-server-side");
@@ -48,7 +53,11 @@ function MyApp({ Component, pageProps }) {
 			</Head>
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<Component {...pageProps} />
+				<JWTContext.Provider
+					value={{ accessToken, setAccessToken, refreshToken, setRefreshToken }}
+				>
+					<Component {...pageProps} />
+				</JWTContext.Provider>
 			</ThemeProvider>
 		</>
 	);

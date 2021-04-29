@@ -10,7 +10,10 @@ function registerValidate({
 	theme,
 }) {
 	const issues = [];
-	if (!validator.isEmail(email)) {
+	if (
+		!validator.isEmail(email) ||
+		!validator.isLength(email, { min: 3, max: 63 })
+	) {
 		issues.push("email-invalid");
 	}
 
@@ -49,4 +52,15 @@ function registerValidate({
 	return issues;
 }
 
-module.exports = { registerValidate };
+function loginValidate({ email, password }) {
+	if (
+		!validator.isEmail(email) ||
+		!validator.isLength(email, { min: 3, max: 63 }) ||
+		!validator.isLength(password, { min: 3, max: 63 })
+	) {
+		return false;
+	}
+	return true;
+}
+
+module.exports = { registerValidate, loginValidate };

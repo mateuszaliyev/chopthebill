@@ -1,6 +1,7 @@
 {
-	"login": "Log in",
 	"forgot-password": "Forgot password?",
 	"have-no-account": "Don't have an account? Register!",
+	"login": "Log in",
+	"login-data-invalid": "Invalid email address or password",
 	"meta-title": "Login"
 }
