@@ -1,4 +1,6 @@
 {
+	"alternative": "Alternatywny",
+	"default": "Domyślny",
 	"en": "Angielski",
 	"expenses": "Wydatki",
 	"friends": "Znajomi",
@@ -10,5 +12,6 @@
 	"pl": "Polski",
 	"password": "Hasło",
 	"register": "Rejestracja",
+	"theme": "Motyw",
 	"username": "Nazwa użytkownika"
 }

@@ -4,14 +4,13 @@ import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
-// Material UI
-import { ThemeProvider } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import theme from "../config/theme";
+// Components
+import Theme from "../components/Theme";
 
 // Styles
 import "../styles/globals.scss";
 
+// Contexts
 export const JWTContext = createContext();
 
 function MyApp({ Component, pageProps }) {
@@ -19,7 +18,6 @@ function MyApp({ Component, pageProps }) {
 	const [refreshToken, setRefreshToken] = useState("");
 
 	useEffect(() => {
-		// Remove the server-side injected CSS.
 		const jssStyles = document.querySelector("#jss-server-side");
 		if (jssStyles) {
 			jssStyles.parentElement.removeChild(jssStyles);
@@ -48,17 +46,16 @@ function MyApp({ Component, pageProps }) {
 				<meta name="description" content="Description" />
 				<meta name="keywords" content="Keywords" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-				<meta name="theme-color" content="#4ba0a5" />
+				<meta name="theme-color" content="#009688" />
 				<title>ChopTheBill</title>
 			</Head>
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
+			<Theme>
 				<JWTContext.Provider
 					value={{ accessToken, setAccessToken, refreshToken, setRefreshToken }}
 				>
 					<Component {...pageProps} />
 				</JWTContext.Provider>
-			</ThemeProvider>
+			</Theme>
 		</>
 	);
 }

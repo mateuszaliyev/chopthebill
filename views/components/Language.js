@@ -1,6 +1,5 @@
 // React & Next
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
@@ -9,9 +8,13 @@ import { Button, Menu, MenuItem } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TranslateIcon from "@material-ui/icons/Translate";
 
+// Components
+import Link from "./Link";
+
 function Language() {
 	const router = useRouter();
 	const [languageAnchor, setLanguageAnchor] = useState(null);
+	const { t } = useTranslation("common");
 
 	const handleClick = (event) => {
 		setLanguageAnchor(event.currentTarget);
@@ -20,8 +23,6 @@ function Language() {
 	const handleClose = () => {
 		setLanguageAnchor(null);
 	};
-
-	const { t } = useTranslation("common");
 
 	return (
 		<>
@@ -44,7 +45,7 @@ function Language() {
 				{router.locales.map((locale) => (
 					<MenuItem key={locale} onClick={handleClose}>
 						<Link href={router.asPath} locale={locale}>
-							<a className="a-clear">{t(locale)}</a>
+							{t(locale)}
 						</Link>
 					</MenuItem>
 				))}

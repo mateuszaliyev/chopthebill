@@ -42,24 +42,30 @@ function SideMenuList({ toggleSideMenu }) {
 					<ListItemText primary={t("friends")} />
 				</ListItem>
 			</Link>
-			<ListItem button>
-				<ListItemIcon>
-					<FolderSharedIcon />
-				</ListItemIcon>
-				<ListItemText primary={t("groups")} />
-			</ListItem>
-			<ListItem button>
-				<ListItemIcon>
-					<ReceiptIcon />
-				</ListItemIcon>
-				<ListItemText primary={t("expenses")} />
-			</ListItem>
-			<ListItem button>
-				<ListItemIcon>
-					<AttachMoneyIcon />
-				</ListItemIcon>
-				<ListItemText primary={t("obligations")} />
-			</ListItem>
+			<Link href="/groups">
+				<ListItem button>
+					<ListItemIcon>
+						<FolderSharedIcon />
+					</ListItemIcon>
+					<ListItemText primary={t("groups")} />
+				</ListItem>
+			</Link>
+			<Link href="/expenses">
+				<ListItem button>
+					<ListItemIcon>
+						<ReceiptIcon />
+					</ListItemIcon>
+					<ListItemText primary={t("expenses")} />
+				</ListItem>
+			</Link>
+			<Link href="/obligations">
+				<ListItem button>
+					<ListItemIcon>
+						<AttachMoneyIcon />
+					</ListItemIcon>
+					<ListItemText primary={t("obligations")} />
+				</ListItem>
+			</Link>
 		</List>
 	);
 }

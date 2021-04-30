@@ -4,6 +4,13 @@
 	box-sizing: border-box;
 }
 
+a,
+a:active,
+a:hover,
+a:visited {
+	text-decoration: none !important;
+}
+
 body {
 	font-family: "Roboto", sans-serif;
 	margin: 0;
