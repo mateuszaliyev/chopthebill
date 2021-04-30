@@ -3,7 +3,13 @@ import { useContext, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 // Material UI
-import { Button, Menu, MenuItem } from "@material-ui/core";
+import {
+	Button,
+	IconButton,
+	Menu,
+	MenuItem,
+	useMediaQuery,
+} from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PaletteIcon from "@material-ui/icons/Palette";
 
@@ -11,9 +17,12 @@ import PaletteIcon from "@material-ui/icons/Palette";
 import { ThemeContext } from "./Theme";
 
 function PaletteList() {
-	const { changeTheme } = useContext(ThemeContext);
-	const [paletteAnchor, setPaletteAnchor] = useState(null);
 	const { t } = useTranslation("common");
+
+	const { muiTheme, setTheme } = useContext(ThemeContext);
+	const [paletteAnchor, setPaletteAnchor] = useState(null);
+
+	const matches = useMediaQuery(muiTheme.breakpoints.up("sm"));
 
 	const handleClick = (event) => {
 		setPaletteAnchor(event.currentTarget);
@@ -25,15 +34,27 @@ function PaletteList() {
 
 	return (
 		<>
-			<Button
-				aria-controls="simple-menu"
-				aria-haspopup="true"
-				endIcon={<ExpandMoreIcon />}
-				startIcon={<PaletteIcon />}
-				onClick={handleClick}
-			>
-				{t("theme")}
-			</Button>
+			{matches ? (
+				<Button
+					aria-controls="simple-menu"
+					aria-haspopup="true"
+					color="inherit"
+					endIcon={<ExpandMoreIcon />}
+					startIcon={<PaletteIcon />}
+					onClick={handleClick}
+				>
+					{t("theme")}
+				</Button>
+			) : (
+				<IconButton
+					aria-controls="simple-menu"
+					aria-haspopup="true"
+					color="inherit"
+					onClick={handleClick}
+				>
+					<PaletteIcon />
+				</IconButton>
+			)}
 			<Menu
 				id="simple-menu"
 				anchorEl={paletteAnchor}
@@ -43,7 +64,7 @@ function PaletteList() {
 			>
 				<MenuItem
 					onClick={() => {
-						changeTheme("default");
+						setTheme("default");
 						handleClose();
 					}}
 				>
@@ -51,7 +72,7 @@ function PaletteList() {
 				</MenuItem>
 				<MenuItem
 					onClick={() => {
-						changeTheme("alternative");
+						setTheme("alternative");
 						handleClose();
 					}}
 				>

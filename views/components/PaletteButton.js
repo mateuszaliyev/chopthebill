@@ -13,7 +13,7 @@ function PaletteButton() {
 	const { light, toggleTheme } = useContext(ThemeContext);
 
 	return (
-		<IconButton onClick={() => toggleTheme()}>
+		<IconButton color="inherit" onClick={() => toggleTheme()}>
 			{light ? <Brightness4Icon /> : <Brightness7Icon />}
 		</IconButton>
 	);

@@ -1,8 +1,8 @@
-import { red, teal } from "@material-ui/core/colors";
+import { green, teal } from "@material-ui/core/colors";
 
 export const alternativeTheme = {
 	palette: {
-		primary: red,
+		primary: green,
 	},
 };
 

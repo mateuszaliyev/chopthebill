@@ -28,12 +28,27 @@ function Theme(props) {
 	);
 
 	useEffect(() => {
-		changeTheme(theme);
-	}, [light]);
+		const localLight = localStorage.getItem("light");
+		const localTheme = localStorage.getItem("theme");
+		if (localLight) {
+			if (localLight === "true") {
+				setLight(true);
+			}
+			if (localLight === "false") {
+				setLight(false);
+			}
+		}
+		if (localTheme) {
+			setTheme(localTheme);
+		}
+	}, []);
 
-	const changeTheme = (themeName) => {
-		setTheme(themeName);
-		switch (themeName) {
+	useEffect(() => {
+		changeTheme(theme);
+	}, [light, theme]);
+
+	const changeTheme = () => {
+		switch (theme) {
 			case "alternative":
 				setMuiTheme(
 					createMuiTheme(
@@ -47,6 +62,9 @@ function Theme(props) {
 				);
 				break;
 		}
+
+		localStorage.setItem("light", `${light}`);
+		localStorage.setItem("theme", theme);
 	};
 
 	const toggleTheme = () => {
@@ -61,7 +79,7 @@ function Theme(props) {
 					content={muiTheme?.palette?.primary?.main ?? "#009688"}
 				/>
 			</Head>
-			<ThemeContext.Provider value={{ changeTheme, light, toggleTheme }}>
+			<ThemeContext.Provider value={{ light, muiTheme, setTheme, toggleTheme }}>
 				<ThemeProvider theme={muiTheme}>
 					<CssBaseline />
 					{props.children}

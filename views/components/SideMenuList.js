@@ -34,7 +34,7 @@ function SideMenuList({ toggleSideMenu }) {
 					<CloseIcon />
 				</ListItemIcon>
 			</ListItem>
-			<Link href="/friends">
+			<Link color="inherit" href="/friends">
 				<ListItem button>
 					<ListItemIcon>
 						<PeopleIcon />
@@ -42,7 +42,7 @@ function SideMenuList({ toggleSideMenu }) {
 					<ListItemText primary={t("friends")} />
 				</ListItem>
 			</Link>
-			<Link href="/groups">
+			<Link color="inherit" href="/groups">
 				<ListItem button>
 					<ListItemIcon>
 						<FolderSharedIcon />
@@ -50,7 +50,7 @@ function SideMenuList({ toggleSideMenu }) {
 					<ListItemText primary={t("groups")} />
 				</ListItem>
 			</Link>
-			<Link href="/expenses">
+			<Link color="inherit" href="/expenses">
 				<ListItem button>
 					<ListItemIcon>
 						<ReceiptIcon />
@@ -58,7 +58,7 @@ function SideMenuList({ toggleSideMenu }) {
 					<ListItemText primary={t("expenses")} />
 				</ListItem>
 			</Link>
-			<Link href="/obligations">
+			<Link color="inherit" href="/obligations">
 				<ListItem button>
 					<ListItemIcon>
 						<AttachMoneyIcon />

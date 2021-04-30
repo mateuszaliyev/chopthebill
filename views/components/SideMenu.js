@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Material UI
-import { Button, SwipeableDrawer } from "@material-ui/core";
+import { IconButton, SwipeableDrawer } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
 // Components
@@ -24,9 +24,14 @@ function SideMenu() {
 
 	return (
 		<>
-			<Button onClick={toggleSideMenu(true)}>
+			<IconButton
+				aria-label="menu"
+				color="inherit"
+				edge="start"
+				onClick={toggleSideMenu(true)}
+			>
 				<MenuIcon />
-			</Button>
+			</IconButton>
 			<SwipeableDrawer
 				anchor="left"
 				disableBackdropTransition={!iOS}
