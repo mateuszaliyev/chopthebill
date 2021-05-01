@@ -7,10 +7,12 @@
 	"groups": "Groups",
 	"language": "Language",
 	"login": "Login",
+	"logout": "Logout",
 	"meta-title": "ChopTheBill – share expenses with ease",
 	"obligations": "Obligations",
 	"password": "Password",
 	"pl": "Polish",
+	"profile": "Profile",
 	"register": "Register",
 	"theme": "Theme",
 	"username": "Username"

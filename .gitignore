@@ -38,3 +38,6 @@ yarn-error.log*
 # pwa
 sw.js*
 workbox-*.js*
+
+# avatars
+public/avatars

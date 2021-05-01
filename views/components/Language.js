@@ -27,7 +27,7 @@ function Language() {
 	const [languageAnchor, setLanguageAnchor] = useState(null);
 	const router = useRouter();
 
-	const matches = useMediaQuery(muiTheme.breakpoints.up("sm"));
+	const matches = useMediaQuery(muiTheme.breakpoints.up("md"));
 
 	const handleClick = (event) => {
 		setLanguageAnchor(event.currentTarget);

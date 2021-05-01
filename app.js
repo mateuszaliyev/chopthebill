@@ -13,11 +13,11 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Routes
-const authRoutes = require("./routes/authRoutes");
+const routes = require("./routes/");
 
 const port = parseInt(process.env.PORT, 10) || 5000;
 
-app.use("/", authRoutes);
+app.use("/", routes);
 
 app.listen(port, () => {
 	console.log(`> Ready on http://localhost:${port}`);

@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 
 // Components
+import AvatarButton from "./AvatarButton";
 import Language from "./Language";
 import PaletteButton from "./PaletteButton";
 import PaletteList from "./PaletteList";
@@ -44,6 +45,7 @@ function Layout({ children, title }) {
 						<Language />
 						<PaletteList />
 						<PaletteButton />
+						<AvatarButton />
 					</Toolbar>
 				</AppBar>
 			</div>

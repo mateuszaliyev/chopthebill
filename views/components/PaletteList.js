@@ -22,7 +22,7 @@ function PaletteList() {
 	const { muiTheme, setTheme } = useContext(ThemeContext);
 	const [paletteAnchor, setPaletteAnchor] = useState(null);
 
-	const matches = useMediaQuery(muiTheme.breakpoints.up("sm"));
+	const matches = useMediaQuery(muiTheme.breakpoints.up("md"));
 
 	const handleClick = (event) => {
 		setPaletteAnchor(event.currentTarget);
