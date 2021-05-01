@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const bcrypt = require("bcrypt");
 
 // Config
@@ -10,7 +12,7 @@ const { registerValidate, loginValidate } = require("../utils/authValidate");
 const {
 	getAccessToken,
 	getRefreshToken,
-	verifyAccessToken,
+	verifyAccessToken: verifyToken,
 } = require("../utils/jwt");
 
 async function registerService(user) {
@@ -88,10 +90,32 @@ function accessService(authHeader) {
 	if (!token) {
 		return "unauthorized";
 	}
-	if (verifyAccessToken(token)) {
+	if (verifyToken(token, process.env.ACCESS_TOKEN_SECRET)) {
 		return "";
 	}
 	return "forbidden";
 }
 
-module.exports = { registerService, loginService, accessService };
+async function refreshService(authHeader) {
+	const token = authHeader && authHeader.split(" ")[1];
+	if (!token) {
+		return "unauthorized";
+	}
+	if (verifyToken(token, process.env.REFRESH_TOKEN_SECRET)) {
+		const refreshQuery = await db.query(
+			`SELECT username, refresh_token FROM public."user" WHERE refresh_token = $1`,
+			[token]
+		);
+		if (refreshQuery.rows[0]) {
+			return getAccessToken({ username: refreshQuery.rows[0].username });
+		}
+	}
+	return "forbidden";
+}
+
+module.exports = {
+	registerService,
+	loginService,
+	accessService,
+	refreshService,
+};

@@ -13,13 +13,17 @@ function getRefreshToken(payload) {
 	});
 }
 
-function verifyAccessToken(token) {
-	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-		if (err) {
-			return false;
-		}
+function verifyToken(token, secret) {
+	try {
+		const decoded = jwt.verify(token, secret);
 		return true;
-	});
+	} catch (err) {
+		return false;
+	}
 }
 
-module.exports = { getAccessToken, getRefreshToken, verifyAccessToken };
+module.exports = {
+	getAccessToken,
+	getRefreshToken,
+	verifyAccessToken: verifyToken,
+};

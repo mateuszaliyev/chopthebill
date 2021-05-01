@@ -2,6 +2,7 @@ const {
 	registerService,
 	loginService,
 	accessService,
+	refreshService,
 } = require("../models/authService");
 
 async function registerController(req, res) {
@@ -31,11 +32,17 @@ async function loginController(req, res) {
 		password: req.body.password,
 	};
 	try {
-		const data = await loginService(user);
-		if (data.error) {
-			return res.status(401).json(data);
+		const { accessToken, refreshToken, error } = await loginService(user);
+		if (error) {
+			return res.status(401).json({ accessToken, error });
 		}
-		res.status(200).json(data);
+		res
+			.status(200)
+			.cookie("refresh_token", `Bearer ${refreshToken}`, {
+				expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
+				httpOnly: true,
+			})
+			.json({ accessToken, error });
 	} catch (err) {
 		console.log(err);
 		res.status(500).json({
@@ -46,20 +53,43 @@ async function loginController(req, res) {
 	}
 }
 
-async function accessController(req, res) {
+function accessController(req, res) {
 	try {
-		const error = accessService(req.headers.authorization);
-		if (!error) {
+		const result = accessService(req.headers.authorization);
+		if (!result) {
 			return res.sendStatus(200);
 		}
-		if (error === "unauthorized") {
+		if (result === "unauthorized") {
 			return res.sendStatus(401);
 		}
-		res.sendStatus(403);
+		if (result === "forbidden") {
+			return res.sendStatus(403);
+		}
 	} catch (err) {
 		console.log(err);
 		res.sendStatus(500);
 	}
 }
 
-module.exports = { registerController, loginController, accessController };
+async function refreshController(req, res) {
+	try {
+		const result = await refreshService(req.cookies.refresh_token);
+		if (result === "unauthorized") {
+			return res.sendStatus(401);
+		}
+		if (result === "forbidden") {
+			return res.sendStatus(403);
+		}
+		return res.status(200).json({ accessToken: result });
+	} catch (err) {
+		console.log(err);
+		res.sendStatus(500);
+	}
+}
+
+module.exports = {
+	registerController,
+	loginController,
+	accessController,
+	refreshController,
+};

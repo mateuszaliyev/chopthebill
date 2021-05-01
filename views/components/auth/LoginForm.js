@@ -35,6 +35,7 @@ function LoginForm() {
 		e.preventDefault();
 		const res = await fetch(`${host}/login`, {
 			method: "POST",
+			credentials: "include",
 			headers: {
 				Accept: "application/json",
 				"Content-Type": "application/json",

@@ -3,11 +3,13 @@ require("dotenv").config();
 
 // Express
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({ credentials: true, origin: true }));
+app.use(cookieParser());
 app.use(express.json());
 
 // Routes

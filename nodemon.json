@@ -1,5 +1,5 @@
 {
 	"ignore": [".git", "node_modules", "views"],
-	"watch": ["config", "controllers", "models", "routes", "app.js"],
+	"watch": ["config", "controllers", "models", "routes", "app.js", "utils"],
 	"ext": "js json"
 }
