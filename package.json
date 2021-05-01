@@ -18,6 +18,7 @@
 	"scripts": {
 		"build": "npm run next-build",
 		"dev": "concurrently \"nodemon app.js\" \"npm run next-dev\"",
+		"generate": "node utils/secretGenerate.js",
 		"next-build": "cd views && npm run build",
 		"next-dev": "cd views && npm run dev",
 		"next-start": "cd views && npm run start",

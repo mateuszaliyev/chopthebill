@@ -66,9 +66,19 @@ Aplikacja do nawiązania połączenia z bazą danych PostgreSQL wymaga utworzeni
 - `PGPASSWORD` - hasło użytkownika `PGUSER`,
 - `PGPORT` - port, na którym można połączyć się z hostem.
 
+Użytkownicy są uwierzytelniani z użyciem [JSONWebToken](https://jwt.io/). Sygnowanie oraz weryfikacja przesyłanych tokenów odbywa się poprzez wykorzystanie sekretnych kluczy zapisanych w zmiennych środowiskowych: `ACCESS_TOKEN_SECRET` oraz `REFRESH_TOKEN_SECRET`.
+
+Wygenerowanie losowych kluczy jest możliwe z poziomu katalogu głównego projektu.
+
+```
+npm run generate
+```
+
 Przykładowa zawartość pliku `.env`.
 
 ```
+ACCESS_TOKEN_SECRET=063fb622691d955737712c46d9849c3f7f3c70e553cf56bead3b8e89e37a12dc
+REFRESH_TOKEN_SECRET=762ff7a10ba43d91166b12be376c8fe54507201f870fd4608e4bbd2657020563
 PGHOST='localhost'
 PGUSER=postgres
 PGDATABASE=chopthebill
