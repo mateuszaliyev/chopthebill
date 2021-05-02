@@ -45,7 +45,7 @@ function LoginForm() {
 				password,
 			}),
 		});
-		const { accessToken, refreshToken, error } = await res.json();
+		const { accessToken, error } = await res.json();
 		if (error === "internal-server-error") {
 			router.push("/500");
 			return;
@@ -55,7 +55,6 @@ function LoginForm() {
 			setFieldsHelper(t(`login:${error}`));
 		} else {
 			jwt.setAccessToken(accessToken);
-			jwt.setRefreshToken(refreshToken);
 			router.push("/dashboard");
 		}
 	};

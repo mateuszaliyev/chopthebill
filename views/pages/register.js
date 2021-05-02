@@ -5,6 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 // Components
 import Meta from "../components/Meta";
 import RegisterForm from "../components/auth/RegisterForm";
+import Redirect from "../components/auth/Redirect";
 
 export async function getServerSideProps({ locale }) {
 	return {
@@ -18,7 +19,7 @@ function Register() {
 	const { t } = useTranslation(["common", "register"]);
 
 	return (
-		<>
+		<Redirect>
 			<Meta title={`${t("register:meta-title")} | ChopTheBill`} />
 			<div className="center">
 				<main className="auth-container">
@@ -26,7 +27,7 @@ function Register() {
 					<RegisterForm />
 				</main>
 			</div>
-		</>
+		</Redirect>
 	);
 }
 

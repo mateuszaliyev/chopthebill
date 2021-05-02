@@ -15,7 +15,6 @@ export const JWTContext = createContext();
 
 function MyApp({ Component, pageProps }) {
 	const [accessToken, setAccessToken] = useState("");
-	const [refreshToken, setRefreshToken] = useState("");
 
 	useEffect(() => {
 		const jssStyles = document.querySelector("#jss-server-side");
@@ -50,9 +49,7 @@ function MyApp({ Component, pageProps }) {
 				<title>ChopTheBill</title>
 			</Head>
 			<Theme>
-				<JWTContext.Provider
-					value={{ accessToken, setAccessToken, refreshToken, setRefreshToken }}
-				>
+				<JWTContext.Provider value={{ accessToken, setAccessToken }}>
 					<Component {...pageProps} />
 				</JWTContext.Provider>
 			</Theme>

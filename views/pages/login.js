@@ -5,6 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 // Components
 import LoginForm from "../components/auth/LoginForm";
 import Meta from "../components/Meta";
+import Redirect from "../components/auth/Redirect";
 
 export async function getServerSideProps({ locale }) {
 	return {
@@ -18,7 +19,7 @@ function Login() {
 	const { t } = useTranslation(["common", "login"]);
 
 	return (
-		<>
+		<Redirect>
 			<Meta title={`${t("login:meta-title")} | ChopTheBill`} />
 			<div className="center">
 				<main className="auth-container">
@@ -26,7 +27,7 @@ function Login() {
 					<LoginForm />
 				</main>
 			</div>
-		</>
+		</Redirect>
 	);
 }
 

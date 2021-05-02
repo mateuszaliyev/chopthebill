@@ -1,5 +1,5 @@
 // React & Next
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 
 // Config
@@ -8,10 +8,9 @@ import { host } from "../../config";
 // Context
 import { JWTContext } from "../../pages/_app";
 
-function Auth(props) {
+function Redirect({ children }) {
 	const router = useRouter();
 	const { accessToken, setAccessToken } = useContext(JWTContext);
-	const [authenticated, setAuthenticated] = useState(false);
 
 	const authenticate = async () => {
 		const res = await fetch(`${host}/access`, {
@@ -21,7 +20,7 @@ function Auth(props) {
 			},
 		});
 		if (res.ok) {
-			setAuthenticated(true);
+			router.push("/dashboard");
 		} else {
 			getAccessToken();
 		}
@@ -32,18 +31,17 @@ function Auth(props) {
 			method: "GET",
 			credentials: "include",
 		});
-
 		if (res.ok) {
 			const data = await res.json();
 			setAccessToken(data.accessToken);
-			setAuthenticated(true);
-		} else {
-			router.push("/login");
 		}
 	};
 
-	useEffect(authenticate);
-	return authenticated ? props.children : <h1>loading</h1>;
+	useEffect(() => {
+		authenticate();
+	}, [accessToken]);
+
+	return children;
 }
 
-export default Auth;
+export default Redirect;
