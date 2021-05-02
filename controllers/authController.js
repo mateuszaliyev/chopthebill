@@ -3,6 +3,7 @@ const {
 	loginService,
 	accessService,
 	refreshService,
+	logoutService,
 } = require("../models/authService");
 
 async function registerController(req, res) {
@@ -47,7 +48,6 @@ async function loginController(req, res) {
 		console.log(err);
 		res.status(500).json({
 			accessToken: "",
-			refreshToken: "",
 			error: "internal-server-error",
 		});
 	}
@@ -87,9 +87,27 @@ async function refreshController(req, res) {
 	}
 }
 
+async function logoutController(req, res) {
+	try {
+		const result = await logoutService(req);
+		if (result === "unauthorized") {
+			return res.sendStatus(401);
+		}
+		if (result === "forbidden") {
+			return res.sendStatus(403);
+		}
+		console.log("test");
+		return res.clearCookie("refresh_token", { httpOnly: true }).sendStatus(204);
+	} catch (err) {
+		console.log(err);
+		res.sendStatus(500);
+	}
+}
+
 module.exports = {
 	registerController,
 	loginController,
 	accessController,
 	refreshController,
+	logoutController,
 };

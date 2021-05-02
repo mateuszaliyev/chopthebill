@@ -1,5 +1,5 @@
 // React & Next
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useTranslation } from "next-i18next";
 
 // Material UI
@@ -11,9 +11,27 @@ import Link from "./Link";
 // Config
 import { host } from "../config";
 
+// Context
+import { JWTContext } from "../pages/_app";
+
 function AvatarButton() {
 	const { t } = useTranslation("common");
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
+	const { accessToken, setAccessToken } = useContext(JWTContext);
+
+	const logout = async () => {
+		const res = await fetch(`${host}/logout`, {
+			method: "DELETE",
+			credentials: "include",
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+		console.log(res.status);
+		if (res.ok) {
+			setAccessToken("");
+		}
+	};
 
 	const handleClick = (event) => {
 		setAvatarAnchor(event.currentTarget);
@@ -40,10 +58,13 @@ function AvatarButton() {
 						{t("profile")}
 					</Link>
 				</MenuItem>
-				<MenuItem onClick={handleClose}>
-					<Link color="inherit" href="/logout">
-						{t("logout")}
-					</Link>
+				<MenuItem
+					onClick={() => {
+						logout();
+						handleClose();
+					}}
+				>
+					{t("logout")}
 				</MenuItem>
 			</Menu>
 		</>

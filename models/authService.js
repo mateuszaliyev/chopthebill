@@ -113,9 +113,32 @@ async function refreshService(authHeader) {
 	return "forbidden";
 }
 
+async function logoutService(req) {
+	const accessToken =
+		req.headers.authorization && req.headers.authorization.split(" ")[1];
+	const refreshToken =
+		req.cookies.refresh_token && req.cookies.refresh_token.split(" ")[1];
+
+	if (!accessToken || !refreshToken) {
+		return "unauthorized";
+	}
+	if (
+		verifyToken(accessToken, process.env.ACCESS_TOKEN_SECRET) &&
+		verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+	) {
+		const logoutQuery = await db.query(
+			`UPDATE public."user" SET refresh_token = NULL WHERE refresh_token = $1`,
+			[refreshToken]
+		);
+		return "";
+	}
+	return "forbidden";
+}
+
 module.exports = {
 	registerService,
 	loginService,
 	accessService,
 	refreshService,
+	logoutService,
 };
