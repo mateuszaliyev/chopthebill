@@ -2,6 +2,9 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+// Components
+import Loader from "../Loader";
+
 // Config
 import { host } from "../../config";
 
@@ -43,7 +46,7 @@ function Auth(props) {
 	};
 
 	useEffect(authenticate);
-	return authenticated ? props.children : <h1>loading</h1>;
+	return authenticated ? props.children : <Loader />;
 }
 
 export default Auth;
