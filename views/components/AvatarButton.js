@@ -1,11 +1,12 @@
 // React & Next
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 // Material UI
-import { Avatar, IconButton, Menu, MenuItem } from "@material-ui/core";
+import { IconButton, Menu, MenuItem } from "@material-ui/core";
 
 // Components
+import Avatar from "./Avatar";
 import Link from "./Link";
 
 // Config
@@ -14,10 +15,15 @@ import { host } from "../config";
 // Context
 import { UserContext } from "./auth/User";
 
+// Hooks
+import useTextToColor from "./hooks/useTextToColor";
+
 function AvatarButton() {
 	const { t } = useTranslation("common");
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
 	const { user } = useContext(UserContext);
+
+	const color = useTextToColor(user.username);
 
 	const handleClick = (event) => {
 		setAvatarAnchor(event.currentTarget);
@@ -31,7 +37,8 @@ function AvatarButton() {
 		<>
 			<IconButton color="inherit" onClick={handleClick}>
 				<Avatar
-					alt={user.username.toUpperCase()}
+					alt={user.username}
+					color={color}
 					src={`${host}/avatars/${user.id}.png`}
 				/>
 			</IconButton>
