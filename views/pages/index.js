@@ -39,7 +39,6 @@ export default function Home() {
 					{t("register")}
 				</Button>
 			</Link>
-			<Link href="/dashboard">Dashboard</Link>
 		</>
 	);
 }

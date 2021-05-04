@@ -29,8 +29,7 @@ function Dashboard() {
 		<Auth>
 			<Meta title={`${t("dashboard:meta-title")} | ChopTheBill`} />
 			<Layout title={`${t("dashboard:meta-title")}`}>
-				<Link href="/dashboard">dashboard</Link>
-				<h1>Welcome {user.username}</h1>
+				<h1>{user.username}</h1>
 			</Layout>
 		</Auth>
 	);
