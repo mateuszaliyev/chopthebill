@@ -12,26 +12,12 @@ import Link from "./Link";
 import { host } from "../config";
 
 // Context
-import { JWTContext } from "../pages/_app";
+import { UserContext } from "./auth/User";
 
 function AvatarButton() {
 	const { t } = useTranslation("common");
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
-	const { accessToken, setAccessToken } = useContext(JWTContext);
-
-	const logout = async () => {
-		const res = await fetch(`${host}/logout`, {
-			method: "DELETE",
-			credentials: "include",
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
-		console.log(res.status);
-		if (res.ok) {
-			setAccessToken("");
-		}
-	};
+	const { user } = useContext(UserContext);
 
 	const handleClick = (event) => {
 		setAvatarAnchor(event.currentTarget);
@@ -44,7 +30,10 @@ function AvatarButton() {
 	return (
 		<>
 			<IconButton color="inherit" onClick={handleClick}>
-				<Avatar alt="Username" src={`${host}/avatars/7.png`} />
+				<Avatar
+					alt={user.username.toUpperCase()}
+					src={`${host}/avatars/${user.id}.png`}
+				/>
 			</IconButton>
 			<Menu
 				id="simple-menu"
@@ -58,13 +47,10 @@ function AvatarButton() {
 						{t("profile")}
 					</Link>
 				</MenuItem>
-				<MenuItem
-					onClick={() => {
-						logout();
-						handleClose();
-					}}
-				>
-					{t("logout")}
+				<MenuItem onClick={handleClose}>
+					<Link color="inherit" href="/logout">
+						{t("logout")}
+					</Link>
 				</MenuItem>
 			</Menu>
 		</>

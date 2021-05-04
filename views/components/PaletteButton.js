@@ -10,11 +10,11 @@ import Brightness7Icon from "@material-ui/icons/Brightness7";
 import { ThemeContext } from "./Theme";
 
 function PaletteButton() {
-	const { light, toggleTheme } = useContext(ThemeContext);
+	const { palette, togglePalette } = useContext(ThemeContext);
 
 	return (
-		<IconButton color="inherit" onClick={() => toggleTheme()}>
-			{light ? <Brightness4Icon /> : <Brightness7Icon />}
+		<IconButton color="inherit" onClick={() => togglePalette()}>
+			{palette === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
 		</IconButton>
 	);
 }

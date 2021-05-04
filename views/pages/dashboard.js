@@ -1,4 +1,5 @@
 // React & Next
+import { useContext } from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -7,6 +8,9 @@ import Auth from "../components/auth/Auth";
 import Layout from "../components/Layout";
 import Link from "../components/Link";
 import Meta from "../components/Meta";
+
+// Contexts
+import { UserContext } from "../components/auth/User";
 
 export async function getServerSideProps({ locale }) {
 	return {
@@ -19,11 +23,14 @@ export async function getServerSideProps({ locale }) {
 function Dashboard() {
 	const { t } = useTranslation(["common", "dashboard"]);
 
+	const { user } = useContext(UserContext);
+
 	return (
 		<Auth>
 			<Meta title={`${t("dashboard:meta-title")} | ChopTheBill`} />
 			<Layout title={`${t("dashboard:meta-title")}`}>
 				<Link href="/dashboard">dashboard</Link>
+				<h1>Welcome {user.username}</h1>
 			</Layout>
 		</Auth>
 	);

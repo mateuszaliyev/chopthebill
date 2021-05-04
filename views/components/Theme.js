@@ -21,55 +21,53 @@ import merge from "lodash/merge";
 export const ThemeContext = createContext();
 
 function Theme(props) {
-	const [light, setLight] = useState(true);
+	const [palette, setPalette] = useState("light");
 	const [theme, setTheme] = useState("default");
 	const [muiTheme, setMuiTheme] = useState(
 		createMuiTheme(merge(defaultTheme, lightTheme))
 	);
-
-	useEffect(() => {
-		const localLight = localStorage.getItem("light");
-		const localTheme = localStorage.getItem("theme");
-		if (localLight) {
-			if (localLight === "true") {
-				setLight(true);
-			}
-			if (localLight === "false") {
-				setLight(false);
-			}
-		}
-		if (localTheme) {
-			setTheme(localTheme);
-		}
-	}, []);
-
-	useEffect(() => {
-		changeTheme(theme);
-	}, [light, theme]);
 
 	const changeTheme = () => {
 		switch (theme) {
 			case "alternative":
 				setMuiTheme(
 					createMuiTheme(
-						merge(alternativeTheme, light ? lightTheme : darkTheme)
+						merge(alternativeTheme, palette === "dark" ? darkTheme : lightTheme)
 					)
 				);
 				break;
 			default:
 				setMuiTheme(
-					createMuiTheme(merge(defaultTheme, light ? lightTheme : darkTheme))
+					createMuiTheme(
+						merge(defaultTheme, palette === "dark" ? darkTheme : lightTheme)
+					)
 				);
 				break;
 		}
 
-		localStorage.setItem("light", `${light}`);
-		localStorage.setItem("theme", theme);
+		localStorage.setItem("theme", `${theme}-${palette}`);
 	};
 
-	const toggleTheme = () => {
-		setLight((prevLight) => !prevLight);
+	const togglePalette = () => {
+		setPalette((prevPalette) => (prevPalette === "light" ? "dark" : "light"));
 	};
+
+	useEffect(() => {
+		if (localStorage.getItem("theme")) {
+			const localPalette = localStorage.getItem("theme").split("-")[1];
+			const localTheme = localStorage.getItem("theme").split("-")[0];
+			if (localPalette === "light" || localPalette === "dark") {
+				setPalette(localPalette);
+			} else {
+				setPalette("light");
+			}
+			if (localTheme) {
+				setTheme(localTheme);
+			}
+		}
+	}, []);
+
+	useEffect(changeTheme, [palette, theme]);
 
 	return (
 		<>
@@ -79,7 +77,16 @@ function Theme(props) {
 					content={muiTheme?.palette?.primary?.main ?? "#009688"}
 				/>
 			</Head>
-			<ThemeContext.Provider value={{ light, muiTheme, setTheme, toggleTheme }}>
+			<ThemeContext.Provider
+				value={{
+					muiTheme,
+					palette,
+					setPalette,
+					setTheme,
+					theme,
+					togglePalette,
+				}}
+			>
 				<ThemeProvider theme={muiTheme}>
 					<CssBaseline />
 					{props.children}
