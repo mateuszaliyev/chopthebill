@@ -6,11 +6,11 @@ import { useRouter } from "next/router";
 import { host } from "../../config";
 
 // Context
-import { JWTContext } from "../../pages/_app";
+import { UserContext } from "./User";
 
 function Redirect({ children }) {
 	const router = useRouter();
-	const { accessToken, setAccessToken } = useContext(JWTContext);
+	const { accessToken, setAccessToken } = useContext(UserContext);
 
 	const authenticate = async () => {
 		const res = await fetch(`${host}/access`, {

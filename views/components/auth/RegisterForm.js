@@ -1,5 +1,5 @@
 // React & Next
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
@@ -20,6 +20,9 @@ import Link from "../Link";
 // Config
 import { host } from "../../config";
 
+// Contexts
+import { ThemeContext } from "../Theme";
+
 const useStyles = makeStyles({
 	margin: {
 		marginTop: "1rem",
@@ -38,8 +41,8 @@ function RegisterForm() {
 		hideEmail: "",
 	});
 
+	const { palette, theme } = useContext(ThemeContext);
 	const router = useRouter();
-
 	const { t } = useTranslation(["common", "register"]);
 
 	const handleSubmit = async (e) => {
@@ -56,7 +59,7 @@ function RegisterForm() {
 				password,
 				hideEmail,
 				language: router.locale,
-				theme: "dark",
+				theme: `${theme}-${palette}`,
 			}),
 		});
 		const issues = await res.json();
@@ -151,7 +154,9 @@ function RegisterForm() {
 					{t("register:register")}
 				</Button>
 
-				<Link href="/login">{t("register:have-an-account")}</Link>
+				<Link className={classes.margin} href="/login">
+					{t("register:have-an-account")}
+				</Link>
 			</FormControl>
 		</form>
 	);

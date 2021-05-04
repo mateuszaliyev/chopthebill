@@ -16,14 +16,14 @@ function getRefreshToken(payload) {
 function verifyToken(token, secret) {
 	try {
 		const decoded = jwt.verify(token, secret);
-		return true;
+		return decoded;
 	} catch (err) {
-		return false;
+		return null;
 	}
 }
 
 module.exports = {
 	getAccessToken,
 	getRefreshToken,
-	verifyAccessToken: verifyToken,
+	verifyToken,
 };

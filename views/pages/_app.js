@@ -1,21 +1,17 @@
 // React & Next
-import { useEffect, useState, createContext } from "react";
+import { useEffect } from "react";
 import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 import PropTypes from "prop-types";
 
 // Components
 import Theme from "../components/Theme";
+import User from "../components/auth/User";
 
 // Styles
 import "../styles/globals.scss";
 
-// Contexts
-export const JWTContext = createContext();
-
 function MyApp({ Component, pageProps }) {
-	const [accessToken, setAccessToken] = useState("");
-
 	useEffect(() => {
 		const jssStyles = document.querySelector("#jss-server-side");
 		if (jssStyles) {
@@ -48,11 +44,12 @@ function MyApp({ Component, pageProps }) {
 				<meta name="theme-color" content="#009688" />
 				<title>ChopTheBill</title>
 			</Head>
-			<Theme>
-				<JWTContext.Provider value={{ accessToken, setAccessToken }}>
+
+			<User>
+				<Theme>
 					<Component {...pageProps} />
-				</JWTContext.Provider>
-			</Theme>
+				</Theme>
+			</User>
 		</>
 	);
 }

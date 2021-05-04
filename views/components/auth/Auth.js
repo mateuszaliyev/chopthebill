@@ -9,11 +9,13 @@ import Loader from "../Loader";
 import { host } from "../../config";
 
 // Context
-import { JWTContext } from "../../pages/_app";
+import { UserContext } from "./User";
 
 function Auth(props) {
 	const router = useRouter();
-	const { accessToken, setAccessToken } = useContext(JWTContext);
+	const { accessToken, setAccessToken, user, setUser } = useContext(
+		UserContext
+	);
 	const [authenticated, setAuthenticated] = useState(false);
 
 	const authenticate = async () => {
@@ -24,6 +26,8 @@ function Auth(props) {
 			},
 		});
 		if (res.ok) {
+			const user = await res.json();
+			setUser(user);
 			setAuthenticated(true);
 		} else {
 			getAccessToken();
@@ -35,18 +39,17 @@ function Auth(props) {
 			method: "GET",
 			credentials: "include",
 		});
-
 		if (res.ok) {
 			const data = await res.json();
 			setAccessToken(data.accessToken);
-			setAuthenticated(true);
 		} else {
 			router.push("/login");
 		}
 	};
 
-	useEffect(authenticate);
-	return authenticated ? props.children : <Loader />;
+	useEffect(authenticate, [accessToken]);
+
+	return authenticated && user ? props.children : <Loader />;
 }
 
 export default Auth;

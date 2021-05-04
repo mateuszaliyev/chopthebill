@@ -28,14 +28,15 @@ async function registerController(req, res) {
 }
 
 async function loginController(req, res) {
-	const user = {
-		email: req.body.email,
-		password: req.body.password,
-	};
 	try {
-		const { accessToken, refreshToken, error } = await loginService(user);
+		const email = req.body.email;
+		const password = req.body.password;
+		const { accessToken, refreshToken, user, error } = await loginService(
+			email,
+			password
+		);
 		if (error) {
-			return res.status(401).json({ accessToken, error });
+			return res.status(401).json({ accessToken, user, error });
 		}
 		res
 			.status(200)
@@ -43,27 +44,28 @@ async function loginController(req, res) {
 				expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
 				httpOnly: true,
 			})
-			.json({ accessToken, error });
+			.json({ accessToken, user, error });
 	} catch (err) {
 		console.log(err);
 		res.status(500).json({
 			accessToken: "",
+			user: {},
 			error: "internal-server-error",
 		});
 	}
 }
 
-function accessController(req, res) {
+async function accessController(req, res) {
 	try {
-		const result = accessService(req.headers.authorization);
-		if (!result) {
-			return res.sendStatus(200);
-		}
-		if (result === "unauthorized") {
+		const { user, error } = await accessService(req.headers.authorization);
+		if (error === "unauthorized") {
 			return res.sendStatus(401);
 		}
-		if (result === "forbidden") {
+		if (error === "forbidden") {
 			return res.sendStatus(403);
+		}
+		if (user && !error) {
+			return res.status(200).json(user);
 		}
 	} catch (err) {
 		console.log(err);
@@ -96,7 +98,6 @@ async function logoutController(req, res) {
 		if (result === "forbidden") {
 			return res.sendStatus(403);
 		}
-		console.log("test");
 		return res.clearCookie("refresh_token", { httpOnly: true }).sendStatus(204);
 	} catch (err) {
 		console.log(err);

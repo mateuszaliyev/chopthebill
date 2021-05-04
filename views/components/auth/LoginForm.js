@@ -14,7 +14,8 @@ import Link from "../Link";
 import { host } from "../../config";
 
 // Context
-import { JWTContext } from "../../pages/_app";
+import { ThemeContext } from "../Theme";
+import { UserContext } from "./User";
 
 const useStyles = makeStyles({
 	margin: {
@@ -26,7 +27,8 @@ function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [fieldsHelper, setFieldsHelper] = useState("");
-	const jwt = useContext(JWTContext);
+	const { setPalette, setTheme } = useContext(ThemeContext);
+	const { setAccessToken, setUser } = useContext(UserContext);
 
 	const { t } = useTranslation(["common", "login"]);
 	const router = useRouter();
@@ -45,7 +47,7 @@ function LoginForm() {
 				password,
 			}),
 		});
-		const { accessToken, error } = await res.json();
+		const { accessToken, user, error } = await res.json();
 		if (error === "internal-server-error") {
 			router.push("/500");
 			return;
@@ -54,8 +56,11 @@ function LoginForm() {
 		if (error === "login-data-invalid") {
 			setFieldsHelper(t(`login:${error}`));
 		} else {
-			jwt.setAccessToken(accessToken);
-			router.push("/dashboard");
+			setAccessToken(accessToken);
+			setPalette(user.theme.split("-")[1] || "light");
+			setTheme(user.theme.split("-")[0] || "default");
+			setUser(user);
+			router.push(`${user.language}/dashboard`);
 		}
 	};
 
@@ -93,8 +98,12 @@ function LoginForm() {
 				>
 					{t("login:login")}
 				</Button>
-				<Link href="/">{t("login:forgot-password")}</Link>
-				<Link href="/register">{t("login:have-no-account")}</Link>
+				<Link className={classes.margin} href="/">
+					{t("login:forgot-password")}
+				</Link>
+				<Link className={classes.margin} href="/register">
+					{t("login:have-no-account")}
+				</Link>
 			</FormControl>
 		</form>
 	);

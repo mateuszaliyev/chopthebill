@@ -52,7 +52,7 @@ function registerValidate({
 	return issues;
 }
 
-function loginValidate({ email, password }) {
+function loginValidate(email, password) {
 	if (
 		!validator.isEmail(email) ||
 		!validator.isLength(email, { min: 3, max: 63 }) ||

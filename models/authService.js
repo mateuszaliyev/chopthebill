@@ -12,7 +12,7 @@ const { registerValidate, loginValidate } = require("../utils/authValidate");
 const {
 	getAccessToken,
 	getRefreshToken,
-	verifyAccessToken: verifyToken,
+	verifyToken,
 } = require("../utils/jwt");
 
 async function registerService(user) {
@@ -57,43 +57,73 @@ async function registerService(user) {
 	return [];
 }
 
-async function loginService({ email, password }) {
-	if (!loginValidate({ email, password })) {
+async function loginService(email, password) {
+	if (!loginValidate(email, password)) {
 		return { accessToken: "", refreshToken: "", error: "login-data-invalid" };
 	}
 
 	const userQuery = await db.query(
-		`SELECT email, password, username FROM public."user" WHERE email = $1`,
+		`SELECT id_user, email, password, username, language, theme, hide_email, last_seen FROM public."user" WHERE email = $1`,
 		[email]
 	);
 	if (
 		!userQuery.rows[0] ||
 		!(await bcrypt.compare(password, userQuery.rows[0]?.password))
 	) {
-		return { accessToken: "", refreshToken: "", error: "login-data-invalid" };
+		return {
+			accessToken: "",
+			refreshToken: "",
+			user: {},
+			error: "login-data-invalid",
+		};
 	}
 
 	const accessToken = getAccessToken({ username: userQuery.rows[0].username });
 	const refreshToken = getRefreshToken({
 		username: userQuery.rows[0].username,
 	});
+	const user = {
+		id: userQuery.rows[0].id_user,
+		email: userQuery.rows[0].email,
+		username: userQuery.rows[0].username,
+		language: userQuery.rows[0].language,
+		theme: userQuery.rows[0].theme,
+		hideEmail: userQuery.rows[0].hide_email,
+		lastSeen: userQuery.rows[0].lastSeen,
+	};
 
 	const tokenQuery = await db.query(
-		`UPDATE public."user" SET refresh_token = $1 WHERE email = $2`,
+		`UPDATE public."user" SET last_seen = NOW(), refresh_token = $1 WHERE email = $2`,
 		[refreshToken, email]
 	);
-	return { accessToken, refreshToken, error: "" };
+	return { accessToken, refreshToken, user, error: "" };
 }
 
-function accessService(authHeader) {
+async function accessService(authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
-		return "unauthorized";
+		return { user: {}, error: "unauthorized" };
 	}
-	if (verifyToken(token, process.env.ACCESS_TOKEN_SECRET)) {
-		return "";
+	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
+	if (decoded) {
+		const userQuery = await db.query(
+			`SELECT id_user, email, username, language, theme, hide_email, last_seen FROM public."user" WHERE username = $1`,
+			[decoded.username]
+		);
+		if (userQuery.rows[0]) {
+			const user = {
+				id: userQuery.rows[0].id_user,
+				email: userQuery.rows[0].email,
+				username: userQuery.rows[0].username,
+				language: userQuery.rows[0].language,
+				theme: userQuery.rows[0].theme,
+				hideEmail: userQuery.rows[0].hide_email,
+				lastSeen: userQuery.rows[0].lastSeen,
+			};
+			return { user, error: "" };
+		}
 	}
-	return "forbidden";
+	return { user: {}, error: "forbidden" };
 }
 
 async function refreshService(authHeader) {
