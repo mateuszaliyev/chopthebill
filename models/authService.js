@@ -43,8 +43,8 @@ async function registerService(user) {
 	const hashedPassword = await bcrypt.hash(user.password, 10);
 
 	const userQuery = await db.query(
-		`INSERT INTO public."user"(id_user, email, password, username, language, theme, hide_email, last_seen) 
-			VALUES (default, $1, $2, $3, $4, $5, $6, NOW())`,
+		`INSERT INTO public."user"(id_user, email, password, username, language, theme, hide_email, last_seen, deleted) 
+			VALUES (default, $1, $2, $3, $4, $5, $6, NOW(), FALSE)`,
 		[
 			user.email,
 			hashedPassword,
@@ -63,12 +63,13 @@ async function loginService(email, password) {
 	}
 
 	const userQuery = await db.query(
-		`SELECT id_user, email, password, username, language, theme, hide_email, last_seen FROM public."user" WHERE email = $1`,
+		`SELECT id_user, email, password, username, language, theme, hide_email, last_seen, deleted FROM public."user" WHERE email = $1`,
 		[email]
 	);
 	if (
 		!userQuery.rows[0] ||
-		!(await bcrypt.compare(password, userQuery.rows[0]?.password))
+		!(await bcrypt.compare(password, userQuery.rows[0]?.password)) ||
+		userQuery.rows[0].deleted
 	) {
 		return {
 			accessToken: "",
@@ -107,10 +108,10 @@ async function accessService(authHeader) {
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
 	if (decoded) {
 		const userQuery = await db.query(
-			`SELECT id_user, email, username, language, theme, hide_email, last_seen FROM public."user" WHERE username = $1`,
+			`SELECT id_user, email, username, language, theme, hide_email, last_seen, deleted FROM public."user" WHERE username = $1`,
 			[decoded.username]
 		);
-		if (userQuery.rows[0]) {
+		if (userQuery.rows[0] && !userQuery.rows[0].deleted) {
 			const user = {
 				id: userQuery.rows[0].id_user,
 				email: userQuery.rows[0].email,
@@ -133,10 +134,10 @@ async function refreshService(authHeader) {
 	}
 	if (verifyToken(token, process.env.REFRESH_TOKEN_SECRET)) {
 		const refreshQuery = await db.query(
-			`SELECT username, refresh_token FROM public."user" WHERE refresh_token = $1`,
+			`SELECT username, refresh_token, deleted FROM public."user" WHERE refresh_token = $1`,
 			[token]
 		);
-		if (refreshQuery.rows[0]) {
+		if (refreshQuery.rows[0] && !refreshQuery.rows[0].deleted) {
 			return getAccessToken({ username: refreshQuery.rows[0].username });
 		}
 	}
