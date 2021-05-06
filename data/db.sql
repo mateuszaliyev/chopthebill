@@ -1,114 +1,162 @@
---
--- PostgreSQL database dump
---
+-- Database: chopthebill
 
--- Dumped from database version 13.2
--- Dumped by pg_dump version 13.2
+-- DROP DATABASE chopthebill;
 
--- Started on 2021-04-26 00:06:01
+CREATE DATABASE chopthebill
+	WITH 
+	OWNER = postgres
+	ENCODING = 'UTF8'
+	LC_COLLATE = 'Polish_Poland.1250'
+	LC_CTYPE = 'Polish_Poland.1250'
+	TABLESPACE = pg_default
+	CONNECTION LIMIT = -1;
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
+DROP TABLE IF EXISTS public.affiliation;
+DROP TABLE IF EXISTS public.expense;
+DROP TABLE IF EXISTS public.friendship;
+DROP TABLE IF EXISTS public.group;
+DROP TABLE IF EXISTS public.notification;
+DROP TABLE IF EXISTS public.obligation;
+DROP TABLE IF EXISTS public.user;
 
-SET default_tablespace = '';
+-- Table: public.affiliation
 
-SET default_table_access_method = heap;
+-- DROP TABLE public.affiliation;
 
---
--- TOC entry 201 (class 1259 OID 16397)
--- Name: user; Type: TABLE; Schema: public; Owner: postgres
---
+CREATE TABLE public.affiliation
+(
+	id_affiliation bigint NOT NULL DEFAULT nextval('affiliation_id_affiliation_seq'::regclass),
+	owner boolean NOT NULL,
+	valid boolean NOT NULL,
+	id_user bigint NOT NULL,
+	id_group bigint NOT NULL,
+	CONSTRAINT affiliation_pkey PRIMARY KEY (id_affiliation)
+)
 
-CREATE TABLE public."user" (
-    id_user bigint NOT NULL,
-    email character varying(63) NOT NULL,
-    password character varying(255) NOT NULL,
-    username character varying(63) NOT NULL,
-    language character varying(15) NOT NULL,
-    theme character varying(63) NOT NULL,
-    hide_email boolean NOT NULL
-);
+TABLESPACE pg_default;
 
+ALTER TABLE public.affiliation
+	OWNER to postgres;
 
-ALTER TABLE public."user" OWNER TO postgres;
+-- Table: public.expense
 
---
--- TOC entry 200 (class 1259 OID 16395)
--- Name: user_id_user_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
+-- DROP TABLE public.expense;
 
-CREATE SEQUENCE public.user_id_user_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+CREATE TABLE public.expense
+(
+	id_expense bigint NOT NULL DEFAULT nextval('expense_id_expense_seq'::regclass),
+	name character varying(63) COLLATE pg_catalog."default" NOT NULL,
+	description text COLLATE pg_catalog."default",
+	date timestamp with time zone NOT NULL,
+	value bigint NOT NULL,
+	currency character varying(3) COLLATE pg_catalog."default" NOT NULL,
+	settled boolean NOT NULL,
+	id_user bigint NOT NULL,
+	id_group bigint,
+	CONSTRAINT expense_pkey PRIMARY KEY (id_expense)
+)
 
+TABLESPACE pg_default;
 
-ALTER TABLE public.user_id_user_seq OWNER TO postgres;
+ALTER TABLE public.expense
+	OWNER to postgres;
 
---
--- TOC entry 2990 (class 0 OID 0)
--- Dependencies: 200
--- Name: user_id_user_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
+-- Table: public.friendship
 
-ALTER SEQUENCE public.user_id_user_seq OWNED BY public."user".id_user;
+-- DROP TABLE public.friendship;
 
+CREATE TABLE public.friendship
+(
+	id_friendship bigint NOT NULL DEFAULT nextval('friendship_id_friendship_seq'::regclass),
+	valid boolean NOT NULL,
+	id_user_1 bigint NOT NULL,
+	id_user_2 bigint NOT NULL,
+	CONSTRAINT friendship_pkey PRIMARY KEY (id_friendship)
+)
 
---
--- TOC entry 2850 (class 2604 OID 16400)
--- Name: user id_user; Type: DEFAULT; Schema: public; Owner: postgres
---
+TABLESPACE pg_default;
 
-ALTER TABLE ONLY public."user" ALTER COLUMN id_user SET DEFAULT nextval('public.user_id_user_seq'::regclass);
+ALTER TABLE public.friendship
+	OWNER to postgres;
 
+-- Table: public.group
 
---
--- TOC entry 2984 (class 0 OID 16397)
--- Dependencies: 201
--- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
---
+-- DROP TABLE public."group";
 
-COPY public."user" (id_user, email, password, username, language, theme, hide_email) FROM stdin;
-1	kotek@gmail.com	kocica50	piesek60	pl	dark	t
-2	haha@test.com	$2b$10$cV2JX1lAgubdgUHK/oVNVe4LueFQ8DjsF.H9YXDBEa6WspoW7v6hK	test	en	dark	f
-3	haha2@test.com	$2b$10$b1AM0Ais2to7/finjwYVCepJbjk4Y7fiz.Lt1LE0babxuLFCGwxOa	test2	en	dark	f
-4	haha23@test.com	$2b$10$aI0VLilSnbwChZlZrPHHTOu18eEWZxoFAZtbcp/9jZGy1Jw61opcO	test23	en	dark	f
-5	haha234@test.com	$2b$10$oGtse/f..ceNl7FX7vPvoeURGfJO9N0DEW24HvS3UiMYFK17aN/oW	test234	en	dark	f
-6	test90@gmail.com	$2b$10$6TKaBY7TltPgssGeQ9ZSYOYxT1X/oCN1.x5zfvm7qXsKeyv8Z2SjO	test90	pl	dark	f
-\.
+CREATE TABLE public."group"
+(
+	id_group bigint NOT NULL DEFAULT nextval('group_id_group_seq'::regclass),
+	name character varying(63) COLLATE pg_catalog."default" NOT NULL,
+	description text COLLATE pg_catalog."default",
+	deleted boolean NOT NULL,
+	CONSTRAINT group_pkey PRIMARY KEY (id_group)
+)
 
+TABLESPACE pg_default;
 
---
--- TOC entry 2991 (class 0 OID 0)
--- Dependencies: 200
--- Name: user_id_user_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
+ALTER TABLE public."group"
+	OWNER to postgres;
 
-SELECT pg_catalog.setval('public.user_id_user_seq', 6, true);
+-- Table: public.notification
 
+-- DROP TABLE public.notification;
 
---
--- TOC entry 2852 (class 2606 OID 16402)
--- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
+CREATE TABLE public.notification
+(
+	id_notification bigint NOT NULL DEFAULT nextval('notification_id_notification_seq'::regclass),
+	title character varying(255) COLLATE pg_catalog."default" NOT NULL,
+	description text COLLATE pg_catalog."default",
+	redirect text COLLATE pg_catalog."default" NOT NULL,
+	read boolean NOT NULL,
+	id_user bigint NOT NULL,
+	CONSTRAINT notification_pkey PRIMARY KEY (id_notification)
+)
 
-ALTER TABLE ONLY public."user"
-    ADD CONSTRAINT user_pkey PRIMARY KEY (id_user);
+TABLESPACE pg_default;
 
+ALTER TABLE public.notification
+	OWNER to postgres;
 
--- Completed on 2021-04-26 00:06:01
+-- Table: public.obligation
 
---
--- PostgreSQL database dump complete
---
+-- DROP TABLE public.obligation;
 
+CREATE TABLE public.obligation
+(
+    id_obligation bigint NOT NULL DEFAULT nextval('obligation_id_obligation_seq'::regclass),
+    value bigint NOT NULL,
+    settled boolean NOT NULL,
+    id_user_debtor bigint NOT NULL,
+    id_user_creditor bigint NOT NULL,
+    id_expense bigint NOT NULL,
+    CONSTRAINT obligation_pkey PRIMARY KEY (id_obligation)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.obligation
+    OWNER to postgres;
+
+-- Table: public.user
+
+-- DROP TABLE public."user";
+
+CREATE TABLE public."user"
+(
+	id_user bigint NOT NULL DEFAULT nextval('user_id_user_seq'::regclass),
+	email character varying(63) COLLATE pg_catalog."default" NOT NULL,
+	password character varying(255) COLLATE pg_catalog."default" NOT NULL,
+	username character varying(63) COLLATE pg_catalog."default" NOT NULL,
+	language character varying(15) COLLATE pg_catalog."default" NOT NULL,
+	theme character varying(63) COLLATE pg_catalog."default" NOT NULL,
+	hide_email boolean NOT NULL,
+	last_seen timestamp with time zone NOT NULL,
+	refresh_token character varying(255) COLLATE pg_catalog."default",
+	deleted boolean NOT NULL,
+	CONSTRAINT user_pkey PRIMARY KEY (id_user)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."user"
+	OWNER to postgres;

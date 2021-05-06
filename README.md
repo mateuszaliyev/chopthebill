@@ -44,7 +44,7 @@ CREATE DATABASE chopthebill
     CONNECTION LIMIT = -1;
 ```
 
-Import danych z pliku `data/db.sql` odbywa się poprzez polecenie `psql`. Po wykonaniu komendy może być konieczne wprowadzenie hasła dla podanego użytkownika.
+Import danych z pliku `data/backup/plain.sql` odbywa się poprzez polecenie `psql`. Po wykonaniu komendy może być konieczne wprowadzenie hasła dla podanego użytkownika.
 
 ```
 psql -U <nazwa_uzytkownika> -d <nazwa_bazy_danych> < <sciezka_do_pliku>
@@ -53,7 +53,7 @@ psql -U <nazwa_uzytkownika> -d <nazwa_bazy_danych> < <sciezka_do_pliku>
 Przykład dla wiersza poleceń systemów z rodziny Windows.
 
 ```
-psql -U postgres -d chopthebill < C:\dev\P01-G01-ChopTheBill\data\db.sql
+psql -U postgres -d chopthebill < C:\dev\P01-G01-ChopTheBill\data\backup\plain.sql
 ```
 
 ### Zmienne środowiskowe
