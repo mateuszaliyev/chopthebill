@@ -72,7 +72,6 @@ function LoginForm() {
 				<TextField
 					id="email"
 					label="Email"
-					variant="filled"
 					type="email"
 					onChange={(e) => setEmail(e.target.value)}
 					className={classes.margin}
@@ -82,7 +81,6 @@ function LoginForm() {
 				<TextField
 					id="password"
 					label={t("password")}
-					variant="filled"
 					type="password"
 					onChange={(e) => setPassword(e.target.value)}
 					className={classes.margin}

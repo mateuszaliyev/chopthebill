@@ -102,7 +102,6 @@ function RegisterForm() {
 				<TextField
 					id="email"
 					label="Email"
-					variant="filled"
 					type="email"
 					onChange={(e) => setEmail(e.target.value)}
 					fullWidth
@@ -114,7 +113,6 @@ function RegisterForm() {
 				<TextField
 					id="username"
 					label={t("username")}
-					variant="filled"
 					type="text"
 					onChange={(e) => setUsername(e.target.value)}
 					fullWidth
@@ -126,7 +124,6 @@ function RegisterForm() {
 				<TextField
 					id="password"
 					label={t("password")}
-					variant="filled"
 					type="password"
 					onChange={(e) => setPassword(e.target.value)}
 					fullWidth
