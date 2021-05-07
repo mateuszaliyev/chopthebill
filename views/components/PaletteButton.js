@@ -1,8 +1,9 @@
 // React & Next
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
+import { useTranslation } from "next-i18next";
 
 // Material UI
-import { IconButton } from "@material-ui/core";
+import { IconButton, Tooltip } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 
@@ -10,12 +11,15 @@ import Brightness7Icon from "@material-ui/icons/Brightness7";
 import { ThemeContext } from "./Theme";
 
 function PaletteButton() {
+	const { t } = useTranslation("common");
 	const { palette, togglePalette } = useContext(ThemeContext);
 
 	return (
-		<IconButton color="inherit" onClick={() => togglePalette()}>
-			{palette === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
-		</IconButton>
+		<Tooltip title={t("palette")}>
+			<IconButton color="inherit" onClick={() => togglePalette()}>
+				{palette === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
+			</IconButton>
+		</Tooltip>
 	);
 }
 

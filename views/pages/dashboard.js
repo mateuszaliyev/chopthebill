@@ -5,8 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 // Components
 import Auth from "../components/auth/Auth";
-import Layout from "../components/Layout";
-import Link from "../components/Link";
+import Layout from "../components/layout/Layout";
 import Meta from "../components/Meta";
 
 // Contexts

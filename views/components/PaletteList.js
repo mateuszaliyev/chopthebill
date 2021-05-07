@@ -3,26 +3,18 @@ import { useContext, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 // Material UI
-import {
-	Button,
-	IconButton,
-	Menu,
-	MenuItem,
-	useMediaQuery,
-} from "@material-ui/core";
+import { Button, IconButton, Menu, MenuItem, Tooltip } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PaletteIcon from "@material-ui/icons/Palette";
 
 // Context
 import { ThemeContext } from "./Theme";
 
-function PaletteList() {
+function PaletteList({ expand }) {
 	const { t } = useTranslation("common");
 
-	const { muiTheme, setTheme } = useContext(ThemeContext);
+	const { setTheme } = useContext(ThemeContext);
 	const [paletteAnchor, setPaletteAnchor] = useState(null);
-
-	const matches = useMediaQuery(muiTheme.breakpoints.up("md"));
 
 	const handleClick = (event) => {
 		setPaletteAnchor(event.currentTarget);
@@ -34,7 +26,7 @@ function PaletteList() {
 
 	return (
 		<>
-			{matches ? (
+			{expand ? (
 				<Button
 					aria-controls="simple-menu"
 					aria-haspopup="true"
@@ -46,14 +38,16 @@ function PaletteList() {
 					{t("theme")}
 				</Button>
 			) : (
-				<IconButton
-					aria-controls="simple-menu"
-					aria-haspopup="true"
-					color="inherit"
-					onClick={handleClick}
-				>
-					<PaletteIcon />
-				</IconButton>
+				<Tooltip title={t("theme")}>
+					<IconButton
+						aria-controls="simple-menu"
+						aria-haspopup="true"
+						color="inherit"
+						onClick={handleClick}
+					>
+						<PaletteIcon />
+					</IconButton>
+				</Tooltip>
 			)}
 			<Menu
 				id="simple-menu"

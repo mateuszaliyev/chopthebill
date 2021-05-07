@@ -1,5 +1,6 @@
 {
 	"alternative": "Alternative",
+	"dashboard": "Dashboard",
 	"default": "Default",
 	"en": "English",
 	"expenses": "Expenses",
@@ -9,11 +10,14 @@
 	"login": "Login",
 	"logout": "Logout",
 	"meta-title": "ChopTheBill – share expenses with ease",
+	"notifications": "Notifications",
 	"obligations": "Obligations",
+	"palette": "Palette",
 	"password": "Password",
 	"pl": "Polish",
 	"profile": "Profile",
 	"register": "Register",
+	"search": "Search",
 	"theme": "Theme",
 	"username": "Username"
 }

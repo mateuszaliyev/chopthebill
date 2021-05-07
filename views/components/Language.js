@@ -1,33 +1,21 @@
 // React & Next
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 // Material UI
-import {
-	Button,
-	IconButton,
-	Menu,
-	MenuItem,
-	useMediaQuery,
-} from "@material-ui/core";
+import { Button, IconButton, Menu, MenuItem, Tooltip } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TranslateIcon from "@material-ui/icons/Translate";
-
-// Contexts
-import { ThemeContext } from "./Theme";
 
 // Components
 import Link from "./Link";
 
-function Language() {
-	const { muiTheme } = useContext(ThemeContext);
+function Language({ expand }) {
 	const { t } = useTranslation("common");
 
 	const [languageAnchor, setLanguageAnchor] = useState(null);
 	const router = useRouter();
-
-	const matches = useMediaQuery(muiTheme.breakpoints.up("md"));
 
 	const handleClick = (event) => {
 		setLanguageAnchor(event.currentTarget);
@@ -39,7 +27,7 @@ function Language() {
 
 	return (
 		<>
-			{matches ? (
+			{expand ? (
 				<Button
 					aria-controls="simple-menu"
 					aria-haspopup="true"
@@ -51,14 +39,16 @@ function Language() {
 					{t("language")}
 				</Button>
 			) : (
-				<IconButton
-					aria-controls="simple-menu"
-					aria-haspopup="true"
-					color="inherit"
-					onClick={handleClick}
-				>
-					<TranslateIcon />
-				</IconButton>
+				<Tooltip title={t("language")}>
+					<IconButton
+						aria-controls="simple-menu"
+						aria-haspopup="true"
+						color="inherit"
+						onClick={handleClick}
+					>
+						<TranslateIcon />
+					</IconButton>
+				</Tooltip>
 			)}
 			<Menu
 				id="simple-menu"

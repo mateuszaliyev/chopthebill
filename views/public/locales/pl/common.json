@@ -1,5 +1,6 @@
 {
 	"alternative": "Alternatywny",
+	"dashboard": "Panel użytkownika",
 	"default": "Domyślny",
 	"en": "Angielski",
 	"expenses": "Wydatki",
@@ -9,11 +10,14 @@
 	"login": "Logowanie",
 	"logout": "Wyloguj",
 	"meta-title": "ChopTheBill – proste i szybkie dzielenie wydatków",
+	"notifications": "Powiadomienia",
 	"obligations": "Zobowiązania",
-	"pl": "Polski",
+	"palette": "Paleta",
 	"password": "Hasło",
+	"pl": "Polski",
 	"profile": "Profil",
 	"register": "Rejestracja",
+	"search": "Szukaj",
 	"theme": "Motyw",
 	"username": "Nazwa użytkownika"
 }
