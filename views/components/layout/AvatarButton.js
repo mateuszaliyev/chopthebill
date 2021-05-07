@@ -52,7 +52,7 @@ function AvatarButton({ items }) {
 			>
 				{items.map((item) => (
 					<MenuItem key={item.text} onClick={handleClose}>
-						<Link color="inherit" href={item.href}>
+						<Link color="inherit" href={item.href} underline="none">
 							{t(item.text)}
 						</Link>
 					</MenuItem>
