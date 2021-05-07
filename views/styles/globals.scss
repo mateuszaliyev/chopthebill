@@ -4,15 +4,7 @@
 	box-sizing: border-box;
 }
 
-a,
-a:active,
-a:hover,
-a:visited {
-	text-decoration: none !important;
-}
-
 body {
-	font-family: "Roboto", sans-serif;
 	margin: 0;
 	padding: 0;
 }
@@ -24,14 +16,6 @@ body {
 
 .auth-form {
 	width: 100%;
-}
-
-.auth-logo {
-	margin: 0 auto;
-	width: 20rem;
-	height: 20rem;
-	background-image: url("/logo.png");
-	background-size: cover;
 }
 
 .center {

@@ -51,7 +51,12 @@ function SideMenu({ items }) {
 			<Divider variant="middle" />
 			<List className={classes.list}>
 				{items.map((item) => (
-					<Link color="inherit" href={item.href} key={item.text}>
+					<Link
+						color="inherit"
+						href={item.href}
+						key={item.text}
+						underline="none"
+					>
 						<ListItem button>
 							<ListItemIcon>{item.icon}</ListItemIcon>
 							<ListItemText primary={t(item.text)} />

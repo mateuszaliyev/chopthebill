@@ -82,7 +82,12 @@ function SwipeMenu({ items }) {
 					onKeyDown={toggleSideMenu(false)}
 				>
 					{items.map((item) => (
-						<Link color="inherit" href={item.href} key={item.text}>
+						<Link
+							color="inherit"
+							href={item.href}
+							key={item.text}
+							underline="none"
+						>
 							<ListItem button>
 								<ListItemIcon>{item.icon}</ListItemIcon>
 								<ListItemText primary={t(item.text)} />
