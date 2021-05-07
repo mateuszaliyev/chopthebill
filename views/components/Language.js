@@ -59,7 +59,12 @@ function Language({ expand }) {
 			>
 				{router.locales.map((locale) => (
 					<MenuItem key={locale} onClick={handleClose}>
-						<Link color="inherit" href={router.asPath} locale={locale}>
+						<Link
+							color="inherit"
+							href={router.asPath}
+							locale={locale}
+							underline="none"
+						>
 							{t(locale)}
 						</Link>
 					</MenuItem>
