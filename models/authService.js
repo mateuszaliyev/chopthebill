@@ -90,7 +90,7 @@ async function loginService(email, password) {
 		language: userQuery.rows[0].language,
 		theme: userQuery.rows[0].theme,
 		hideEmail: userQuery.rows[0].hide_email,
-		lastSeen: userQuery.rows[0].lastSeen,
+		lastSeen: userQuery.rows[0].last_seen,
 	};
 
 	const tokenQuery = await db.query(
@@ -119,7 +119,7 @@ async function accessService(authHeader) {
 				language: userQuery.rows[0].language,
 				theme: userQuery.rows[0].theme,
 				hideEmail: userQuery.rows[0].hide_email,
-				lastSeen: userQuery.rows[0].lastSeen,
+				lastSeen: userQuery.rows[0].last_seen,
 			};
 			return { user, error: "" };
 		}

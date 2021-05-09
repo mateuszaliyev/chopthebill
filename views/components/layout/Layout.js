@@ -10,7 +10,7 @@ import {
 	Typography,
 	useMediaQuery,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import FolderSharedIcon from "@material-ui/icons/FolderShared";
 import HomeIcon from "@material-ui/icons/Home";
@@ -143,14 +143,14 @@ function AppBarmd({ title }) {
 }
 
 function Layout({ children, title }) {
-	const { muiTheme } = useContext(ThemeContext);
+	const theme = useTheme();
 
 	// Breakpoints
 	const bp360 = useMediaQuery("(min-width:360px)");
-	const bpsm = useMediaQuery(muiTheme.breakpoints.up("sm"));
-	const bpmd = useMediaQuery(muiTheme.breakpoints.up("md"));
-	const bplg = useMediaQuery(muiTheme.breakpoints.up("lg"));
-	const bpxl = useMediaQuery(muiTheme.breakpoints.up("xl"));
+	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
+	const bpmd = useMediaQuery(theme.breakpoints.up("md"));
+	const bplg = useMediaQuery(theme.breakpoints.up("lg"));
+	const bpxl = useMediaQuery(theme.breakpoints.up("xl"));
 
 	return (
 		<>

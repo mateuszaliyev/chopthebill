@@ -12,7 +12,7 @@ import {
 	Typography,
 	useMediaQuery,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 // Components
@@ -21,17 +21,6 @@ import Logo from "../components/Logo";
 import Meta from "../components/Meta";
 import RegisterForm from "../components/auth/RegisterForm";
 import Redirect from "../components/auth/Redirect";
-
-export async function getServerSideProps({ locale }) {
-	return {
-		props: {
-			...(await serverSideTranslations(locale, ["common", "register"])),
-		},
-	};
-}
-
-// Contexts
-import { ThemeContext } from "../components/Theme";
 
 // Styles
 const useStyles = makeStyles({
@@ -55,10 +44,18 @@ const useStyles = makeStyles({
 	},
 });
 
+export async function getServerSideProps({ locale }) {
+	return {
+		props: {
+			...(await serverSideTranslations(locale, ["common", "register"])),
+		},
+	};
+}
+
 function Register() {
 	const { t } = useTranslation(["common", "register"]);
-	const { muiTheme } = useContext(ThemeContext);
-	const bpsm = useMediaQuery(muiTheme.breakpoints.up("sm"));
+	const theme = useTheme();
+	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
 	const classes = useStyles();
 
 	return (
