@@ -15,15 +15,10 @@ import { host } from "../../config";
 // Context
 import { UserContext } from "../auth/User";
 
-// Hooks
-import useTextToColor from "../hooks/useTextToColor";
-
 function AvatarButton({ items }) {
 	const { t } = useTranslation("common");
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
 	const { user } = useContext(UserContext);
-
-	const color = useTextToColor(user.username);
 
 	const handleClick = (event) => {
 		setAvatarAnchor(event.currentTarget);
@@ -38,9 +33,7 @@ function AvatarButton({ items }) {
 			<Tooltip title={user.username}>
 				<IconButton color="inherit" onClick={handleClick}>
 					<Avatar
-						alt={user.username}
-						color={color}
-						src={`${host}/avatars/${user.id}.png`}
+						alt={user.username} /* src={`${host}/avatars/${user.id}.png`} */
 					/>
 				</IconButton>
 			</Tooltip>
