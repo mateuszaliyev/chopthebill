@@ -1,4 +1,6 @@
-# ChopTheBill
+<p align="center"><img alt="Logo" src="https://github.com/PRz-IO/P01-G01-ChopTheBill/blob/main/views/public/icons/icon.svg"></p>
+<h1 align="center">ChopTheBill</h1>
+
 Aplikacja internetowa do łatwego podziału kosztów między ludźmi.
 
 Stworzona w ramach łączonego projektu kierunków Zarządzania oraz Informatyki Politechniki Rzeszowskiej im. Ignacego Łukasiewicza.
@@ -60,13 +62,17 @@ psql -U postgres -d chopthebill < C:\dev\P01-G01-ChopTheBill\data\backup\plain.s
 
 Aplikacja do nawiązania połączenia z bazą danych PostgreSQL wymaga utworzenia pliku `.env` w katalogu głównym projektu oraz wprowadzenia zmiennych środowiskowych.
 
-- `PGHOST` - nazwa hosta, z którym aplikacja nawiązuje połączenie,
-- `PGUSER` - nazwa użytkownika PostgreSQL (domyślnie `postgres`),
-- `PGDATABASE` - nazwa bazy danych,
-- `PGPASSWORD` - hasło użytkownika `PGUSER`,
-- `PGPORT` - port, na którym można połączyć się z hostem.
-
 Użytkownicy są uwierzytelniani z użyciem [JSONWebToken](https://jwt.io/). Sygnowanie oraz weryfikacja przesyłanych tokenów odbywa się poprzez wykorzystanie sekretnych kluczy zapisanych w zmiennych środowiskowych: `ACCESS_TOKEN_SECRET` oraz `REFRESH_TOKEN_SECRET`.
+
+| Zmienna                    | Opis                           | Domyślna wartość |
+| -------------------------- | ------------------------------ | ----------------:|
+| `ACCESS_TOKEN_SECRET`      | sekretny klucz *access token*  |                  |
+| `REFRESH_TOKEN_SECRET`     | sekretny klucz *refresh token* |                  |
+| `PGHOST`                   | nazwa hosta                    |      `localhost` |
+| `PGUSER`                   | nazwa użytkownika              |       `postgres` |
+| `PGDATABASE`               | nazwa bazy danych              |    `chopthebill` |
+| `PGPASSWORD`               | hasło użytkownika              |                  |
+| `PGPORT`                   | port serwera bazy danych       |           `5432` |
 
 Wygenerowanie losowych kluczy jest możliwe z poziomu katalogu głównego projektu.
 
