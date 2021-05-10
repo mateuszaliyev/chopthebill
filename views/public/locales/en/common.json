@@ -11,6 +11,7 @@
 	"login": "Login",
 	"logout": "Logout",
 	"meta-title": "ChopTheBill – share expenses with ease",
+	"no-results": "No results",
 	"notifications": "Notifications",
 	"obligations": "Obligations",
 	"palette": "Palette",
@@ -19,7 +20,8 @@
 	"profile": "Profile",
 	"register": "Register",
 	"search": "Search",
-	"search-users": "Search users",
+	"search-users": "Search users (min. 3 characters)",
 	"theme": "Theme",
-	"username": "Username"
+	"username": "Username",
+	"users": "Users"
 }

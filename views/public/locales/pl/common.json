@@ -11,6 +11,7 @@
 	"login": "Logowanie",
 	"logout": "Wyloguj",
 	"meta-title": "ChopTheBill – proste i szybkie dzielenie wydatków",
+	"no-results": "Brak wyników",
 	"notifications": "Powiadomienia",
 	"obligations": "Zobowiązania",
 	"palette": "Paleta",
@@ -19,7 +20,8 @@
 	"profile": "Profil",
 	"register": "Rejestracja",
 	"search": "Szukaj",
-	"search-users": "Wyszukaj użytkowników",
+	"search-users": "Wyszukaj użytkowników (min. 3 znaki)",
 	"theme": "Motyw",
-	"username": "Nazwa użytkownika"
+	"username": "Nazwa użytkownika",
+	"users": "Użytkownicy"
 }

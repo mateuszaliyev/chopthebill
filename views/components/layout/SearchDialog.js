@@ -1,7 +1,8 @@
-import { useState, useContext, useEffect } from "react";
-import { UserContext } from "../auth/User";
+// React & Next
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
-import Link from "../Link";
+
+// Material UI
 import {
 	Dialog,
 	DialogContent,
@@ -9,30 +10,70 @@ import {
 	IconButton,
 	InputBase,
 	List,
+	ListSubheader,
 	ListItem,
+	ListItemAvatar,
 	ListItemText,
 	Paper,
 	Tooltip,
+	useMediaQuery,
+	Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import CloseIcon from "@material-ui/icons/Close";
 import SearchIcon from "@material-ui/icons/Search";
+
+// Components
+import Avatar from "../Avatar";
+import Link from "../Link";
+
+// Config
 import { host } from "../../config";
 
+// Context
+import { UserContext } from "../auth/User";
+
 const useStyles = makeStyles((theme) => ({
+	closeButton: {
+		position: "absolute",
+		right: theme.spacing(1),
+		top: theme.spacing(1),
+	},
 	input: {
+		flex: 1,
 		marginLeft: "1rem",
+	},
+	padding: {
+		paddingBottom: "1rem",
+		paddingTop: "1rem",
+	},
+	paper: {
+		display: "flex",
 	},
 }));
 
 function SearchDialog({ onClose, open, title }) {
 	const { t } = useTranslation("common");
-	const classes = useStyles();
-	const [input, setInput] = useState("");
-	const [results, setResults] = useState([]);
-	const [list, setList] = useState();
+
 	const { accessToken } = useContext(UserContext);
 
-	const handleClick = async () => {
+	const [input, setInput] = useState("");
+	const [results, setResults] = useState([]);
+	const [submitted, setSubmitted] = useState(false);
+
+	const classes = useStyles();
+	const theme = useTheme();
+	const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+	const handleChange = (e) => {
+		setInput(e.target.value);
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (input.length < 3) {
+			return;
+		}
 		const res = await fetch(`${host}/search`, {
 			method: "POST",
 			headers: {
@@ -45,51 +86,87 @@ function SearchDialog({ onClose, open, title }) {
 			}),
 		});
 		const data = await res.json();
-		setResults(data.result);
-	};
-
-	const handleChange = (e) => {
-		setInput(e.target.value);
+		setResults(data.results);
+		setSubmitted(true);
 	};
 
 	useEffect(() => {
-		const newList = results.map((user) => {
-			console.log(user.username);
-			<Link
-				color="inherit"
-				href={`users/${user.id_user}`}
-				key={user.id_user}
-				underline="none"
-			>
-				<ListItem>
-					<ListItemText primary={user.username} />
-				</ListItem>
-			</Link>;
-		});
-		setList(newList);
-	}, [results]);
+		if (open) {
+			setResults([]);
+			setSubmitted(false);
+		}
+	}, [open]);
 
 	return (
-		<Dialog onClose={onClose} open={open}>
-			<DialogTitle>{title}</DialogTitle>
+		<Dialog
+			fullScreen={fullScreen}
+			fullWidth={true}
+			onClose={onClose}
+			open={open}
+		>
+			<DialogTitle>
+				{title}
+				<IconButton
+					aria-label="close"
+					className={classes.closeButton}
+					onClick={onClose}
+				>
+					<CloseIcon />
+				</IconButton>
+			</DialogTitle>
 			<DialogContent dividers>
-				<Paper>
+				<Paper
+					className={classes.paper}
+					component="form"
+					onSubmit={handleSubmit}
+				>
 					<InputBase
 						className={classes.input}
 						placeholder={t("search-users")}
 						onChange={handleChange}
 					/>
 					<Tooltip title={t("search")}>
-						<IconButton onClick={handleClick}>
+						<IconButton type="submit">
 							<SearchIcon />
 						</IconButton>
 					</Tooltip>
 				</Paper>
-			</DialogContent>
-			<DialogContent>
-				<Paper>
-					<List>{list}</List>
-				</Paper>
+				{results && results.length > 0 ? (
+					<List>
+						<ListSubheader>{t("users")}</ListSubheader>
+						{results.map((user) => (
+							<Link
+								color="inherit"
+								href={`users/${user.id}`}
+								key={user.id}
+								underline="none"
+							>
+								<ListItem button className={user.email ? "" : classes.padding}>
+									<ListItemAvatar>
+										<Avatar
+											alt={user.username}
+											// src={`${host}/avatars/${user.id_user}.png`}
+										/>
+									</ListItemAvatar>
+									<ListItemText
+										primary={user.username}
+										secondary={user.email}
+									/>
+								</ListItem>
+							</Link>
+						))}
+					</List>
+				) : (
+					submitted && (
+						<List>
+							<ListItem>
+								<ListItemText>
+									<Typography color="error">{t("no-results")}</Typography>
+								</ListItemText>
+							</ListItem>
+						</List>
+					)
+				)}
 			</DialogContent>
 		</Dialog>
 	);
