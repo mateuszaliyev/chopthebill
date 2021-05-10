@@ -86,6 +86,17 @@ PGPASSWORD=postgres
 PGPORT=5432
 ```
 
+### Adres serwera
+W pliku `views/config/index.js` znajdują się adresy URL serwera dla trybu *"development"* oraz *"production"*. Domyślnym adresem dla obu opcji jest `http://localhost:5000`. Aplikacja powinna działać prawidłowo, jeżeli korzysta się z niej na tym samym urządzeniu, na którym została uruchomiona. Aby móc korzystać z aplikacji używajac innego urządzenia (np. smartfonu) należy ustawić powyższe adresy na adres IP hosta tak, jak w poniższym przykładzie.
+
+```js
+const dev = process.env.NODE_ENV !== "production";
+
+export const host = dev
+	? `http://192.168.0.10:5000` //  development
+	: `http://192.168.0.10:5000`; // production
+```
+
 ### Uruchamianie
 
 Uruchomienie aplikacji w trybie *"development"*, zoptymalizowanym do edycji kodu (z automatycznym odświeżaniem strony po zapisaniu wprowadzonych zmian, wyświetlaniem błędów, etc.).
