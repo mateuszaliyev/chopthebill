@@ -13,9 +13,8 @@ import { UserContext } from "./User";
 
 function Auth(props) {
 	const router = useRouter();
-	const { accessToken, setAccessToken, user, setUser } = useContext(
-		UserContext
-	);
+	const { accessToken, setAccessToken, user, setUser } =
+		useContext(UserContext);
 	const [authenticated, setAuthenticated] = useState(false);
 
 	const authenticate = async () => {
@@ -48,6 +47,13 @@ function Auth(props) {
 	};
 
 	useEffect(authenticate, [accessToken]);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			getAccessToken();
+		}, 1000 * 60 * 14);
+		return () => clearInterval(interval);
+	}, [accessToken]);
 
 	return authenticated && user ? props.children : <Loader />;
 }
