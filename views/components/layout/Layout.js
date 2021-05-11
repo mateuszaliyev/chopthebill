@@ -48,17 +48,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // List items
-const avatarItems = [
-	{
-		href: "/user",
-		text: "profile",
-	},
-	{
-		href: "/logout",
-		text: "logout",
-	},
-];
-
 const menuItems = [
 	{
 		href: "/dashboard",
@@ -111,7 +100,7 @@ function AppBarxs({ title }) {
 						amount={1}
 						color={palette === "light" ? "secondary" : "primary"}
 					/>
-					<AvatarButton items={avatarItems} />
+					<AvatarButton />
 				</Toolbar>
 			</AppBar>
 		</header>
@@ -135,7 +124,7 @@ function AppBarmd({ title }) {
 					</Typography>
 					<SearchButton />
 					<NotificationButton amount={1} color="primary" />
-					<AvatarButton items={avatarItems} />
+					<AvatarButton />
 				</Toolbar>
 			</AppBar>
 		</header>

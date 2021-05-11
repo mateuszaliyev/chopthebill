@@ -51,7 +51,7 @@ function Account() {
 		}
 	};
 
-	useEffect(getUser, [accessToken]);
+	useEffect(getUser, [accessToken, id]);
 
 	return (
 		<Auth>

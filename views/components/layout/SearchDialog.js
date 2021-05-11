@@ -137,7 +137,7 @@ function SearchDialog({ onClose, open, title }) {
 						{results.map((user) => (
 							<Link
 								color="inherit"
-								href={`user/${user.id}`}
+								href={`/user/${user.id}`}
 								key={user.id}
 								underline="none"
 							>

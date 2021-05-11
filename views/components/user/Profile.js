@@ -12,8 +12,9 @@ import { UserContext } from "../../components/auth/User";
 
 const useStyles = makeStyles((theme) => ({
 	large: {
-		width: theme.spacing(20),
+		fontSize: "5rem",
 		height: theme.spacing(20),
+		width: theme.spacing(20),
 	},
 	root: {
 		display: "flex",

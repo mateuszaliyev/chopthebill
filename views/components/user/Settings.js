@@ -65,30 +65,35 @@ function Settings() {
 			language: e.target.value,
 		}));
 	};
+
 	const handleUsername = (e) => {
 		setSettings((prevSettings) => ({
 			...prevSettings,
 			username: e.target.value,
 		}));
 	};
+
 	const handleEmail = (e) => {
 		setSettings((prevSettings) => ({
 			...prevSettings,
 			email: e.target.value,
 		}));
 	};
+
 	const handleHideEmail = (e) => {
 		setSettings((prevSettings) => ({
 			...prevSettings,
 			hideEmail: e.target.checked,
 		}));
 	};
+
 	const handleTheme = (e) => {
 		setSettings((prevSettings) => ({
 			...prevSettings,
 			theme: `${e.target.value}-${prevSettings.theme.split("-")[1]}`,
 		}));
 	};
+
 	const handlePalette = (e) => {
 		const palette = e.target.checked ? "light" : "dark";
 		setSettings((prevSettings) => ({
@@ -96,8 +101,6 @@ function Settings() {
 			theme: `${prevSettings.theme.split("-")[0]}-${palette}`,
 		}));
 	};
-
-	useEffect(() => console.log(settings), [settings]);
 
 	return (
 		<>

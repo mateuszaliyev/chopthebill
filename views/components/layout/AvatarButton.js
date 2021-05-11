@@ -15,7 +15,7 @@ import { host } from "../../config";
 // Context
 import { UserContext } from "../auth/User";
 
-function AvatarButton({ items }) {
+function AvatarButton() {
 	const { t } = useTranslation("common");
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
 	const { user } = useContext(UserContext);
@@ -27,6 +27,18 @@ function AvatarButton({ items }) {
 	const handleClose = () => {
 		setAvatarAnchor(null);
 	};
+
+	// List items
+	const items = [
+		{
+			href: `/user/${user.id}`,
+			text: "profile",
+		},
+		{
+			href: "/logout",
+			text: "logout",
+		},
+	];
 
 	return (
 		<>
