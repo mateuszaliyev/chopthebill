@@ -30,8 +30,18 @@ import { ThemeContext } from "../Theme";
 // Styles
 const useStyles = makeStyles((theme) => ({
 	appBar: {
-		marginLeft: "16rem",
 		width: "calc(100% - 16rem)",
+	},
+	container: {
+		flexGrow: 1,
+	},
+	main: {
+		display: "flex",
+		flexDirection: "column",
+		height: "calc(100vh - 4rem)",
+	},
+	margin: {
+		marginLeft: "16rem",
 	},
 	menuButton: {
 		marginRight: theme.spacing(2),
@@ -113,7 +123,7 @@ function AppBarmd({ title }) {
 	return (
 		<header className={classes.root}>
 			<AppBar
-				className={classes.appBar}
+				className={`${classes.appBar} ${classes.margin}`}
 				color="transparent"
 				elevation={0}
 				position="static"
@@ -132,6 +142,7 @@ function AppBarmd({ title }) {
 }
 
 function Layout({ children, title }) {
+	const classes = useStyles();
 	const theme = useTheme();
 
 	// Breakpoints
@@ -147,15 +158,19 @@ function Layout({ children, title }) {
 				<>
 					<AppBarmd title={title} />
 					<SideMenu items={menuItems} />
-					<main style={{ marginLeft: "16rem" }}>
+					<main className={`${classes.main} ${classes.margin}`}>
 						<Divider variant="middle" />
-						<Container maxWidth="xl">{children}</Container>
+						<Container className={classes.container} maxWidth="xl">
+							{children}
+						</Container>
 					</main>
 				</>
 			) : (
 				<>
 					<AppBarxs title={title} />
-					<Container component="main">{children}</Container>
+					<Container className={classes.main} component="main">
+						{children}
+					</Container>
 				</>
 			)}
 		</>
