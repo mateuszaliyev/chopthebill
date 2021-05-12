@@ -44,7 +44,7 @@ async function registerService(user) {
 
 	const hashedPassword = await bcrypt.hash(user.password, 10);
 
-	const userQuery = await db.query(
+	await db.query(
 		`INSERT INTO public."user"(id_user, email, password, username, language, theme, hide_email, last_seen, deleted) 
 			VALUES (default, $1, $2, $3, $4, $5, $6, NOW(), FALSE)`,
 		[
@@ -95,7 +95,7 @@ async function loginService(email, password) {
 		lastSeen: userQuery.rows[0].last_seen,
 	};
 
-	const tokenQuery = await db.query(
+	await db.query(
 		`UPDATE public."user" SET last_seen = NOW(), refresh_token = $1 WHERE email = $2`,
 		[refreshToken, email]
 	);
@@ -123,6 +123,10 @@ async function accessService(authHeader) {
 				hideEmail: userQuery.rows[0].hide_email,
 				lastSeen: userQuery.rows[0].last_seen,
 			};
+			await db.query(
+				`UPDATE public."user" SET last_seen = NOW() WHERE username = $1`,
+				[decoded.username]
+			);
 			return { user, error: "" };
 		}
 	}
@@ -159,7 +163,7 @@ async function logoutService(req) {
 		verifyToken(accessToken, process.env.ACCESS_TOKEN_SECRET) &&
 		verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
 	) {
-		const logoutQuery = await db.query(
+		await db.query(
 			`UPDATE public."user" SET refresh_token = NULL WHERE refresh_token = $1`,
 			[refreshToken]
 		);
