@@ -55,7 +55,9 @@ function Profile({ user }) {
 			<Avatar alt={user.username} className={classes.large} />
 			<div className={classes.details}>
 				<h1 className={classes.margin}>{user.username}</h1>
-				{!user.hideEmail && <h3 className={classes.margin}>{user.email}</h3>}
+				{!user.hideEmail && user.username !== user.email && (
+					<h3 className={classes.margin}>{user.email}</h3>
+				)}
 				<h3 className={classes.margin}>{lastSeen}</h3>
 			</div>
 			{loggedUser.id !== user.id && (

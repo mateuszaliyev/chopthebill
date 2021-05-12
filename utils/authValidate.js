@@ -63,4 +63,36 @@ function loginValidate(email, password) {
 	return true;
 }
 
-module.exports = { registerValidate, loginValidate };
+function settingsValidate({ email, username, hideEmail, language, theme }) {
+	const issues = [];
+	if (
+		!validator.isEmail(email) ||
+		!validator.isLength(email, { min: 3, max: 63 })
+	) {
+		issues.push("email-invalid");
+	}
+
+	if (username !== "") {
+		if (!validator.isAlphanumeric(username)) {
+			issues.push("username-invalid");
+		}
+
+		if (!validator.isLength(username, { min: 3, max: 63 })) {
+			issues.push("username-length-invalid");
+		}
+	} else if (hideEmail) {
+		issues.push("exclusion");
+	}
+
+	if (!validator.isLength(language, { max: 15 })) {
+		issues.push("language-invalid");
+	}
+
+	if (!validator.isLength(theme, { max: 63 })) {
+		issues.push("theme-invalid");
+	}
+
+	return issues;
+}
+
+module.exports = { registerValidate, loginValidate, settingsValidate };

@@ -1,6 +1,9 @@
 // React & Next
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+
+import { host } from "../../config";
 
 // Material UI
 import {
@@ -15,6 +18,10 @@ import {
 	Select,
 	Switch,
 	TextField,
+	FormControl,
+	FormControlLabel,
+	FormHelperText,
+	FormGroup,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
@@ -26,7 +33,8 @@ import TextFieldsIcon from "@material-ui/icons/TextFields";
 import TranslateIcon from "@material-ui/icons/Translate";
 
 // Contexts
-import { UserContext } from "../../components/auth/User";
+import { UserContext } from "../auth/User";
+import { ThemeContext } from "../Theme";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -50,17 +58,31 @@ const useStyles = makeStyles((theme) => ({
 function Settings() {
 	const { t } = useTranslation("common");
 
-	const { user } = useContext(UserContext);
+	const { user, accessToken } = useContext(UserContext);
+	const { setTheme, setPalette } = useContext(ThemeContext);
 
 	const classes = useStyles();
 
+	const router = useRouter();
+
+	const [fieldsHelper, setFieldsHelper] = useState({
+		email: "",
+		username: "",
+		hideEmail: "",
+	});
+
 	const [settings, setSettings] = useState({
-		username: user.username,
+		username: user.username === user.email ? "" : user.username,
 		email: user.email,
 		language: user.language,
 		hideEmail: user.hideEmail,
 		theme: user.theme,
 	});
+
+	const changeTheme = () => {
+		setTheme(settings.theme.split("-")[0]);
+		setPalette(settings.theme.split("-")[1]);
+	};
 
 	const handleLanguage = (e) => {
 		setSettings((prevSettings) => ({
@@ -105,9 +127,54 @@ function Settings() {
 		}));
 	};
 
+	useEffect(changeTheme, [settings]);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		const res = await fetch(`${host}/settings`, {
+			method: "PUT",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: JSON.stringify(settings),
+		});
+		const issues = await res.json();
+
+		if (issues.length > 0) {
+			const newFieldsHelper = {
+				email: "",
+				username: "",
+				hideEmail: "",
+			};
+			issues.forEach((issue) => {
+				if (issue.indexOf("email") !== -1) {
+					newFieldsHelper.email += t(`register:${issue}`) + ". ";
+				}
+
+				if (issue.indexOf("username") !== -1) {
+					newFieldsHelper.username += t(`register:${issue}`) + ". ";
+				}
+
+				if (issue.indexOf("exclusion") !== -1) {
+					newFieldsHelper.hideEmail += t(`register:${issue}`) + ". ";
+				}
+			});
+			setFieldsHelper(newFieldsHelper);
+		} else {
+			if (settings.language !== user.language) {
+				router.replace(router.asPath, router.asPath, {
+					locale: settings.language,
+				});
+			} else router.reload();
+		}
+	};
+
 	return (
 		<>
-			<Paper>
+			<Paper component="form" onSubmit={handleSubmit}>
 				<List>
 					<ListItem>
 						<ListItemIcon>
@@ -118,8 +185,12 @@ function Settings() {
 							<TextField
 								className={classes.inputField}
 								inputProps={{ style: { textAlign: "center" } }}
-								defaultValue={settings.username}
+								defaultValue={
+									settings.username === settings.email ? "" : settings.username
+								}
 								onChange={handleUsername}
+								helperText={fieldsHelper.username}
+								error={fieldsHelper.username.length > 0}
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
@@ -130,10 +201,13 @@ function Settings() {
 						<ListItemText>Email</ListItemText>
 						<ListItemSecondaryAction>
 							<TextField
+								type="email"
 								className={classes.inputField}
 								inputProps={{ style: { textAlign: "center" } }}
 								defaultValue={settings.email}
 								onChange={handleEmail}
+								helperText={fieldsHelper.email}
+								error={fieldsHelper.email.length > 0}
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
@@ -153,19 +227,34 @@ function Settings() {
 							</Select>
 						</ListItemSecondaryAction>
 					</ListItem>
-					<ListItem>
-						<ListItemIcon>
-							<EmailIcon />
-						</ListItemIcon>
-						<ListItemText>{t("hide-email")}</ListItemText>
-						<ListItemSecondaryAction>
-							<Switch
-								color="primary"
-								onChange={handleHideEmail}
-								checked={settings.hideEmail}
-							></Switch>
-						</ListItemSecondaryAction>
-					</ListItem>
+					<FormControl
+						error={fieldsHelper.hideEmail.length > 0}
+						style={{ width: "100%" }}
+					>
+						<FormGroup>
+							<ListItem>
+								<ListItemIcon>
+									<EmailIcon />
+								</ListItemIcon>
+								<ListItemText>{t("hide-email")}</ListItemText>
+								<ListItemSecondaryAction>
+									<FormControlLabel
+										style={{ marginRight: "0" }}
+										control={
+											<Switch
+												color="primary"
+												onChange={handleHideEmail}
+												checked={settings.hideEmail}
+											></Switch>
+										}
+									/>
+								</ListItemSecondaryAction>
+							</ListItem>
+						</FormGroup>
+						<FormHelperText style={{ textAlign: "center" }}>
+							{fieldsHelper.hideEmail}
+						</FormHelperText>
+					</FormControl>
 					<ListItem>
 						<ListItemIcon>
 							<PaletteIcon />
@@ -200,7 +289,7 @@ function Settings() {
 						</ListItemSecondaryAction>
 					</ListItem>
 					<div className={classes.button}>
-						<Button variant="contained" color="primary">
+						<Button variant="contained" color="primary" type="submit">
 							{t("confirm")}
 						</Button>
 					</div>

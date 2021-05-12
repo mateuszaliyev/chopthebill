@@ -50,7 +50,7 @@ async function registerService(user) {
 		[
 			user.email,
 			hashedPassword,
-			user.username,
+			user.username || user.email,
 			user.language,
 			user.theme,
 			user.hideEmail,

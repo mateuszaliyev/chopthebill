@@ -1,4 +1,4 @@
-const { profileService } = require("../models/profileService");
+const { profileService, settingsService } = require("../models/userService");
 
 async function profileController(req, res) {
 	try {
@@ -19,4 +19,18 @@ async function profileController(req, res) {
 		return res.status(500).json({ error: "internal-server-error", user: {} });
 	}
 }
-module.exports = { profileController };
+
+async function settingsController(req, res) {
+	try {
+		const issues = await settingsService(req.headers.authorization, req.body);
+		if (issues.length > 0) {
+			return res.status(400).json(issues);
+		}
+		return res.status(200).json([]);
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json(["internal-server-error"]);
+	}
+}
+
+module.exports = { profileController, settingsController };

@@ -13,8 +13,6 @@ function useDateComparison(date1, date2) {
 
 	const difference = Math.abs(date1.getTime() - date2.getTime());
 
-	console.log(date1, date2);
-
 	if (difference < 1000 * 60 * 15) {
 		return t("date:now");
 	}
