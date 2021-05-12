@@ -71,7 +71,7 @@ function Login() {
 								</IconButton>
 							</Tooltip>
 						</Link>
-						<Logo size={192} />
+						<Logo center size={192} />
 						<Typography align="center" variant="h4">
 							ChopTheBill
 						</Typography>
@@ -86,7 +86,7 @@ function Login() {
 								</IconButton>
 							</Tooltip>
 						</Link>
-						<Logo size={192} />
+						<Logo center size={192} />
 						<Typography align="center" variant="h4">
 							ChopTheBill
 						</Typography>

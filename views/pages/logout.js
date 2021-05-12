@@ -27,7 +27,7 @@ function Logout() {
 		if (res.ok) {
 			setAccessToken("");
 			setUser({});
-			router.push("/login");
+			router.replace("/login");
 		}
 	};
 
@@ -35,8 +35,8 @@ function Logout() {
 
 	return (
 		<Auth>
-			<div className="center">
-				<Loader />
+			<div style={{ height: "100vh" }}>
+				<Loader size="4rem" />
 			</div>
 		</Auth>
 	);

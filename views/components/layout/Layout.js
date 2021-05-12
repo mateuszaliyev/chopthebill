@@ -86,7 +86,8 @@ const menuItems = [
 	},
 ];
 
-function AppBarxs({ title }) {
+// Mobile appbar
+function AppBarMobile({ title }) {
 	const { palette } = useContext(ThemeContext);
 	const classes = useStyles();
 
@@ -117,7 +118,8 @@ function AppBarxs({ title }) {
 	);
 }
 
-function AppBarmd({ title }) {
+// Desktop appbar
+function AppBarDesktop({ title }) {
 	const classes = useStyles();
 
 	return (
@@ -146,17 +148,13 @@ function Layout({ children, title }) {
 	const theme = useTheme();
 
 	// Breakpoints
-	const bp360 = useMediaQuery("(min-width:360px)");
-	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
 	const bpmd = useMediaQuery(theme.breakpoints.up("md"));
-	const bplg = useMediaQuery(theme.breakpoints.up("lg"));
-	const bpxl = useMediaQuery(theme.breakpoints.up("xl"));
 
 	return (
 		<>
 			{bpmd ? (
 				<>
-					<AppBarmd title={title} />
+					<AppBarDesktop title={title} />
 					<SideMenu items={menuItems} />
 					<main className={`${classes.main} ${classes.margin}`}>
 						<Divider variant="middle" />
@@ -167,7 +165,7 @@ function Layout({ children, title }) {
 				</>
 			) : (
 				<>
-					<AppBarxs title={title} />
+					<AppBarMobile title={title} />
 					<Container className={classes.main} component="main">
 						{children}
 					</Container>

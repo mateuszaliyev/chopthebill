@@ -1,20 +1,15 @@
-// React & Next
-import { useContext } from "react";
-
 // Material UI
 import { useMediaQuery } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-// Contexts
-import { ThemeContext } from "../components/Theme";
-
+// Styles
 const useStyles = makeStyles((theme) => ({
-	logo: ({ bpsm, palette }) => ({
+	logo: ({ bpsm }) => ({
 		background: 'url("/icons/icon-no-bg.svg")',
 		backgroundPosition: "50% 50%",
 		backgroundRepeat: "no-repeat",
 		backgroundSize: bpsm ? "48rem" : "24rem",
-		filter: `invert(${palette === "light" ? 1 : 0})`,
+		filter: `invert(1)`,
 		height: "100%",
 		opacity: "0.05",
 	}),
@@ -23,8 +18,7 @@ const useStyles = makeStyles((theme) => ({
 function Empty() {
 	const theme = useTheme();
 	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
-	const { palette } = useContext(ThemeContext);
-	const classes = useStyles({ bpsm, palette });
+	const classes = useStyles({ bpsm });
 
 	return <div className={classes.logo} />;
 }
