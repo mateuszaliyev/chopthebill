@@ -1,0 +1,19 @@
+{
+	"ago": "temu",
+	"day_0": "{{count}} dzień",
+	"day_1": "{{count}} dni",
+	"day_2": "{{count}} dni",
+	"hour_0": "{{count}} godzina",
+	"hour_1": "{{count}} godziny",
+	"hour_2": "{{count}} godzin",
+	"minute_0": "{{count}} minuta",
+	"minute_1": "{{count}} minuty",
+	"minute_2": "{{count}} minut",
+	"month_0": "{{count}} miesiąc",
+	"month_1": "{{count}} miesiące",
+	"month_2": "{{count}} miesięcy",
+	"now": "teraz",
+	"year_0": "{{count}} rok",
+	"year_1": "{{count}} lata",
+	"year_2": "{{count}} lat"
+}

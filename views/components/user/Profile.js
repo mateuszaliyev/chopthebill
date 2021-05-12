@@ -12,6 +12,9 @@ import Avatar from "../Avatar";
 // Contexts
 import { UserContext } from "../../components/auth/User";
 
+// Hooks
+import useDateComparison from "../hooks/useDateComparison";
+
 // Styles
 const useStyles = makeStyles((theme) => ({
 	large: {
@@ -39,11 +42,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Profile({ user }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation(["common", "date"]);
 
 	const { user: loggedUser } = useContext(UserContext);
 
 	const classes = useStyles();
+
+	const lastSeen = useDateComparison(new Date(user.lastSeen), new Date());
 
 	return (
 		<Paper className={classes.root}>
@@ -51,7 +56,7 @@ function Profile({ user }) {
 			<div className={classes.details}>
 				<h1 className={classes.margin}>{user.username}</h1>
 				{!user.hideEmail && <h3 className={classes.margin}>{user.email}</h3>}
-				<h3 className={classes.margin}>{user.lastSeen}</h3>
+				<h3 className={classes.margin}>{lastSeen}</h3>
 			</div>
 			{loggedUser.id !== user.id && (
 				<Button variant="contained" color="primary">
