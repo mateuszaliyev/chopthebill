@@ -63,6 +63,21 @@ function loginValidate(email, password) {
 	return true;
 }
 
+function resetPasswordValidate(password) {
+	if (
+		validator.isStrongPassword(password, {
+			minLength: 6,
+			minLowercase: 1,
+			minUppercase: 1,
+			minNumbers: 1,
+			minSymbols: 0,
+		})
+	) {
+		return true;
+	}
+	return false;
+}
+
 function settingsValidate({ email, username, hideEmail, language, theme }) {
 	const issues = [];
 	if (
@@ -95,4 +110,9 @@ function settingsValidate({ email, username, hideEmail, language, theme }) {
 	return issues;
 }
 
-module.exports = { registerValidate, loginValidate, settingsValidate };
+module.exports = {
+	registerValidate,
+	loginValidate,
+	resetPasswordValidate,
+	settingsValidate,
+};

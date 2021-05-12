@@ -6,7 +6,7 @@ const { db } = require("../config/db");
 
 // Utils
 const { verifyToken } = require("../utils/jwt");
-const { settingsValidate } = require("../utils/authValidate");
+const { settingsValidate } = require("../utils/validate");
 
 async function profileService(id, authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];

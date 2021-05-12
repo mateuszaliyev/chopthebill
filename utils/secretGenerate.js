@@ -17,6 +17,7 @@ fs.readFile(path.join(__dirname, "../.env"), "utf8", (err, data) => {
 	});
 	env.ACCESS_TOKEN_SECRET = crypto.randomBytes(32).toString("hex");
 	env.REFRESH_TOKEN_SECRET = crypto.randomBytes(32).toString("hex");
+	env.FORGOT_PASSWORD_SECRET = crypto.randomBytes(32).toString("hex");
 	let newData = "";
 	for (key in env) {
 		newData += `${key}=${env[key]}\r\n`;

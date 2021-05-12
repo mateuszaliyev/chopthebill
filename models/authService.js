@@ -8,13 +8,18 @@ const bcrypt = require("bcrypt");
 const { db } = require("../config/db");
 
 // Validation
-const { registerValidate, loginValidate } = require("../utils/authValidate");
+const {
+	registerValidate,
+	loginValidate,
+	resetPasswordValidate,
+} = require("../utils/validate");
 
 // Tokens
 const {
 	getAccessToken,
 	getRefreshToken,
 	verifyToken,
+	getResetPasswordLink,
 } = require("../utils/jwt");
 
 async function registerService(user) {
@@ -172,10 +177,87 @@ async function logoutService(req) {
 	return "forbidden";
 }
 
+async function forgotPasswordService(email) {
+	const emailPasswordIdQuery = await db.query(
+		`SELECT email, password, id_user FROM public."user" WHERE email = $1`,
+		[email]
+	);
+
+	if (!emailPasswordIdQuery.rows[0]?.email) {
+		return { link: "", error: "invalid-email" };
+	}
+
+	const secret =
+		process.env.FORGOT_PASSWORD_SECRET + emailPasswordIdQuery.rows[0].password;
+
+	const payload = {
+		email: emailPasswordIdQuery.rows[0].email,
+		id: emailPasswordIdQuery.rows[0].id_user,
+	};
+
+	const link = getResetPasswordLink(payload, secret);
+
+	return { link: link, error: "" };
+}
+
+async function validateLinkService(id, token) {
+	const idPasswordQuery = await db.query(
+		`SELECT id_user, password FROM public."user" WHERE id_user = $1`,
+		[id]
+	);
+
+	if (!idPasswordQuery.rows[0]) {
+		return "invalid-link";
+	}
+
+	const secret =
+		process.env.FORGOT_PASSWORD_SECRET + idPasswordQuery.rows[0].password;
+
+	if (!verifyToken(token, secret)) {
+		return "link-expired";
+	}
+
+	return "";
+}
+
+async function resetPasswordService(id, token, password) {
+	const idPasswordQuery = await db.query(
+		`SELECT id_user, password FROM public."user" WHERE id_user = $1`,
+		[id]
+	);
+
+	if (!idPasswordQuery.rows[0]) {
+		return "invalid-link";
+	}
+
+	const secret =
+		process.env.FORGOT_PASSWORD_SECRET + idPasswordQuery.rows[0].password;
+
+	if (!verifyToken(token, secret)) {
+		return "link-expired";
+	}
+
+	if (!resetPasswordValidate(password)) {
+		return "invalid-password";
+	}
+
+	const hashedPassword = await bcrypt.hash(password, 10);
+
+	await db.query(`UPDATE public."user" SET password = $1 WHERE id_user = $2`, [
+		hashedPassword,
+		id,
+	]);
+
+	return "";
+}
+
 module.exports = {
 	registerService,
 	loginService,
 	accessService,
 	refreshService,
 	logoutService,
+	forgotPasswordService,
+	validateLinkService,
+	resetPasswordService,
 };

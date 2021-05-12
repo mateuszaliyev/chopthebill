@@ -4,6 +4,9 @@ const {
 	accessService,
 	refreshService,
 	logoutService,
+	forgotPasswordService,
+	validateLinkService,
+	resetPasswordService,
 } = require("../models/authService");
 
 async function registerController(req, res) {
@@ -105,10 +108,62 @@ async function logoutController(req, res) {
 	}
 }
 
+async function forgotPasswordController(req, res) {
+	try {
+		const { link, error } = await forgotPasswordService(req.body.email);
+		if (error === "invalid-email") {
+			return res.status(401).json({ link: "", error: "invalid-email" });
+		}
+		return res.status(200).json({ link, error });
+	} catch (err) {
+		console.log(err);
+		res.status(500);
+	}
+}
+
+async function validateLinkController(req, res) {
+	try {
+		const error = await validateLinkService(req.body.id, req.body.token);
+		if (error === "invalid-link") {
+			return res.status(403).json({ error });
+		}
+		if (error === "link-expired") {
+			return res.status(401).json({ error });
+		}
+		return res.status(200).json({ error: "" });
+	} catch (err) {
+		console.log(err);
+		res.status(500);
+	}
+}
+
+async function resetPasswordController(req, res) {
+	try {
+		const error = await resetPasswordService(
+			req.body.id,
+			req.body.token,
+			req.body.password
+		);
+		if (error === "invalid-link" || error === "invalid-password") {
+			return res.status(403).json({ error });
+		}
+		if (error === "link-expired") {
+			return res.status(401).json({ error });
+		}
+		return res.status(200).json({ error: "" });
+	} catch (err) {
+		console.log(err);
+		res.status(500);
+	}
+}
+
 module.exports = {
 	registerController,
 	loginController,
 	accessController,
 	refreshController,
 	logoutController,
+	forgotPasswordController,
+	validateLinkController,
+	resetPasswordController,
 };

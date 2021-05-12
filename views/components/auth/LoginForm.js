@@ -97,7 +97,7 @@ function LoginForm() {
 				>
 					{t("login:login")}
 				</Button>
-				<Link className={classes.margin} href="/">
+				<Link className={classes.margin} href="/forgot-password">
 					{t("login:forgot-password")}
 				</Link>
 				<Link className={classes.margin} href="/register">

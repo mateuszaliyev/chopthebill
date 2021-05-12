@@ -9,6 +9,9 @@ const {
 	accessController,
 	refreshController,
 	logoutController,
+	forgotPasswordController,
+	validateLinkController,
+	resetPasswordController,
 } = require("../controllers/authController");
 
 // Routes
@@ -17,5 +20,8 @@ router.post("/login", loginController);
 router.get("/access", accessController);
 router.get("/refresh", refreshController);
 router.delete("/logout", logoutController);
+router.post("/forgot-password", forgotPasswordController);
+router.post("/validate-link", validateLinkController);
+router.post("/reset-password", resetPasswordController);
 
 module.exports = router;

@@ -24,8 +24,14 @@ function verifyToken(token, secret) {
 	}
 }
 
+function getResetPasswordLink(payload, secret) {
+	const token = jwt.sign(payload, secret, { expiresIn: "15m" });
+	return `http://localhost:3000/reset-password/${payload.id}/${token}`;
+}
+
 module.exports = {
 	getAccessToken,
 	getRefreshToken,
 	verifyToken,
+	getResetPasswordLink,
 };
