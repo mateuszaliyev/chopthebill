@@ -1,15 +1,18 @@
-import Avatar from "../Avatar";
-
-import Paper from "@material-ui/core/Paper";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-
+// React & Next
+import { useContext } from "react";
 import { useTranslation } from "next-i18next";
 
-import { useContext } from "react";
+// Material UI
+import { Button, Paper } from "@material-ui/core/";
+import { makeStyles } from "@material-ui/core/styles";
+
+// Components
+import Avatar from "../Avatar";
+
+// Contexts
 import { UserContext } from "../../components/auth/User";
 
+// Styles
 const useStyles = makeStyles((theme) => ({
 	large: {
 		fontSize: "5rem",
@@ -36,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Profile({ user }) {
-	const classes = useStyles();
-
 	const { t } = useTranslation("common");
 
 	const { user: loggedUser } = useContext(UserContext);
+
+	const classes = useStyles();
 
 	return (
 		<Paper className={classes.root}>

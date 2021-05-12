@@ -1,3 +1,4 @@
+// Material UI
 import {
 	Dialog,
 	DialogContent,
@@ -8,6 +9,7 @@ import {
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 
+// Styles
 const useStyles = makeStyles((theme) => ({
 	closeButton: {
 		position: "absolute",

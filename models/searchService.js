@@ -1,3 +1,4 @@
+// .env
 require("dotenv").config();
 
 // Config
@@ -66,8 +67,6 @@ async function searchService(query, authHeader) {
 					return a.match - b.match;
 				});
 		}
-
-		console.log(results);
 
 		return { error: "", results };
 	}

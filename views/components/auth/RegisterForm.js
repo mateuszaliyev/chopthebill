@@ -23,6 +23,7 @@ import { host } from "../../config";
 // Contexts
 import { ThemeContext } from "../Theme";
 
+// Styles
 const useStyles = makeStyles({
 	margin: {
 		marginTop: "1rem",

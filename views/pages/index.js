@@ -20,7 +20,7 @@ export async function getServerSideProps({ locale }) {
 	};
 }
 
-export default function Home() {
+function Home() {
 	const { t } = useTranslation("common");
 
 	return (
@@ -42,3 +42,5 @@ export default function Home() {
 		</>
 	);
 }
+
+export default Home;

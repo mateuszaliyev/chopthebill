@@ -33,6 +33,7 @@ import { host } from "../../config";
 // Context
 import { UserContext } from "../auth/User";
 
+// Styles
 const useStyles = makeStyles((theme) => ({
 	closeButton: {
 		position: "absolute",
@@ -139,6 +140,7 @@ function SearchDialog({ onClose, open, title }) {
 								color="inherit"
 								href={`/user/${user.id}`}
 								key={user.id}
+								onClick={onClose}
 								underline="none"
 							>
 								<ListItem button className={user.email ? "" : classes.padding}>

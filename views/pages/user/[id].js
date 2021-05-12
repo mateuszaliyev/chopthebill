@@ -1,20 +1,24 @@
+// React & Next
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Auth from "../../components/auth/Auth";
-import Layout from "../../components/layout/Layout";
-import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../../components/auth/User";
-
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import { host } from "../../config";
+// Material UI
+import Container from "@material-ui/core/Container";
 
+// Components
+import Auth from "../../components/auth/Auth";
+import Layout from "../../components/layout/Layout";
 import Meta from "../../components/Meta";
-
 import Profile from "../../components/user/Profile";
 import Settings from "../../components/user/Settings";
 
-import Container from "@material-ui/core/Container";
+// Config
+import { host } from "../../config";
+
+// Contexts
+import { UserContext } from "../../components/auth/User";
 
 export async function getServerSideProps({ locale }) {
 	return {

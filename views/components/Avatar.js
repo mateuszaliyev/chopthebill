@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 // Hooks
 import useTextToColor from "./hooks/useTextToColor";
 
+// Styles
 const useStyles = makeStyles((theme) => ({
 	avatar: (props) => ({
 		backgroundColor: props.color,

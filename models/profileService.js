@@ -1,6 +1,11 @@
+// .env
 require("dotenv").config();
-const { verifyToken } = require("../utils/jwt");
+
+// Config
 const { db } = require("../config/db");
+
+// Utils
+const { verifyToken } = require("../utils/jwt");
 
 async function profileService(id, authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];

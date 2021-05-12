@@ -1,31 +1,34 @@
-import { makeStyles } from "@material-ui/core/styles";
-
-import Paper from "@material-ui/core/Paper";
-
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Switch from "@material-ui/core/Switch";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-
-import TextFieldsIcon from "@material-ui/icons/TextFields";
-import EmailIcon from "@material-ui/icons/Email";
-import TranslateIcon from "@material-ui/icons/Translate";
-import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
-import PaletteIcon from "@material-ui/icons/Palette";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
-import Brightness7Icon from "@material-ui/icons/Brightness7";
-
+// React & Next
+import { useContext, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-import { useContext, useState, useEffect } from "react";
+// Material UI
+import {
+	Button,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemSecondaryAction,
+	ListItemText,
+	MenuItem,
+	Paper,
+	Select,
+	Switch,
+	TextField,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import EmailIcon from "@material-ui/icons/Email";
+import PaletteIcon from "@material-ui/icons/Palette";
+import TextFieldsIcon from "@material-ui/icons/TextFields";
+import TranslateIcon from "@material-ui/icons/Translate";
+
+// Contexts
 import { UserContext } from "../../components/auth/User";
 
+// Styles
 const useStyles = makeStyles((theme) => ({
 	button: {
 		display: "flex",
@@ -49,6 +52,8 @@ function Settings() {
 
 	const { user } = useContext(UserContext);
 
+	const classes = useStyles();
+
 	const [settings, setSettings] = useState({
 		username: user.username,
 		email: user.email,
@@ -56,8 +61,6 @@ function Settings() {
 		hideEmail: user.hideEmail,
 		theme: user.theme,
 	});
-
-	const classes = useStyles();
 
 	const handleLanguage = (e) => {
 		setSettings((prevSettings) => ({
@@ -187,7 +190,7 @@ function Settings() {
 								<Brightness4Icon />
 							)}
 						</ListItemIcon>
-						<ListItemText>{t("theme")}</ListItemText>
+						<ListItemText>{t("palette")}</ListItemText>
 						<ListItemSecondaryAction>
 							<Switch
 								color="primary"

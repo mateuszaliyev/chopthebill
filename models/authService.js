@@ -1,5 +1,7 @@
+// .env
 require("dotenv").config();
 
+// Bcrypt
 const bcrypt = require("bcrypt");
 
 // Config

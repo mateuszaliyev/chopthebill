@@ -17,6 +17,7 @@ import { host } from "../../config";
 import { ThemeContext } from "../Theme";
 import { UserContext } from "./User";
 
+// Styles
 const useStyles = makeStyles({
 	margin: {
 		marginTop: "1rem",

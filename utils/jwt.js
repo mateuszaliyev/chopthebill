@@ -1,4 +1,6 @@
+// .env
 require("dotenv").config();
+
 const jwt = require("jsonwebtoken");
 
 function getAccessToken(payload) {
