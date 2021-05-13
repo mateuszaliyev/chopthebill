@@ -55,9 +55,26 @@ function Profile({ user }) {
 
 	const router = useRouter();
 
-	const handleClick = async () => {
+	const addFriend = async () => {
 		const res = await fetch(`${host}/friend`, {
 			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: JSON.stringify({
+				id: user.id,
+			}),
+		});
+		if (res.ok) {
+			router.reload();
+		}
+	};
+
+	const unfriend = async () => {
+		const res = await fetch(`${host}/friend`, {
+			method: "DELETE",
 			headers: {
 				Accept: "application/json",
 				"Content-Type": "application/json",
@@ -84,11 +101,11 @@ function Profile({ user }) {
 			</div>
 			{loggedUser.id !== user.id &&
 				(user.friend ? (
-					<Button onClick={handleClick} variant="contained" color="secondary">
+					<Button onClick={unfriend} variant="contained" color="secondary">
 						{t("unfriend")}
 					</Button>
 				) : (
-					<Button onClick={handleClick} variant="contained" color="primary">
+					<Button onClick={addFriend} variant="contained" color="primary">
 						{t("add-friend")}
 					</Button>
 				))}
