@@ -10,13 +10,14 @@ import { makeStyles } from "@material-ui/core/styles";
 // Components
 import Avatar from "../Avatar";
 
+// Config
+import { host } from "../../config";
+
 // Contexts
 import { UserContext } from "../../components/auth/User";
 
 // Hooks
 import useDateComparison from "../hooks/useDateComparison";
-
-import { host } from "../../config";
 
 // Styles
 const useStyles = makeStyles((theme) => ({

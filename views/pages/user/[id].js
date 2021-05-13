@@ -43,6 +43,8 @@ function Account() {
 			const res = await fetch(`${host}/user/${id}`, {
 				method: "GET",
 				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
 					Authorization: `Bearer ${accessToken}`,
 				},
 			});

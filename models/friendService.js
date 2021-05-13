@@ -91,4 +91,35 @@ async function unfriendService(authHeader, id) {
 	return "forbidden";
 }
 
-module.exports = { addFriendService, unfriendService };
+async function friendsService(authHeader) {
+	const token = authHeader && authHeader.split(" ")[1];
+	if (!token) {
+		return { error: "unauthorized", friends: [] };
+	}
+	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
+	if (decoded) {
+		const idQuery = await db.query(
+			`SELECT id_user, deleted FROM public."user" WHERE username = $1`,
+			[decoded.username]
+		);
+		if (idQuery.rows[0] && !idQuery.rows[0].deleted) {
+			const friendsQuery = await db.query(
+				`SELECT u.id_user, u.email, u.username, u.hide_email, u.last_seen, u.deleted FROM public."user" AS u, public."friendship" AS f WHERE u.id_user = f.id_user_2 AND f.id_user_1 = $1 AND f.valid = TRUE AND u.deleted = FALSE ORDER BY last_seen DESC`,
+				[idQuery.rows[0].id_user]
+			);
+			const friends = friendsQuery.rows.map((friend) => ({
+				id: friend.id_user,
+				email: friend.hide_email ? "" : friend.email,
+				username: friend.username,
+				hideEmail: friend.hide_email,
+				lastSeen: friend.last_seen,
+			}));
+			return { error: "", friends };
+		}
+
+		return { error: "bad-request", friends: [] };
+	}
+	return { error: "forbidden", friends: [] };
+}
+
+module.exports = { addFriendService, unfriendService, friendsService };

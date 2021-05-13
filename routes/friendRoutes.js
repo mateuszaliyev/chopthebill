@@ -6,10 +6,12 @@ const router = express.Router();
 const {
 	addFriendController,
 	unfriendController,
+	friendsController,
 } = require("../controllers/friendController");
 
 // Routes
 router.post("/", addFriendController);
 router.delete("/", unfriendController);
+router.get("/", friendsController);
 
 module.exports = router;
