@@ -1,6 +1,7 @@
 // React & Next
 import { useContext } from "react";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 // Material UI
 import { Button, Paper } from "@material-ui/core/";
@@ -14,6 +15,8 @@ import { UserContext } from "../../components/auth/User";
 
 // Hooks
 import useDateComparison from "../hooks/useDateComparison";
+
+import { host } from "../../config";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -44,11 +47,30 @@ const useStyles = makeStyles((theme) => ({
 function Profile({ user }) {
 	const { t } = useTranslation(["common", "date"]);
 
-	const { user: loggedUser } = useContext(UserContext);
+	const { user: loggedUser, accessToken } = useContext(UserContext);
 
 	const classes = useStyles();
 
 	const lastSeen = useDateComparison(new Date(user.lastSeen), new Date());
+
+	const router = useRouter();
+
+	const handleClick = async () => {
+		const res = await fetch(`${host}/friend`, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: JSON.stringify({
+				id: user.id,
+			}),
+		});
+		if (res.ok) {
+			router.reload();
+		}
+	};
 
 	return (
 		<Paper className={classes.root}>
@@ -60,11 +82,16 @@ function Profile({ user }) {
 				)}
 				<h3 className={classes.margin}>{lastSeen}</h3>
 			</div>
-			{loggedUser.id !== user.id && (
-				<Button variant="contained" color="primary">
-					{t("add-friend")}
-				</Button>
-			)}
+			{loggedUser.id !== user.id &&
+				(user.friend ? (
+					<Button onClick={handleClick} variant="contained" color="secondary">
+						{t("unfriend")}
+					</Button>
+				) : (
+					<Button onClick={handleClick} variant="contained" color="primary">
+						{t("add-friend")}
+					</Button>
+				))}
 		</Paper>
 	);
 }

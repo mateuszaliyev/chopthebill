@@ -17,11 +17,29 @@ async function profileService(id, authHeader) {
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
 
 	if (decoded) {
+		const idQuery = await db.query(
+			`SELECT id_user, deleted FROM public."user" WHERE username = $1`,
+			[decoded.username]
+		);
+
 		const profileQuery = await db.query(
 			`SELECT id_user, email, username, language, theme, hide_email, last_seen, deleted FROM public."user" WHERE id_user = $1`,
 			[id]
 		);
-		if (profileQuery.rows[0] && !profileQuery.rows[0].deleted) {
+		if (
+			profileQuery.rows[0] &&
+			!profileQuery.rows[0].deleted &&
+			idQuery.rows[0] &&
+			!idQuery.rows[0].deleted
+		) {
+			const checkQuery = await db.query(
+				`SELECT * FROM public."friendship" WHERE id_user_1 = $1 AND id_user_2 = $2`,
+				[idQuery.rows[0].id_user, id]
+			);
+			let friend = false;
+			if (checkQuery.rows[0] && checkQuery.rows[0].valid) {
+				friend = true;
+			}
 			const user = {
 				id: profileQuery.rows[0].id_user,
 				email: profileQuery.rows[0].email,
@@ -30,6 +48,7 @@ async function profileService(id, authHeader) {
 				theme: profileQuery.rows[0].theme,
 				hideEmail: profileQuery.rows[0].hide_email,
 				lastSeen: profileQuery.rows[0].last_seen,
+				friend,
 			};
 			return { error: "", user };
 		}

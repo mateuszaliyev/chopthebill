@@ -1,5 +1,5 @@
 {
-	"add-friend": "Dodaj znajomego",
+	"add-friend": "Dodaj do znajomych",
 	"alternative": "Alternatywny",
 	"back": "Powrót",
 	"confirm": "Zatwierdź",
@@ -28,6 +28,7 @@
 	"search-users": "Wyszukaj użytkowników (min. 3 znaki)",
 	"settings": "Ustawienia",
 	"theme": "Motyw",
+	"unfriend": "Usuń ze znajomych",
 	"username": "Nazwa użytkownika",
 	"users": "Użytkownicy"
 }
