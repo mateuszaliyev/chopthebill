@@ -147,7 +147,6 @@ function Layout({ children, title }) {
 	const classes = useStyles();
 	const theme = useTheme();
 
-	// Breakpoints
 	const bpmd = useMediaQuery(theme.breakpoints.up("md"));
 
 	return (
@@ -166,9 +165,7 @@ function Layout({ children, title }) {
 			) : (
 				<>
 					<AppBarMobile title={title} />
-					<Container className={classes.main} component="main">
-						{children}
-					</Container>
+					<main className={classes.main}>{children}</main>
 				</>
 			)}
 		</>

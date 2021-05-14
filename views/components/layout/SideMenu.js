@@ -63,14 +63,6 @@ function SideMenu({ items }) {
 						</ListItem>
 					</Link>
 				))}
-				<ListSubheader>Temporary Buttons</ListSubheader>
-				<ListItem>
-					<Language expand />
-				</ListItem>
-				<ListItem>
-					<PaletteList expand />
-					<PaletteButton />
-				</ListItem>
 			</List>
 		</Drawer>
 	);
