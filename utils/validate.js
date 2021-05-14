@@ -63,7 +63,7 @@ function loginValidate(email, password) {
 	return true;
 }
 
-function resetPasswordValidate(password) {
+function passwordValidate(password) {
 	if (
 		validator.isStrongPassword(password, {
 			minLength: 6,
@@ -113,6 +113,6 @@ function settingsValidate({ email, username, hideEmail, language, theme }) {
 module.exports = {
 	registerValidate,
 	loginValidate,
-	resetPasswordValidate,
+	passwordValidate,
 	settingsValidate,
 };

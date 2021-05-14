@@ -1,12 +1,13 @@
 // .env
 require("dotenv").config();
+const bcrypt = require("bcrypt");
 
 // Config
 const { db } = require("../config/db");
 
 // Utils
 const { verifyToken } = require("../utils/jwt");
-const { settingsValidate } = require("../utils/validate");
+const { settingsValidate, passwordValidate } = require("../utils/validate");
 
 async function profileService(id, authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];
@@ -18,12 +19,12 @@ async function profileService(id, authHeader) {
 
 	if (decoded) {
 		const idQuery = await db.query(
-			`SELECT id_user, deleted FROM public."user" WHERE username = $1`,
+			`SELECT id_user, deleted FROM public."user" WHERE username = $1 AND deleted = FALSE`,
 			[decoded.username]
 		);
 
 		const profileQuery = await db.query(
-			`SELECT id_user, email, username, language, theme, hide_email, last_seen, deleted FROM public."user" WHERE id_user = $1`,
+			`SELECT id_user, email, username, language, theme, hide_email, last_seen, deleted FROM public."user" WHERE id_user = $1 AND deleted = FALSE`,
 			[id]
 		);
 		if (
@@ -60,7 +61,7 @@ async function profileService(id, authHeader) {
 async function settingsService(authHeader, settings) {
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
-		return { error: "unauthorized", user: {} };
+		return { error: "unauthorized", issues: [] };
 	}
 
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
@@ -69,7 +70,7 @@ async function settingsService(authHeader, settings) {
 		const issues = settingsValidate(settings);
 
 		const emailQuery = await db.query(
-			`SELECT email, username FROM public."user" WHERE email = $1`,
+			`SELECT email, username FROM public."user" WHERE email = $1 AND deleted = FALSE`,
 			[settings.email]
 		);
 
@@ -81,7 +82,7 @@ async function settingsService(authHeader, settings) {
 		}
 
 		const usernameQuery = await db.query(
-			`SELECT username FROM public."user" WHERE username = $1`,
+			`SELECT username FROM public."user" WHERE username = $1 AND deleted = FALSE`,
 			[settings.username]
 		);
 
@@ -93,7 +94,7 @@ async function settingsService(authHeader, settings) {
 		}
 
 		if (issues.length > 0) {
-			return issues;
+			return { error: "", issues };
 		}
 
 		await db.query(
@@ -107,7 +108,91 @@ async function settingsService(authHeader, settings) {
 				decoded.username,
 			]
 		);
-		return [];
+		return { error: "", issues: [] };
 	}
+
+	return { error: "forbidden", issues: [] };
 }
-module.exports = { profileService, settingsService };
+
+async function passwordService(authHeader, password) {
+	const token = authHeader && authHeader.split(" ")[1];
+	if (!token) {
+		return { error: "unauthorized", issues: [] };
+	}
+
+	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
+
+	if (decoded) {
+		const issues = [];
+
+		if (!passwordValidate(password.newPassword))
+			issues.push("new-password-invalid");
+
+		if (password.newPassword !== password.newPasswordRepeated) {
+			issues.push("new-password-repeated-different");
+		}
+
+		const passwordQuery = await db.query(
+			`SELECT password FROM public."user" WHERE username = $1 AND deleted = FALSE`,
+			[decoded.username]
+		);
+
+		if (
+			!passwordQuery.rows[0] ||
+			!(await bcrypt.compare(
+				password.oldPassword,
+				passwordQuery.rows[0].password
+			))
+		)
+			issues.push("password-different");
+
+		if (issues.length > 0) {
+			return { error: "", issues };
+		}
+
+		await db.query(`UPDATE public."user" SET password=$1 WHERE username = $2`, [
+			await bcrypt.hash(password.newPassword, 10),
+			decoded.username,
+		]);
+
+		return { error: "", issues };
+	}
+	return { error: "forbidden", issues: [] };
+}
+
+async function deleteService(authHeader, password) {
+	const token = authHeader && authHeader.split(" ")[1];
+	if (!token) {
+		return "unauthorized";
+	}
+
+	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
+
+	if (decoded) {
+		const passwordQuery = await db.query(
+			`SELECT password FROM public."user" WHERE username = $1 AND deleted = FALSE`,
+			[decoded.username]
+		);
+
+		if (
+			!passwordQuery.rows[0] ||
+			!(await bcrypt.compare(password, passwordQuery.rows[0].password))
+		)
+			return "password-different";
+
+		await db.query(
+			`UPDATE public."user" SET deleted=TRUE WHERE username = $1`,
+			[decoded.username]
+		);
+
+		return "";
+	}
+	return "forbidden";
+}
+
+module.exports = {
+	profileService,
+	settingsService,
+	passwordService,
+	deleteService,
+};

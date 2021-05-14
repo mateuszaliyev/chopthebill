@@ -22,8 +22,14 @@ import {
 	FormControlLabel,
 	FormHelperText,
 	FormGroup,
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	useMediaQuery,
+	Snackbar,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import MuiAlert from "@material-ui/lab/Alert";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
@@ -35,6 +41,8 @@ import TranslateIcon from "@material-ui/icons/Translate";
 // Contexts
 import { UserContext } from "../auth/User";
 import { ThemeContext } from "../Theme";
+
+import DeleteAccountButton from "./DeleteAccountButton";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +63,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+function Alert(props) {
+	return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 function Settings() {
 	const { t } = useTranslation("common");
 
@@ -65,10 +77,16 @@ function Settings() {
 
 	const router = useRouter();
 
+	const theme = useTheme();
+	const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
 	const [fieldsHelper, setFieldsHelper] = useState({
 		email: "",
 		username: "",
 		hideEmail: "",
+		oldPassword: "",
+		newPassword: "",
+		newPasswordRepeated: "",
 	});
 
 	const [settings, setSettings] = useState({
@@ -141,13 +159,16 @@ function Settings() {
 			},
 			body: JSON.stringify(settings),
 		});
-		const issues = await res.json();
+		const { issues } = await res.json();
 
 		if (issues.length > 0) {
 			const newFieldsHelper = {
 				email: "",
 				username: "",
 				hideEmail: "",
+				oldPassword: "",
+				newPassword: "",
+				newPasswordRepeated: "",
 			};
 			issues.forEach((issue) => {
 				if (issue.indexOf("email") !== -1) {
@@ -172,9 +193,77 @@ function Settings() {
 		}
 	};
 
+	const [password, setPassword] = useState({
+		oldPassword: "",
+		newPassword: "",
+		newPasswordRepeated: "",
+	});
+
+	const [openPassword, setPasswordOpen] = useState(false);
+
+	const handleChangePassClick = () => {
+		setPasswordOpen((prevPasswordOpen) => !prevPasswordOpen);
+	};
+
+	const [openSnackbar, setSnackbar] = useState(false);
+
+	const handleChangePassSubmit = async (e) => {
+		e.preventDefault();
+
+		const res = await fetch(`${host}/password`, {
+			method: "PUT",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: JSON.stringify(password),
+		});
+		const { issues } = await res.json();
+
+		if (issues.length > 0) {
+			const newFieldsHelper = {
+				email: "",
+				username: "",
+				hideEmail: "",
+				oldPassword: "",
+				newPassword: "",
+				newPasswordRepeated: "",
+			};
+			issues.forEach((issue) => {
+				if (issue === "password-different") {
+					newFieldsHelper.oldPassword += t(`${issue}`) + ". ";
+				}
+
+				if (issue === "new-password-invalid") {
+					newFieldsHelper.newPassword += t(`${issue}`) + ". ";
+				}
+
+				if (issue === "new-password-repeated-different") {
+					newFieldsHelper.newPasswordRepeated += t(`${issue}`) + ". ";
+				}
+			});
+			setFieldsHelper(newFieldsHelper);
+		} else {
+			setPasswordOpen(false);
+			setSnackbar(true);
+		}
+	};
+
+	const [openDeleteAccount, setDeleteAccount] = useState(false);
+
+	const handleDeleteAccClick = () => {
+		setDeleteAccount((prevPasswordOpen) => !prevPasswordOpen);
+	};
+
+	const handleClose = () => {
+		setPasswordOpen(false);
+		setDeleteAccount(false);
+	};
+
 	return (
 		<>
-			<Paper component="form" onSubmit={handleSubmit}>
+			<Paper component="form" id="settings" onSubmit={handleSubmit}>
 				<List>
 					<ListItem>
 						<ListItemIcon>
@@ -289,20 +378,127 @@ function Settings() {
 						</ListItemSecondaryAction>
 					</ListItem>
 					<div className={classes.button}>
-						<Button variant="contained" color="primary" type="submit">
+						<Button
+							variant="contained"
+							color="primary"
+							type="submit"
+							form="settings"
+						>
 							{t("confirm")}
 						</Button>
 					</div>
 				</List>
 			</Paper>
 			<div className={classes.buttons}>
-				<Button variant="contained" color="secondary">
+				<Button
+					variant="contained"
+					color="secondary"
+					onClick={handleChangePassClick}
+				>
 					{t("change-password")}
 				</Button>
-				<Button variant="outlined" color="secondary">
-					{t("delete-account")}
-				</Button>
+				<DeleteAccountButton />
 			</div>
+			<Dialog
+				fullScreen={fullScreen}
+				onClose={handleClose}
+				fullWidth={true}
+				open={openPassword}
+			>
+				<DialogTitle>Test</DialogTitle>
+				<DialogContent dividers>
+					<Paper
+						component="form"
+						id="password"
+						onSubmit={handleChangePassSubmit}
+					>
+						<List>
+							<ListItem>
+								<ListItemText>{t("old-password")}</ListItemText>
+								<ListItemSecondaryAction>
+									<TextField
+										className={classes.inputField}
+										inputProps={{ style: { textAlign: "center" } }}
+										type="password"
+										onChange={(e) => {
+											setPassword((prevPassword) => ({
+												...prevPassword,
+												oldPassword: e.target.value,
+											}));
+										}}
+										helperText={fieldsHelper.oldPassword}
+										error={fieldsHelper.oldPassword.length > 0}
+									/>
+								</ListItemSecondaryAction>
+							</ListItem>
+							<ListItem>
+								<ListItemText>{t("new-password")}</ListItemText>
+								<ListItemSecondaryAction>
+									<TextField
+										className={classes.inputField}
+										inputProps={{ style: { textAlign: "center" } }}
+										type="password"
+										onChange={(e) => {
+											setPassword((prevPassword) => ({
+												...prevPassword,
+												newPassword: e.target.value,
+											}));
+										}}
+										helperText={fieldsHelper.newPassword}
+										error={fieldsHelper.newPassword.length > 0}
+									/>
+								</ListItemSecondaryAction>
+							</ListItem>
+							<ListItem>
+								<ListItemText>{t("old-password-repeated")}</ListItemText>
+								<ListItemSecondaryAction>
+									<TextField
+										className={classes.inputField}
+										inputProps={{ style: { textAlign: "center" } }}
+										type="password"
+										onChange={(e) => {
+											setPassword((prevPassword) => ({
+												...prevPassword,
+												newPasswordRepeated: e.target.value,
+											}));
+										}}
+										helperText={fieldsHelper.newPasswordRepeated}
+										error={fieldsHelper.newPasswordRepeated.length > 0}
+									/>
+								</ListItemSecondaryAction>
+							</ListItem>
+							<div className={classes.button}>
+								<Button
+									variant="contained"
+									color="primary"
+									//Click={handleChangePassSubmit}
+									type="submit"
+								>
+									{t("confirm")}
+								</Button>
+							</div>
+						</List>
+					</Paper>
+				</DialogContent>
+			</Dialog>
+			<Snackbar
+				open={openSnackbar}
+				autoHideDuration={6000}
+				onClose={() => setSnackbar(false)}
+			>
+				<Alert onClose={handleClose} severity="success">
+					{t("password-change-success")}
+				</Alert>
+			</Snackbar>
+			<Dialog
+				fullScreen={fullScreen}
+				onClose={handleClose}
+				fullWidth={true}
+				open={openDeleteAccount}
+			>
+				<DialogTitle>Test</DialogTitle>
+				<DialogContent dividers>test2</DialogContent>
+			</Dialog>
 		</>
 	);
 }

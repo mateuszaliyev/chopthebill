@@ -11,7 +11,7 @@ const { db } = require("../config/db");
 const {
 	registerValidate,
 	loginValidate,
-	resetPasswordValidate,
+	passwordValidate,
 } = require("../utils/validate");
 
 // Tokens
@@ -237,7 +237,7 @@ async function resetPasswordService(id, token, password) {
 		return "link-expired";
 	}
 
-	if (!resetPasswordValidate(password)) {
+	if (!passwordValidate(password)) {
 		return "invalid-password";
 	}
 
