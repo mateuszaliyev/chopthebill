@@ -1,7 +1,7 @@
 {
-	"add-friend": "Add friend",
 	"alternative": "Alternative",
 	"back": "Back",
+	"cancel": "Cancel",
 	"confirm": "Confirm",
 	"change-password": "Change password",
 	"dashboard": "Dashboard",
@@ -13,6 +13,7 @@
 	"groups": "Groups",
 	"hide-email": "Hide email",
 	"language": "Language",
+	"last-seen": "Last seen",
 	"login": "Login",
 	"logout": "Logout",
 	"meta-title": "ChopTheBill – share expenses with ease",
@@ -29,6 +30,7 @@
 	"settings": "Settings",
 	"theme": "Theme",
 	"unfriend": "Unfriend",
+	"user": "User",
 	"username": "Username",
 	"users": "Users"
 }

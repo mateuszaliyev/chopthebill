@@ -1,17 +1,14 @@
 // React & Next
 import { useContext } from "react";
-import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
 
 // Material UI
-import { Button, Paper } from "@material-ui/core/";
+import { Paper } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 
 // Components
+import AddFriendButton from "../friends/AddFriendButton";
 import Avatar from "../Avatar";
-
-// Config
-import { host } from "../../config";
+import UnfriendButton from "../friends/UnfriendButton";
 
 // Contexts
 import { UserContext } from "../../components/auth/User";
@@ -46,49 +43,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Profile({ user }) {
-	const { t } = useTranslation(["common", "date"]);
-
-	const { user: loggedUser, accessToken } = useContext(UserContext);
+	const { user: loggedUser } = useContext(UserContext);
 
 	const classes = useStyles();
 
 	const lastSeen = useDateComparison(new Date(user.lastSeen), new Date());
-
-	const router = useRouter();
-
-	const addFriend = async () => {
-		const res = await fetch(`${host}/friend`, {
-			method: "POST",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: JSON.stringify({
-				id: user.id,
-			}),
-		});
-		if (res.ok) {
-			router.reload();
-		}
-	};
-
-	const unfriend = async () => {
-		const res = await fetch(`${host}/friend`, {
-			method: "DELETE",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: JSON.stringify({
-				id: user.id,
-			}),
-		});
-		if (res.ok) {
-			router.reload();
-		}
-	};
 
 	return (
 		<Paper className={classes.root}>
@@ -102,13 +61,9 @@ function Profile({ user }) {
 			</div>
 			{loggedUser.id !== user.id &&
 				(user.friend ? (
-					<Button onClick={unfriend} variant="contained" color="secondary">
-						{t("unfriend")}
-					</Button>
+					<UnfriendButton color="error" id={user.id} username={user.username} />
 				) : (
-					<Button onClick={addFriend} variant="contained" color="primary">
-						{t("add-friend")}
-					</Button>
+					<AddFriendButton color="primary" id={user.id} />
 				))}
 		</Paper>
 	);

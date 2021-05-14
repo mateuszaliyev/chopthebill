@@ -1,3 +1,6 @@
 {
-	"meta-title": "Znajomi"
+	"add-friend": "Dodaj do znajomych",
+	"meta-title": "Znajomi",
+	"unfriend-text": "{{username}} nie będzie się wyświetlać na liście znajomych.",
+	"unfriend-title": "Usunąć {{username}} ze znajomych?"
 }

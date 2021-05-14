@@ -23,7 +23,12 @@ import { UserContext } from "../../components/auth/User";
 export async function getServerSideProps({ locale }) {
 	return {
 		props: {
-			...(await serverSideTranslations(locale, ["common", "date", "register"])),
+			...(await serverSideTranslations(locale, [
+				"common",
+				"date",
+				"friends",
+				"register",
+			])),
 		},
 	};
 }

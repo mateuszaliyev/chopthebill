@@ -8,7 +8,7 @@ import { host } from "../config";
 
 // Components
 import Auth from "../components/auth/Auth";
-import FriendList from "../components/FriendList";
+import FriendList from "../components/friends/FriendList";
 import Layout from "../components/layout/Layout";
 import Loader from "../components/Loader";
 import Meta from "../components/Meta";
@@ -26,9 +26,11 @@ export async function getServerSideProps({ locale }) {
 
 function Friends() {
 	const { t } = useTranslation(["common", "friends"]);
+
 	const { accessToken } = useContext(UserContext);
 	const [friends, setFriends] = useState([]);
 	const [loading, setLoading] = useState(true);
+
 	const getFriends = async () => {
 		const res = await fetch(`${host}/friend`, {
 			method: "GET",
@@ -46,11 +48,16 @@ function Friends() {
 	};
 
 	useEffect(() => getFriends(), [accessToken]);
+
 	return (
 		<Auth>
 			<Meta title={`${t("friends:meta-title")} | ChopTheBill`} />
 			<Layout title={t("friends:meta-title")}>
-				{loading ? <Loader size="4rem" /> : <FriendList friends={friends} />}
+				{loading ? (
+					<Loader size="4rem" />
+				) : (
+					<FriendList friends={friends} setFriends={setFriends} />
+				)}
 			</Layout>
 		</Auth>
 	);

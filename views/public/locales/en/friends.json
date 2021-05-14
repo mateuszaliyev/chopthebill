@@ -1,3 +1,6 @@
 {
-	"meta-title": "Friends"
+	"add-friend": "Add friend",
+	"meta-title": "Friends",
+	"unfriend-text": "{{username}} will no longer appear on your friend list.",
+	"unfriend-title": "Unfriend {{username}}?"
 }
