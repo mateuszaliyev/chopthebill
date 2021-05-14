@@ -63,7 +63,7 @@ function Login() {
 			<Meta title={`${t("login:meta-title")} | ChopTheBill`} />
 			<Container className={classes.root} disableGutters={!bpsm} maxWidth="sm">
 				{bpsm ? (
-					<Paper className={classes.paper} component="main">
+					<Paper className={classes.paper} component="main" elevation={24}>
 						<Link color="inherit" href="/" underline="none">
 							<Tooltip title={t("back")}>
 								<IconButton className={classes.back}>

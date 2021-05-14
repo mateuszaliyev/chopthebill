@@ -8,6 +8,7 @@ import { host } from "../config";
 
 // Components
 import Auth from "../components/auth/Auth";
+import Empty from "../components/Empty";
 import FriendList from "../components/friends/FriendList";
 import Layout from "../components/layout/Layout";
 import Loader from "../components/Loader";
@@ -55,8 +56,10 @@ function Friends() {
 			<Layout title={t("friends:meta-title")}>
 				{loading ? (
 					<Loader size="4rem" />
-				) : (
+				) : friends.length ? (
 					<FriendList friends={friends} setFriends={setFriends} />
+				) : (
+					<Empty />
 				)}
 			</Layout>
 		</Auth>
