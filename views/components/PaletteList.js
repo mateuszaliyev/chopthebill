@@ -10,10 +10,10 @@ import PaletteIcon from "@material-ui/icons/Palette";
 // Context
 import { ThemeContext } from "./Theme";
 
-function PaletteList({ expand }) {
+function PaletteList({ expand, size }) {
 	const { t } = useTranslation("common");
 
-	const { setTheme } = useContext(ThemeContext);
+	const { theme, setTheme } = useContext(ThemeContext);
 	const [paletteAnchor, setPaletteAnchor] = useState(null);
 
 	const handleClick = (event) => {
@@ -27,16 +27,18 @@ function PaletteList({ expand }) {
 	return (
 		<>
 			{expand ? (
-				<Button
-					aria-controls="simple-menu"
-					aria-haspopup="true"
-					color="inherit"
-					endIcon={<ExpandMoreIcon />}
-					startIcon={<PaletteIcon />}
-					onClick={handleClick}
-				>
-					{t("theme")}
-				</Button>
+				<Tooltip title={t("theme")}>
+					<Button
+						aria-controls="simple-menu"
+						aria-haspopup="true"
+						color="inherit"
+						endIcon={<ExpandMoreIcon />}
+						startIcon={<PaletteIcon />}
+						onClick={handleClick}
+					>
+						{t(theme)}
+					</Button>
+				</Tooltip>
 			) : (
 				<Tooltip title={t("theme")}>
 					<IconButton
@@ -44,6 +46,7 @@ function PaletteList({ expand }) {
 						aria-haspopup="true"
 						color="inherit"
 						onClick={handleClick}
+						size={size}
 					>
 						<PaletteIcon />
 					</IconButton>

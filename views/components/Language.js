@@ -11,7 +11,7 @@ import TranslateIcon from "@material-ui/icons/Translate";
 // Components
 import Link from "./Link";
 
-function Language({ expand }) {
+function Language({ expand, size }) {
 	const { t } = useTranslation("common");
 
 	const [languageAnchor, setLanguageAnchor] = useState(null);
@@ -28,16 +28,18 @@ function Language({ expand }) {
 	return (
 		<>
 			{expand ? (
-				<Button
-					aria-controls="simple-menu"
-					aria-haspopup="true"
-					color="inherit"
-					endIcon={<ExpandMoreIcon />}
-					startIcon={<TranslateIcon />}
-					onClick={handleClick}
-				>
-					{t("language")}
-				</Button>
+				<Tooltip title={t("language")}>
+					<Button
+						aria-controls="simple-menu"
+						aria-haspopup="true"
+						color="inherit"
+						endIcon={<ExpandMoreIcon />}
+						startIcon={<TranslateIcon />}
+						onClick={handleClick}
+					>
+						{t(router.locale)}
+					</Button>
+				</Tooltip>
 			) : (
 				<Tooltip title={t("language")}>
 					<IconButton
@@ -45,6 +47,7 @@ function Language({ expand }) {
 						aria-haspopup="true"
 						color="inherit"
 						onClick={handleClick}
+						size={size}
 					>
 						<TranslateIcon />
 					</IconButton>
