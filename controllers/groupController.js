@@ -10,8 +10,9 @@ async function getMembersController(req, res) {
 	try {
 		const authHeader = req.headers.authorization;
 		const groupId = req.body.id_group;
-	
-		const { error, result } = await getMembersService(groupId, authHeader);
+		const userId = req.body.id_user;
+
+		const { error, result } = await getMembersService(groupId, userId, authHeader);
 
 		if (error === "unauthorized") {
 			return res.status(401).json({ error, result });

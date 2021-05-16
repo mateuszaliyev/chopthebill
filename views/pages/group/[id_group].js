@@ -34,7 +34,6 @@ function Group() {
 	const { user, accessToken } = useContext(UserContext);
 	const [results, setResults] = useState([]);
 
-
     const getMembers = async () => {
 		console.log("fetching");
 		const res = await fetch(`${host}/groups/members`, {
@@ -45,7 +44,7 @@ function Group() {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
 			},
-			body: JSON.stringify({"id_group": id_group}),
+			body: JSON.stringify({"id_group": id_group, "id_user": user.id}),
 		});
 		
 		if (res.ok)
