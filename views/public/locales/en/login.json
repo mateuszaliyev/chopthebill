@@ -3,5 +3,13 @@
 	"have-no-account": "Don't have an account? Register!",
 	"login": "Log in",
 	"login-data-invalid": "Invalid email address or password",
-	"meta-title": "Login"
+	"meta-title": "Login",
+	"send": "Send",
+	"forgot-password-text": "Enter email address, where you will get password reset link",
+	"invalid-email": "Account with this email does not exist",
+	"enter-new-password": "Enter new password",
+	"reset-password": "Reset pasword",
+	"link-expired": "Link expired",
+	"invalid-link": "Link is invalid",
+	"email-sent": "Email with password reset link has been sent"
 }

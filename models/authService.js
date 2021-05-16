@@ -19,7 +19,7 @@ const {
 	getAccessToken,
 	getRefreshToken,
 	verifyToken,
-	getResetPasswordLink,
+	getToken,
 } = require("../utils/jwt");
 
 async function registerService(user) {
@@ -178,24 +178,30 @@ async function logoutService(req) {
 }
 
 async function forgotPasswordService(email) {
-	const emailPasswordIdQuery = await db.query(
-		`SELECT email, password, id_user FROM public."user" WHERE email = $1`,
+	const emailPasswordIdLanguageQuery = await db.query(
+		`SELECT password, id_user, language FROM public."user" WHERE email = $1`,
 		[email]
 	);
 
-	if (!emailPasswordIdQuery.rows[0]?.email) {
+	if (!emailPasswordIdLanguageQuery.rows[0]) {
 		return { link: "", error: "invalid-email" };
 	}
 
-	const secret =
-		process.env.FORGOT_PASSWORD_SECRET + emailPasswordIdQuery.rows[0].password;
+	const {
+		password,
+		id_user: id,
+		language,
+	} = emailPasswordIdLanguageQuery.rows[0];
+
+	const secret = process.env.ACCESS_TOKEN_SECRET + password;
 
 	const payload = {
-		email: emailPasswordIdQuery.rows[0].email,
-		id: emailPasswordIdQuery.rows[0].id_user,
+		email,
+		id,
 	};
 
-	const link = getResetPasswordLink(payload, secret);
+	const token = getToken(payload, secret);
+	const link = `http://localhost:3000/${language}/reset-password/${id}/${token}`;
 
 	return { link: link, error: "" };
 }
@@ -211,7 +217,7 @@ async function validateLinkService(id, token) {
 	}
 
 	const secret =
-		process.env.FORGOT_PASSWORD_SECRET + idPasswordQuery.rows[0].password;
+		process.env.ACCESS_TOKEN_SECRET + idPasswordQuery.rows[0].password;
 
 	if (!verifyToken(token, secret)) {
 		return "link-expired";
@@ -231,7 +237,7 @@ async function resetPasswordService(id, token, password) {
 	}
 
 	const secret =
-		process.env.FORGOT_PASSWORD_SECRET + idPasswordQuery.rows[0].password;
+		process.env.ACCESS_TOKEN_SECRET + idPasswordQuery.rows[0].password;
 
 	if (!verifyToken(token, secret)) {
 		return "link-expired";
