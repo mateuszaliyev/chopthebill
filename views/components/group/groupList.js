@@ -53,14 +53,11 @@ const GroupList = ({groups, refreshGroupList}) => {
 		<List className={classes.root}>
 			{groups.map((row) => (
 				<>
-					<ListItem key={row.id_group} button >
-						<Link href="/group/[id]" as={`/group/${row.id_group}`}
-						underline="none" color="inherit">
-							<ListItemText 
-								primary={ row.name }
-								secondary={ row.description }
-							/>
-						</Link>
+					<ListItem key={row.id_group} button component={Link} underline="none" color="inherit" href="/group/[id]" as={`/group/${row.id_group}`}>
+						<ListItemText 
+							primary={ row.name }
+							secondary={ row.description }
+						/>
 						<ListItemSecondaryAction>
 							<Tooltip title={`${t("groups:settings-button")}`}>
 								<IconButton edge="end" key={row.id_group}>
