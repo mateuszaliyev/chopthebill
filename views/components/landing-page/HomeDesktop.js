@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 		fontFamily: '"Open Sans", "Quicksand", "Helvetica", "Arial", "sans-serif"',
 		fontWeight: "700",
 		marginBottom: "2rem",
-		maxWidth: "20ch",
+		maxWidth: "15ch",
 	},
 	logo: {
 		background: 'url("/icons/icon-no-bg.svg")',

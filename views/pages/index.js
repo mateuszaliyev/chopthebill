@@ -1,4 +1,5 @@
 // React & Next
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -26,12 +27,22 @@ export async function getServerSideProps({ locale }) {
 
 function Home() {
 	const { t } = useTranslation("common");
-	const { height, width } = useWindowSize();
 
+	const [showChild, setShowChild] = useState(false);
+
+	const { height, width } = useWindowSize();
 	const theme = useTheme();
 	const bpmd = useMediaQuery(theme.breakpoints.up("md"));
 
 	const desktop = bpmd && width / height >= 1;
+
+	useEffect(() => {
+		setShowChild(true);
+	}, []);
+
+	if (!showChild) {
+		return null;
+	}
 
 	return (
 		<>
