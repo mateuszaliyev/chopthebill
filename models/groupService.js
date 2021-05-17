@@ -41,7 +41,7 @@ async function getMembersService(groupId, userId, authHeader) {
  * 
  * @param {*} userId user id
  * @param {*} authHeader header containing authentication token
- * @returns group data { id_group, name, description }
+ * @returns user's groups data { id_group, name, description }
  */
 async function userGroupsService(userId, authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];
@@ -100,21 +100,31 @@ async function createGroupService(name, description, members, authHeader) {
 /**
  * Creates affiliation between groupId and userId.
  * @param {*} groupId group id
- * @param {*} userId user id
- * @param {*} owner true if user has an owner
+ * @param {*} userId id of a user that's getting added to a group
+ * @param {*} ownerId id of a user that's trying to add a new user
+ * @param {*} owner true if new user has an owner
  * @param {*} authHeader header containing authentication token
  */
-async function addUserToGroupService(groupId, userId, owner, authHeader) {
+async function addUserToGroupService(groupId, userId, ownerId, owner, authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
 		return { error: "unauthorized", result: [] };
 	}
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
 	if (decoded) {
-		const queryRes = await db.query(
-			`INSERT INTO public.affiliation (id_group, id_user, owner, valid)
-			VALUES ($1, $2, $3, true);`,
-			[groupId, userId, owner]);
+		// check if ownerId has an owner in that group
+		const hasOwner = await db.query(
+			`SELECT a.owner FROM public."group" g, public.affiliation a 
+			WHERE g.id_group = a.id_group AND 
+			g.id_group = $1 AND a.id_user = $2;`,
+			[groupId, ownerId]).rows[0].owner;
+		
+		if (hasOwner == true) {
+			const queryRes = await db.query(
+				`INSERT INTO public.affiliation (id_group, id_user, owner, valid)
+				VALUES ($1, $2, $3, true);`,
+				[groupId, userId, owner]);
+		}
 	}
 	return { error: "forbidden", result: [] };
 }
@@ -122,22 +132,32 @@ async function addUserToGroupService(groupId, userId, owner, authHeader) {
 /**
  * Delete a group with a given id
  * @param {*} groupId id of a group to delete
+ * @param {*} userId id of a user thats trying to delete the group
  * @param {*} authHeader header containing authentication token
  */
-async function deleteGroupService(groupId, authHeader) {
+async function deleteGroupService(groupId, userId, authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
 		return { error: "unauthorized", result: [] };
 	}
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
 	if (decoded) {
-		// TODO: check if user has an owner
-		const queryRes = await db.query(
-			`UPDATE public."group"
-			SET deleted = true
-			WHERE id_group = $1;`,
-			[groupId]);
-		return { error: "", result: []};
+		// check if user has an owner
+		const hasOwner = await db.query(
+			`SELECT a.owner FROM public."group" g, public.affiliation a 
+			WHERE g.id_group = a.id_group AND 
+			g.id_group = $1 AND a.id_user = $2;`,
+			[groupId, userId]).rows[0].owner;
+
+		if (hasOwner == true) {
+			const queryRes = await db.query(
+				`UPDATE public."group"
+				SET deleted = true
+				WHERE id_group = $1;`,
+				[groupId]);
+			return { error: "", result: []};
+		}
+		return { error: "unauthorized", result: [] };
 	}
 	return { error: "forbidden", result: [] };
 }
