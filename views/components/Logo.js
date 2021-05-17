@@ -6,8 +6,11 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-	logo: ({ center, size }) => ({
-		background: 'url("/icons/icon.svg")',
+	logo: ({ background, center, size }) => ({
+		background: background
+			? 'url("/icons/icon.svg")'
+			: 'url("/icons/icon-no-bg.svg")',
+		backgroundPosition: "50% 50%",
 		backgroundRepeat: "no-repeat",
 		backgroundSize: "cover",
 		height: size,
@@ -16,18 +19,15 @@ const useStyles = makeStyles((theme) => ({
 	}),
 }));
 
-function Logo({ center = false, size = "4rem" }) {
-	const classes = useStyles({ center, size });
+function Logo({
+	background = false,
+	className,
+	center = false,
+	size = "4rem",
+}) {
+	const classes = useStyles({ background, center, size });
 
-	return (
-		<div className={classes.logo} />
-		// <Image
-		// 	alt="ChopTheBill logo"
-		// 	height={size || 64}
-		// 	src="/icons/icon.svg"
-		// 	width={size || 64}
-		// />
-	);
+	return <div className={`${className} ${classes.logo}`} />;
 }
 
 export default Logo;

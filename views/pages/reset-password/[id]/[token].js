@@ -104,7 +104,7 @@ function ResetPassword({ id, token }) {
 								</IconButton>
 							</Tooltip>
 						</Link>
-						<Logo center size={192} />
+						<Logo background center size={192} />
 						<Typography align="center" variant="h4">
 							ChopTheBill
 						</Typography>
@@ -119,7 +119,7 @@ function ResetPassword({ id, token }) {
 								</IconButton>
 							</Tooltip>
 						</Link>
-						<Logo center size={192} />
+						<Logo background center size={192} />
 						<Typography align="center" variant="h4">
 							ChopTheBill
 						</Typography>

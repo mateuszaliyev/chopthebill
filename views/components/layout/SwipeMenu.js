@@ -70,7 +70,7 @@ function SwipeMenu({ items }) {
 				onOpen={toggleSideMenu(true)}
 			>
 				<div className={classes.logo}>
-					<Logo size={48} />
+					<Logo background size={48} />
 					<Typography className={classes.logoText} variant="h5">
 						ChopTheBill
 					</Typography>

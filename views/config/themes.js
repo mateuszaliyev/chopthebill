@@ -1,4 +1,4 @@
-import { green, teal } from "@material-ui/core/colors";
+import { teal } from "@material-ui/core/colors";
 
 const errorPalette = {
 	light: "#e57373",
@@ -17,7 +17,7 @@ const typography = {
 
 export const alternativeTheme = {
 	palette: {
-		primary: green,
+		primary: teal,
 		secondary: errorPalette,
 	},
 };
@@ -31,7 +31,12 @@ export const darkTheme = {
 
 export const defaultTheme = {
 	palette: {
-		primary: teal,
+		primary: {
+			contrastText: "#fff",
+			dark: "#1a714b",
+			light: "#51b589",
+			main: "#26a26c",
+		},
 		secondary: errorPalette,
 	},
 };
