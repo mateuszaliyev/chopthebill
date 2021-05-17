@@ -49,7 +49,7 @@ const MemberList = ({members}) => {
 		<List className={classes.root}>
 			{members.map((row) => (
 				<>
-					<ListItem key={row.id_user} button >
+					<ListItem key={row.id_user} button key={row.id_user}>
 						<ListItemText 
 							primary={ row.username }
 							secondary={ row.email }

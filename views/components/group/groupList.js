@@ -60,12 +60,12 @@ const GroupList = ({groups, refreshGroupList}) => {
 						/>
 						<ListItemSecondaryAction>
 							<Tooltip title={`${t("groups:settings-button")}`}>
-								<IconButton edge="end" key={row.id_group}>
+								<IconButton edge="end" component={Link} href="/group/[id]/GroupSettings" as={`/group/${row.id_group}/GroupSettings`}>
 									<SettingsIcon />
 								</IconButton>
 							</Tooltip>
 							<Tooltip title={`${t("groups:delete-button")}`}>
-								<IconButton edge="end" onClick={handleClick(row.name, row.id_group)} key={row.id_group}>
+								<IconButton edge="end" onClick={handleClick(row.name, row.id_group)} >
 									<DeleteIcon />
 								</IconButton>
 							</Tooltip>
