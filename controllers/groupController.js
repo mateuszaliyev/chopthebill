@@ -3,7 +3,9 @@ const {
 	userGroupsService,
 	createGroupService,
 	addUserToGroupService,
-	deleteGroupService
+	deleteGroupService,
+	groupNameService,
+	groupDescriptionService
 } = require("../models/groupService");
 
 async function getMembersController(req, res) {
@@ -113,8 +115,62 @@ async function deleteGroupController(req, res) {
 	try {
 		const authHeader = req.headers.authorization;
 		const groupId = req.body.id_group;
+		const userId = req.body.id_user;
 
-		const { error, result } = await deleteGroupService(groupId, authHeader);
+		const { error, result } = await deleteGroupService(groupId, userId, authHeader);
+
+		if (error === "unauthorized") {
+			return res.status(401).json({ error, result });
+		}
+		if (error === "forbidden") {
+			return res.status(403).json({ error, result });
+		}
+		// OK
+		return res.status(200).json({ error, result });
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			error: "internal-server-error",
+			result: []
+		});
+	}
+}
+
+
+async function groupNameController(req, res) {
+	try {
+		const authHeader = req.headers.authorization;
+		const groupId = req.body.id_group;
+		const userId = req.body.id_user;
+		const name = req.body.name;
+		
+		const { error, result } = await groupNameService(groupId, userId, name, authHeader);
+
+		if (error === "unauthorized") {
+			return res.status(401).json({ error, result });
+		}
+		if (error === "forbidden") {
+			return res.status(403).json({ error, result });
+		}
+		// OK
+		return res.status(200).json({ error, result });
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			error: "internal-server-error",
+			result: []
+		});
+	}
+}
+
+async function groupDescriptionController(req, res) {
+	try {
+		const authHeader = req.headers.authorization;
+		const groupId = req.body.id_group;
+		const userId = req.body.id_user;
+		const description = req.body.description;
+
+		const { error, result } = await groupDescriptionService(groupId, userId, description, authHeader);
 
 		if (error === "unauthorized") {
 			return res.status(401).json({ error, result });
@@ -138,5 +194,7 @@ module.exports = {
 	getGroupsController,
 	createGroupController,
 	addAffiliationController,
-	deleteGroupController
+	deleteGroupController,
+	groupNameController,
+	groupDescriptionController
 };

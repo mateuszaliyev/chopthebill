@@ -32,9 +32,9 @@ const GroupList = ({groups, refreshGroupList}) => {
 	const { t } = useTranslation(["common", "groups"]);
 	const classes = useStyles();
 
-	const [open, setOpen] = useState();
-	const [groupName, setGroupName] = useState();
-	const [groupId, setGroupId] = useState();
+	const [open, setOpen] = useState(false);
+	const [groupName, setGroupName] = useState("");
+	const [groupId, setGroupId] = useState(-1);
 
 	const handleClick = (name, id) => {
 		return () => {
@@ -53,20 +53,37 @@ const GroupList = ({groups, refreshGroupList}) => {
 		<List className={classes.root}>
 			{groups.map((row) => (
 				<>
-					<ListItem key={row.id_group} button component={Link} underline="none" color="inherit" href="/group/[id]" as={`/group/${row.id_group}`}>
+					<ListItem 
+						button
+						key={row.id_group}
+						underline="none"
+						color="inherit"
+						component={Link}
+						href="/group/[id]"
+						as={`/group/${row.id_group}`}
+					>
 						<ListItemText 
+							style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}}
 							primary={ row.name }
 							secondary={ row.description }
 						/>
 						<ListItemSecondaryAction>
 							<Tooltip title={`${t("groups:settings-button")}`}>
-								<IconButton edge="end" component={Link} href="/group/[id]/GroupSettings" as={`/group/${row.id_group}/GroupSettings`}>
-									<SettingsIcon />
+								<IconButton
+									edge="end"
+									component={Link}
+									href="/group/[id]/settings"
+									as={`/group/${row.id_group}/settings`}
+								>
+									<SettingsIcon color="action"/>
 								</IconButton>
 							</Tooltip>
 							<Tooltip title={`${t("groups:delete-button")}`}>
-								<IconButton edge="end" onClick={handleClick(row.name, row.id_group)} >
-									<DeleteIcon />
+								<IconButton
+									edge="end"
+									onClick={handleClick(row.name, row.id_group)}
+								>
+									<DeleteIcon color="secondary"/>
 								</IconButton>
 							</Tooltip>
 						</ListItemSecondaryAction>

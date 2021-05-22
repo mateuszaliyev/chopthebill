@@ -17,7 +17,6 @@ import {
 	Tooltip,
 } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import SettingsIcon from '@material-ui/icons/Settings';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -31,17 +30,9 @@ const MemberList = ({members}) => {
 	const { t } = useTranslation(["common", "groups"]);
 	const classes = useStyles();
 
-	const [open, setOpen] = useState();
-	const [groupName, setGroupName] = useState();
-	const [groupId, setGroupId] = useState();
-
-	const handleClick = (name, id) => {
-		return () => {
-			setOpen((prevOpen) => !prevOpen);
-			setGroupName(name);
-			setGroupId(id);
-		}
-	};
+	const [open, setOpen] = useState(false);
+	const [userName, setUserName] = useState("");
+	const [userId, setUserId] = useState(-1);
 
 	return (
 		<>
@@ -49,7 +40,7 @@ const MemberList = ({members}) => {
 		<List className={classes.root}>
 			{members.map((row) => (
 				<>
-					<ListItem key={row.id_user} button key={row.id_user}>
+					<ListItem key={row.id_user} button>
 						<ListItemText 
 							primary={ row.username }
 							secondary={ row.email }

@@ -7,6 +7,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Auth from "../components/auth/Auth";
 import Layout from "../components/layout/Layout";
 import Meta from "../components/Meta";
+import Link from "../components/Link";
 import GroupList from "../components/group/groupList";
 
 // Config
@@ -54,7 +55,6 @@ function Groups() {
 	}
 
 	const getGroups = async () => {
-		console.log("fetching");
 		const res = await fetch(`${host}/groups`, {
 			method: "POST",
 			credentials: "include",
@@ -73,25 +73,6 @@ function Groups() {
 		}
 	}
 
-	const createGroup = async () => {
-		const res = await fetch(`${host}/groups/create`, {
-			method: "POST",
-			credentials: "include",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: JSON.stringify(user),
-		});
-		
-		if (res.ok)
-		{
-			const data = await res.json();
-			setRefreshGroups((prev) => !prev);
-		}
-	}
-
 	useEffect(() => {getGroups()}, [refreshGroups]);
 	
 	return (
@@ -100,8 +81,10 @@ function Groups() {
 			<Layout title={`${t("groups:meta-title")}`}>
 				<GroupList groups={results} refreshGroupList={refreshGroupList}/>
 					<Tooltip title={`${t("groups:create-button")}`}>
-						<Fab className={classes.absolute} style={{ color: "white", backgroundColor: "#f50057" }} onClick={createGroup}>
-							<AddIcon fontSize="large"/>
+						<Fab className={classes.absolute} color="secondary" 
+						component={Link} href="/group/create" as="/group/create"
+						>
+							<AddIcon fontSize="large" variant="contained"/>
 						</Fab>
 					</Tooltip>
 			</Layout>

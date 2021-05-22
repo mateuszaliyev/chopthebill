@@ -2,5 +2,9 @@
 	"meta-title": "Grupy",
 	"create-button": "Utwórz grupę",
 	"settings-button": "Ustawienia",
-	"delete-button": "Usuń"
+	"delete-button": "Usuń",
+	"group-name": "Nazwa grupy",
+	"change-name": "Zmień nazwę",
+	"group-description": "Opis grupy",
+	"change-description": "Zmień opis"
 }

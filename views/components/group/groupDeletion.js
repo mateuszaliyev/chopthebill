@@ -21,7 +21,7 @@ function GroupDeletionDialog({ onClose, open, title, groupId, refreshGroupList }
 	const { t } = useTranslation("common", "group");
 	const classes = useStyles();
 
-	const { accessToken } = useContext(UserContext);
+	const { accessToken, user } = useContext(UserContext);
 
 	const deleteRequest = async () => {
 		const res = await fetch(`${host}/groups/delete`, {
@@ -31,7 +31,10 @@ function GroupDeletionDialog({ onClose, open, title, groupId, refreshGroupList }
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
 			},
-			body: JSON.stringify({id_group: groupId}),
+			body: JSON.stringify({
+				"id_group": groupId,
+				"id_user": user.id
+			}),
 		});
 		if (res.ok) {
 			const data = await res.json();
