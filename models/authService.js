@@ -86,9 +86,13 @@ async function loginService(email, password) {
 		};
 	}
 
-	const accessToken = getAccessToken({ username: userQuery.rows[0].username });
+	const accessToken = getAccessToken({
+		username: userQuery.rows[0].username,
+		id: userQuery.rows[0].id_user,
+	});
 	const refreshToken = getRefreshToken({
 		username: userQuery.rows[0].username,
+		id: userQuery.rows[0].id_user,
 	});
 	const user = {
 		id: userQuery.rows[0].id_user,
@@ -145,11 +149,14 @@ async function refreshService(authHeader) {
 	}
 	if (verifyToken(token, process.env.REFRESH_TOKEN_SECRET)) {
 		const refreshQuery = await db.query(
-			`SELECT username, refresh_token, deleted FROM public."user" WHERE refresh_token = $1`,
+			`SELECT username, id_user, refresh_token, deleted FROM public."user" WHERE refresh_token = $1`,
 			[token]
 		);
 		if (refreshQuery.rows[0] && !refreshQuery.rows[0].deleted) {
-			return getAccessToken({ username: refreshQuery.rows[0].username });
+			return getAccessToken({
+				username: refreshQuery.rows[0].username,
+				id: refreshQuery.rows[0].id_user,
+			});
 		}
 	}
 	return "forbidden";

@@ -252,10 +252,6 @@ function Settings() {
 
 	const [openDeleteAccount, setDeleteAccount] = useState(false);
 
-	const handleDeleteAccClick = () => {
-		setDeleteAccount((prevPasswordOpen) => !prevPasswordOpen);
-	};
-
 	const handleClose = () => {
 		setPasswordOpen(false);
 		setDeleteAccount(false);

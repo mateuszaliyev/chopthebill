@@ -44,9 +44,7 @@ function AvatarButton() {
 		<>
 			<Tooltip title={user.username}>
 				<IconButton color="inherit" onClick={handleClick}>
-					<Avatar
-						alt={user.username} /* src={`${host}/avatars/${user.id}.png`} */
-					/>
+					<Avatar alt={user.username} src={`${host}/avatars/${user.id}.png`} />
 				</IconButton>
 			</Tooltip>
 			<Menu
