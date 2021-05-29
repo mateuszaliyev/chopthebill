@@ -1,10 +1,16 @@
-import { teal } from "@material-ui/core/colors";
+import { grey, teal } from "@material-ui/core/colors";
 
-const errorPalette = {
-	light: "#e57373",
-	main: "#f44336",
-	dark: "#d32f2f",
-	contrastText: "#fff",
+// const errorPalette = {
+// 	light: "#e57373",
+// 	main: "#f44336",
+// 	dark: "#d32f2f",
+// 	contrastText: "#fff",
+// };
+
+const brightPalette = {
+	light: grey[50],
+	main: grey[100],
+	dark: grey[150],
 };
 
 const typography = {
@@ -18,7 +24,7 @@ const typography = {
 export const alternativeTheme = {
 	palette: {
 		primary: teal,
-		secondary: errorPalette,
+		secondary: brightPalette,
 	},
 };
 
@@ -37,7 +43,7 @@ export const defaultTheme = {
 			light: "#51b589",
 			main: "#26a26c",
 		},
-		secondary: errorPalette,
+		secondary: brightPalette,
 	},
 };
 

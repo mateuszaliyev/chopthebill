@@ -55,15 +55,18 @@ async function searchService(query, authHeader) {
 					email: user.hide_email ? "" : user.email,
 					username: user.username,
 					hideEmail: user.hide_email,
+					lastSeen: user.last_seen,
 					match: match,
 				};
 			});
 
-			results = users
-				.filter((user) => user.match <= 3)
-				.sort((a, b) => {
-					return a.match - b.match;
-				});
+			results = {
+				users: users
+					.filter((user) => user.match <= 3)
+					.sort((a, b) => {
+						return a.match - b.match;
+					}),
+			};
 		}
 
 		return { error: "", results };

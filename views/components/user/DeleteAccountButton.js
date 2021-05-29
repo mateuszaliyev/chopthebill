@@ -15,6 +15,25 @@ import {
 	DialogTitle,
 	TextField,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+// Styles
+const useStyles = makeStyles((theme) => ({
+	button: {
+		border: `1px solid ${theme.palette.error.main}80`,
+		color: theme.palette.error.main,
+		"&:hover": {
+			backgroundColor: `${theme.palette.error.main}0a`,
+			border: `1px solid ${theme.palette.error.main}`,
+		},
+	},
+	red: {
+		color: theme.palette.error.main,
+		"&:hover": {
+			backgroundColor: `${theme.palette.error.main}0a`,
+		},
+	},
+}));
 
 function DeleteAccountButton() {
 	const { t } = useTranslation("common");
@@ -27,6 +46,8 @@ function DeleteAccountButton() {
 	const [password, setPassword] = useState("");
 
 	const [fieldHelper, setFieldHelper] = useState("");
+
+	const classes = useStyles();
 
 	const deleteAccount = async () => {
 		setOpen(false);
@@ -54,9 +75,9 @@ function DeleteAccountButton() {
 	return (
 		<>
 			<Button
-				variant="outlined"
-				color="secondary"
+				className={classes.button}
 				onClick={() => setOpen(true)}
+				variant="outlined"
 			>
 				{t("delete-account")}
 			</Button>
@@ -79,7 +100,7 @@ function DeleteAccountButton() {
 					<Button color="primary" onClick={() => setOpen(false)}>
 						{t("cancel")}
 					</Button>
-					<Button autoFocus color="secondary" onClick={deleteAccount}>
+					<Button autoFocus className={classes.red} onClick={deleteAccount}>
 						{t("confirm")}
 					</Button>
 				</DialogActions>

@@ -1,9 +1,13 @@
+// React & Next
+import { useTranslation } from "next-i18next";
+
 // Material UI
 import {
 	Dialog,
 	DialogContent,
 	DialogTitle,
 	IconButton,
+	Tooltip,
 	useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -19,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NotificationDialog({ onClose, open, title }) {
+	const { t } = useTranslation("common");
+
 	const classes = useStyles();
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -32,15 +38,13 @@ function NotificationDialog({ onClose, open, title }) {
 		>
 			<DialogTitle>
 				{title}
-				<IconButton
-					aria-label="close"
-					className={classes.closeButton}
-					onClick={onClose}
-				>
-					<CloseIcon />
-				</IconButton>
+				<Tooltip title={t("close")}>
+					<IconButton className={classes.closeButton} onClick={onClose}>
+						<CloseIcon />
+					</IconButton>
+				</Tooltip>
 			</DialogTitle>
-			<DialogContent dividers>TODO: {title}</DialogContent>
+			<DialogContent>TODO: {title}</DialogContent>
 		</Dialog>
 	);
 }

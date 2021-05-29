@@ -13,6 +13,7 @@ import {
 	IconButton,
 	Tooltip,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 // Config
@@ -20,6 +21,16 @@ import { host } from "../../config";
 
 // Contexts
 import { UserContext } from "../auth/User";
+
+// Styles
+const useStyles = makeStyles((theme) => ({
+	red: {
+		color: theme.palette.error.main,
+		"&:hover": {
+			backgroundColor: `${theme.palette.error.main}0a`,
+		},
+	},
+}));
 
 function UnfriendButton({
 	color = "inherit",
@@ -32,6 +43,8 @@ function UnfriendButton({
 
 	const { accessToken } = useContext(UserContext);
 	const [open, setOpen] = useState(false);
+
+	const classes = useStyles();
 
 	const unfriend = async () => {
 		setOpen(false);
@@ -72,7 +85,7 @@ function UnfriendButton({
 					<Button color="primary" onClick={() => setOpen(false)}>
 						{t("cancel")}
 					</Button>
-					<Button autoFocus color="secondary" onClick={unfriend}>
+					<Button autoFocus className={classes.red} onClick={unfriend}>
 						{t("confirm")}
 					</Button>
 				</DialogActions>

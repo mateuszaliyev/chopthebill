@@ -40,8 +40,11 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: "column",
 		height: "calc(100vh - 4rem)",
 	},
-	margin: {
+	marginDesktop: {
 		marginLeft: "16rem",
+	},
+	marginMobile: {
+		marginTop: "4rem",
 	},
 	menuButton: {
 		marginRight: theme.spacing(2),
@@ -93,10 +96,7 @@ function AppBarMobile({ title }) {
 
 	return (
 		<header className={classes.root}>
-			<AppBar
-				color={palette === "light" ? "primary" : "inherit"}
-				position="static"
-			>
+			<AppBar color={palette === "light" ? "primary" : "inherit"}>
 				<Toolbar>
 					<SwipeMenu className={classes.menuButton} items={menuItems} />
 					<Typography
@@ -109,7 +109,7 @@ function AppBarMobile({ title }) {
 					<SearchButton />
 					<NotificationButton
 						amount={1}
-						color={palette === "light" ? "secondary" : "primary"}
+						color={palette === "light" ? "error" : "primary"}
 					/>
 					<AvatarButton />
 				</Toolbar>
@@ -125,7 +125,7 @@ function AppBarDesktop({ title }) {
 	return (
 		<header className={classes.root}>
 			<AppBar
-				className={`${classes.appBar} ${classes.margin}`}
+				className={`${classes.appBar} ${classes.marginDesktop}`}
 				color="transparent"
 				elevation={0}
 				position="static"
@@ -155,7 +155,7 @@ function Layout({ children, title }) {
 				<>
 					<AppBarDesktop title={title} />
 					<SideMenu items={menuItems} />
-					<main className={`${classes.main} ${classes.margin}`}>
+					<main className={`${classes.main} ${classes.marginDesktop}`}>
 						<Divider variant="middle" />
 						<Container className={classes.container} maxWidth="xl">
 							{children}
@@ -165,7 +165,9 @@ function Layout({ children, title }) {
 			) : (
 				<>
 					<AppBarMobile title={title} />
-					<main className={classes.main}>{children}</main>
+					<main className={`${classes.main} ${classes.marginMobile}`}>
+						{children}
+					</main>
 				</>
 			)}
 		</>

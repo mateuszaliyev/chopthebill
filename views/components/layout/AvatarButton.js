@@ -9,9 +9,6 @@ import { IconButton, Menu, MenuItem, Tooltip } from "@material-ui/core";
 import Avatar from "../Avatar";
 import Link from "../Link";
 
-// Config
-import { host } from "../../config";
-
 // Context
 import { UserContext } from "../auth/User";
 
@@ -44,7 +41,7 @@ function AvatarButton() {
 		<>
 			<Tooltip title={user.username}>
 				<IconButton color="inherit" onClick={handleClick}>
-					<Avatar alt={user.username} src={`${host}/avatars/${user.id}.png`} />
+					<Avatar user={user} />
 				</IconButton>
 			</Tooltip>
 			<Menu

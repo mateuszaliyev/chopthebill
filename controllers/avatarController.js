@@ -1,13 +1,26 @@
+const fs = require("fs");
 const path = require("path");
 const {
 	addAvatarService,
 	deleteAvatarService,
 } = require("../models/avatarService");
 
-function avatarController(req, res) {
-	res.sendFile(`/${req.params.id}`, {
-		root: path.join(__dirname, "../public/avatars"),
-	});
+async function avatarController(req, res) {
+	const files = await fs.promises.readdir("public/avatars/");
+	for (const file of files) {
+		const id = file.split(".")[0];
+		const extension = file.split(".")[1];
+		if (id === req.params.id) {
+			return res.sendFile(
+				`/${id}.${extension}`,
+				{
+					root: path.join(__dirname, "../public/avatars"),
+				},
+				(err) => {}
+			);
+		}
+	}
+	res.sendStatus(204);
 }
 
 async function addAvatarController(req, res, next) {

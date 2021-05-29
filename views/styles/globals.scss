@@ -24,3 +24,19 @@ body {
 	display: grid;
 	place-items: center;
 }
+
+::-webkit-scrollbar {
+	width: 0.4rem;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #757575;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #9e9e9e;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}

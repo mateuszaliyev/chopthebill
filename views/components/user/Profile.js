@@ -15,6 +15,7 @@ import UnfriendButton from "../friends/UnfriendButton";
 // Contexts
 import { UserContext } from "../../components/auth/User";
 
+// Config
 import { host } from "../../config";
 
 // Hooks
@@ -101,18 +102,10 @@ function Profile({ user }) {
 		<Paper className={classes.root}>
 			{user.id === loggedUser.id ? (
 				<IconButton onClick={handleClick}>
-					<Avatar
-						alt={user.username}
-						className={classes.large}
-						src={`${host}/avatars/${user.id}.png`}
-					/>
+					<Avatar className={classes.large} user={user} />
 				</IconButton>
 			) : (
-				<Avatar
-					alt={user.username}
-					className={classes.large}
-					src={`${host}/avatars/${user.id}.png`}
-				/>
+				<Avatar className={classes.large} user={user} />
 			)}
 			<Menu
 				anchorEl={avatarAnchor}
@@ -130,9 +123,9 @@ function Profile({ user }) {
 					style={{ display: "none" }}
 				></input>
 				<label htmlFor="upload">
-					<MenuItem>{t("modify-avatar")}</MenuItem>
+					<MenuItem>{t("change")}</MenuItem>
 				</label>
-				<MenuItem onClick={handleDelete}>{t("delete-avatar")}</MenuItem>
+				<MenuItem onClick={handleDelete}>{t("delete")}</MenuItem>
 			</Menu>
 
 			<div className={classes.details}>

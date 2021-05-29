@@ -5,7 +5,7 @@
 -- Dumped from database version 13.2
 -- Dumped by pg_dump version 13.2
 
--- Started on 2021-05-06 16:12:10
+-- Started on 2021-05-18 01:57:45
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -23,7 +23,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 201 (class 1259 OID 16909)
+-- TOC entry 205 (class 1259 OID 17104)
 -- Name: affiliation; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -39,7 +39,7 @@ CREATE TABLE public.affiliation (
 ALTER TABLE public.affiliation OWNER TO postgres;
 
 --
--- TOC entry 202 (class 1259 OID 16912)
+-- TOC entry 204 (class 1259 OID 17102)
 -- Name: affiliation_id_affiliation_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -54,8 +54,8 @@ CREATE SEQUENCE public.affiliation_id_affiliation_seq
 ALTER TABLE public.affiliation_id_affiliation_seq OWNER TO postgres;
 
 --
--- TOC entry 3060 (class 0 OID 0)
--- Dependencies: 202
+-- TOC entry 3070 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: affiliation_id_affiliation_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -63,7 +63,7 @@ ALTER SEQUENCE public.affiliation_id_affiliation_seq OWNED BY public.affiliation
 
 
 --
--- TOC entry 203 (class 1259 OID 16914)
+-- TOC entry 207 (class 1259 OID 17122)
 -- Name: expense; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -83,7 +83,7 @@ CREATE TABLE public.expense (
 ALTER TABLE public.expense OWNER TO postgres;
 
 --
--- TOC entry 204 (class 1259 OID 16920)
+-- TOC entry 206 (class 1259 OID 17120)
 -- Name: expense_id_expense_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -98,8 +98,8 @@ CREATE SEQUENCE public.expense_id_expense_seq
 ALTER TABLE public.expense_id_expense_seq OWNER TO postgres;
 
 --
--- TOC entry 3061 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3071 (class 0 OID 0)
+-- Dependencies: 206
 -- Name: expense_id_expense_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -107,7 +107,7 @@ ALTER SEQUENCE public.expense_id_expense_seq OWNED BY public.expense.id_expense;
 
 
 --
--- TOC entry 205 (class 1259 OID 16922)
+-- TOC entry 209 (class 1259 OID 17143)
 -- Name: friendship; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -122,7 +122,7 @@ CREATE TABLE public.friendship (
 ALTER TABLE public.friendship OWNER TO postgres;
 
 --
--- TOC entry 206 (class 1259 OID 16925)
+-- TOC entry 208 (class 1259 OID 17141)
 -- Name: friendship_id_friendship_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -137,8 +137,8 @@ CREATE SEQUENCE public.friendship_id_friendship_seq
 ALTER TABLE public.friendship_id_friendship_seq OWNER TO postgres;
 
 --
--- TOC entry 3062 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3072 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: friendship_id_friendship_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -146,7 +146,7 @@ ALTER SEQUENCE public.friendship_id_friendship_seq OWNED BY public.friendship.id
 
 
 --
--- TOC entry 207 (class 1259 OID 16927)
+-- TOC entry 203 (class 1259 OID 17093)
 -- Name: group; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -161,7 +161,7 @@ CREATE TABLE public."group" (
 ALTER TABLE public."group" OWNER TO postgres;
 
 --
--- TOC entry 208 (class 1259 OID 16933)
+-- TOC entry 202 (class 1259 OID 17091)
 -- Name: group_id_group_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -176,8 +176,8 @@ CREATE SEQUENCE public.group_id_group_seq
 ALTER TABLE public.group_id_group_seq OWNER TO postgres;
 
 --
--- TOC entry 3063 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3073 (class 0 OID 0)
+-- Dependencies: 202
 -- Name: group_id_group_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -185,7 +185,7 @@ ALTER SEQUENCE public.group_id_group_seq OWNED BY public."group".id_group;
 
 
 --
--- TOC entry 200 (class 1259 OID 16891)
+-- TOC entry 211 (class 1259 OID 17161)
 -- Name: notification; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -202,7 +202,7 @@ CREATE TABLE public.notification (
 ALTER TABLE public.notification OWNER TO postgres;
 
 --
--- TOC entry 209 (class 1259 OID 16935)
+-- TOC entry 210 (class 1259 OID 17159)
 -- Name: notification_id_notification_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -217,8 +217,8 @@ CREATE SEQUENCE public.notification_id_notification_seq
 ALTER TABLE public.notification_id_notification_seq OWNER TO postgres;
 
 --
--- TOC entry 3064 (class 0 OID 0)
--- Dependencies: 209
+-- TOC entry 3074 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: notification_id_notification_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -226,7 +226,7 @@ ALTER SEQUENCE public.notification_id_notification_seq OWNED BY public.notificat
 
 
 --
--- TOC entry 210 (class 1259 OID 16937)
+-- TOC entry 213 (class 1259 OID 17177)
 -- Name: obligation; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -243,7 +243,7 @@ CREATE TABLE public.obligation (
 ALTER TABLE public.obligation OWNER TO postgres;
 
 --
--- TOC entry 211 (class 1259 OID 16940)
+-- TOC entry 212 (class 1259 OID 17175)
 -- Name: obligation_id_obligation_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -258,8 +258,8 @@ CREATE SEQUENCE public.obligation_id_obligation_seq
 ALTER TABLE public.obligation_id_obligation_seq OWNER TO postgres;
 
 --
--- TOC entry 3065 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3075 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: obligation_id_obligation_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -267,7 +267,7 @@ ALTER SEQUENCE public.obligation_id_obligation_seq OWNED BY public.obligation.id
 
 
 --
--- TOC entry 212 (class 1259 OID 16942)
+-- TOC entry 201 (class 1259 OID 17082)
 -- Name: user; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -288,7 +288,7 @@ CREATE TABLE public."user" (
 ALTER TABLE public."user" OWNER TO postgres;
 
 --
--- TOC entry 213 (class 1259 OID 16948)
+-- TOC entry 200 (class 1259 OID 17080)
 -- Name: user_id_user_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -303,8 +303,8 @@ CREATE SEQUENCE public.user_id_user_seq
 ALTER TABLE public.user_id_user_seq OWNER TO postgres;
 
 --
--- TOC entry 3066 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 3076 (class 0 OID 0)
+-- Dependencies: 200
 -- Name: user_id_user_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -312,7 +312,7 @@ ALTER SEQUENCE public.user_id_user_seq OWNED BY public."user".id_user;
 
 
 --
--- TOC entry 2891 (class 2604 OID 16950)
+-- TOC entry 2892 (class 2604 OID 17107)
 -- Name: affiliation id_affiliation; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -320,7 +320,7 @@ ALTER TABLE ONLY public.affiliation ALTER COLUMN id_affiliation SET DEFAULT next
 
 
 --
--- TOC entry 2892 (class 2604 OID 16951)
+-- TOC entry 2893 (class 2604 OID 17125)
 -- Name: expense id_expense; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -328,7 +328,7 @@ ALTER TABLE ONLY public.expense ALTER COLUMN id_expense SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 2893 (class 2604 OID 16952)
+-- TOC entry 2894 (class 2604 OID 17146)
 -- Name: friendship id_friendship; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -336,7 +336,7 @@ ALTER TABLE ONLY public.friendship ALTER COLUMN id_friendship SET DEFAULT nextva
 
 
 --
--- TOC entry 2894 (class 2604 OID 16953)
+-- TOC entry 2891 (class 2604 OID 17096)
 -- Name: group id_group; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -344,7 +344,7 @@ ALTER TABLE ONLY public."group" ALTER COLUMN id_group SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 2890 (class 2604 OID 16954)
+-- TOC entry 2895 (class 2604 OID 17164)
 -- Name: notification id_notification; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -352,7 +352,7 @@ ALTER TABLE ONLY public.notification ALTER COLUMN id_notification SET DEFAULT ne
 
 
 --
--- TOC entry 2895 (class 2604 OID 16955)
+-- TOC entry 2896 (class 2604 OID 17180)
 -- Name: obligation id_obligation; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -360,7 +360,7 @@ ALTER TABLE ONLY public.obligation ALTER COLUMN id_obligation SET DEFAULT nextva
 
 
 --
--- TOC entry 2896 (class 2604 OID 16956)
+-- TOC entry 2890 (class 2604 OID 17085)
 -- Name: user id_user; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -368,8 +368,8 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id_user SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 3042 (class 0 OID 16909)
--- Dependencies: 201
+-- TOC entry 3056 (class 0 OID 17104)
+-- Dependencies: 205
 -- Data for Name: affiliation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -378,8 +378,8 @@ COPY public.affiliation (id_affiliation, owner, valid, id_user, id_group) FROM s
 
 
 --
--- TOC entry 3044 (class 0 OID 16914)
--- Dependencies: 203
+-- TOC entry 3058 (class 0 OID 17122)
+-- Dependencies: 207
 -- Data for Name: expense; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -388,8 +388,8 @@ COPY public.expense (id_expense, name, description, date, value, currency, settl
 
 
 --
--- TOC entry 3046 (class 0 OID 16922)
--- Dependencies: 205
+-- TOC entry 3060 (class 0 OID 17143)
+-- Dependencies: 209
 -- Data for Name: friendship; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -398,8 +398,8 @@ COPY public.friendship (id_friendship, valid, id_user_1, id_user_2) FROM stdin;
 
 
 --
--- TOC entry 3048 (class 0 OID 16927)
--- Dependencies: 207
+-- TOC entry 3054 (class 0 OID 17093)
+-- Dependencies: 203
 -- Data for Name: group; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -408,8 +408,8 @@ COPY public."group" (id_group, name, description, deleted) FROM stdin;
 
 
 --
--- TOC entry 3041 (class 0 OID 16891)
--- Dependencies: 200
+-- TOC entry 3062 (class 0 OID 17161)
+-- Dependencies: 211
 -- Data for Name: notification; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -418,8 +418,8 @@ COPY public.notification (id_notification, title, description, redirect, read, i
 
 
 --
--- TOC entry 3051 (class 0 OID 16937)
--- Dependencies: 210
+-- TOC entry 3064 (class 0 OID 17177)
+-- Dependencies: 213
 -- Data for Name: obligation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -428,8 +428,8 @@ COPY public.obligation (id_obligation, value, settled, id_user_debtor, id_user_c
 
 
 --
--- TOC entry 3053 (class 0 OID 16942)
--- Dependencies: 212
+-- TOC entry 3052 (class 0 OID 17082)
+-- Dependencies: 201
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -438,8 +438,8 @@ COPY public."user" (id_user, email, password, username, language, theme, hide_em
 
 
 --
--- TOC entry 3067 (class 0 OID 0)
--- Dependencies: 202
+-- TOC entry 3077 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: affiliation_id_affiliation_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -447,8 +447,8 @@ SELECT pg_catalog.setval('public.affiliation_id_affiliation_seq', 1, false);
 
 
 --
--- TOC entry 3068 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 3078 (class 0 OID 0)
+-- Dependencies: 206
 -- Name: expense_id_expense_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -456,26 +456,26 @@ SELECT pg_catalog.setval('public.expense_id_expense_seq', 1, false);
 
 
 --
--- TOC entry 3069 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 3079 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: friendship_id_friendship_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.friendship_id_friendship_seq', 1, false);
+SELECT pg_catalog.setval('public.friendship_id_friendship_seq', 81, true);
 
 
 --
--- TOC entry 3070 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 3080 (class 0 OID 0)
+-- Dependencies: 202
 -- Name: group_id_group_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.group_id_group_seq', 1, false);
+SELECT pg_catalog.setval('public.group_id_group_seq', 1, true);
 
 
 --
--- TOC entry 3071 (class 0 OID 0)
--- Dependencies: 209
+-- TOC entry 3081 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: notification_id_notification_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -483,8 +483,8 @@ SELECT pg_catalog.setval('public.notification_id_notification_seq', 1, false);
 
 
 --
--- TOC entry 3072 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 3082 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: obligation_id_obligation_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -492,16 +492,16 @@ SELECT pg_catalog.setval('public.obligation_id_obligation_seq', 1, false);
 
 
 --
--- TOC entry 3073 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 3083 (class 0 OID 0)
+-- Dependencies: 200
 -- Name: user_id_user_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_id_user_seq', 1, true);
+SELECT pg_catalog.setval('public.user_id_user_seq', 28, true);
 
 
 --
--- TOC entry 2900 (class 2606 OID 16958)
+-- TOC entry 2902 (class 2606 OID 17109)
 -- Name: affiliation affiliation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -510,7 +510,7 @@ ALTER TABLE ONLY public.affiliation
 
 
 --
--- TOC entry 2902 (class 2606 OID 16960)
+-- TOC entry 2904 (class 2606 OID 17130)
 -- Name: expense expense_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -519,7 +519,7 @@ ALTER TABLE ONLY public.expense
 
 
 --
--- TOC entry 2904 (class 2606 OID 16962)
+-- TOC entry 2906 (class 2606 OID 17148)
 -- Name: friendship friendship_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -528,7 +528,7 @@ ALTER TABLE ONLY public.friendship
 
 
 --
--- TOC entry 2906 (class 2606 OID 16964)
+-- TOC entry 2900 (class 2606 OID 17101)
 -- Name: group group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -537,7 +537,7 @@ ALTER TABLE ONLY public."group"
 
 
 --
--- TOC entry 2898 (class 2606 OID 16907)
+-- TOC entry 2908 (class 2606 OID 17169)
 -- Name: notification notification_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -546,7 +546,7 @@ ALTER TABLE ONLY public.notification
 
 
 --
--- TOC entry 2908 (class 2606 OID 16966)
+-- TOC entry 2910 (class 2606 OID 17182)
 -- Name: obligation obligation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -555,7 +555,7 @@ ALTER TABLE ONLY public.obligation
 
 
 --
--- TOC entry 2910 (class 2606 OID 16968)
+-- TOC entry 2898 (class 2606 OID 17090)
 -- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -563,7 +563,97 @@ ALTER TABLE ONLY public."user"
     ADD CONSTRAINT user_pkey PRIMARY KEY (id_user);
 
 
--- Completed on 2021-05-06 16:12:10
+--
+-- TOC entry 2912 (class 2606 OID 17115)
+-- Name: affiliation affiliation_id_group_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.affiliation
+    ADD CONSTRAINT affiliation_id_group_fkey FOREIGN KEY (id_group) REFERENCES public."group"(id_group);
+
+
+--
+-- TOC entry 2911 (class 2606 OID 17110)
+-- Name: affiliation affiliation_id_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.affiliation
+    ADD CONSTRAINT affiliation_id_user_fkey FOREIGN KEY (id_user) REFERENCES public."user"(id_user);
+
+
+--
+-- TOC entry 2914 (class 2606 OID 17136)
+-- Name: expense expense_id_group_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.expense
+    ADD CONSTRAINT expense_id_group_fkey FOREIGN KEY (id_group) REFERENCES public."group"(id_group);
+
+
+--
+-- TOC entry 2913 (class 2606 OID 17131)
+-- Name: expense expense_id_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.expense
+    ADD CONSTRAINT expense_id_user_fkey FOREIGN KEY (id_user) REFERENCES public."user"(id_user);
+
+
+--
+-- TOC entry 2915 (class 2606 OID 17149)
+-- Name: friendship friendship_id_user_1_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendship
+    ADD CONSTRAINT friendship_id_user_1_fkey FOREIGN KEY (id_user_1) REFERENCES public."user"(id_user);
+
+
+--
+-- TOC entry 2916 (class 2606 OID 17154)
+-- Name: friendship friendship_id_user_2_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.friendship
+    ADD CONSTRAINT friendship_id_user_2_fkey FOREIGN KEY (id_user_2) REFERENCES public."user"(id_user);
+
+
+--
+-- TOC entry 2917 (class 2606 OID 17170)
+-- Name: notification notification_id_user_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notification
+    ADD CONSTRAINT notification_id_user_fkey FOREIGN KEY (id_user) REFERENCES public."user"(id_user);
+
+
+--
+-- TOC entry 2920 (class 2606 OID 17193)
+-- Name: obligation obligation_id_expense_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.obligation
+    ADD CONSTRAINT obligation_id_expense_fkey FOREIGN KEY (id_expense) REFERENCES public.expense(id_expense);
+
+
+--
+-- TOC entry 2919 (class 2606 OID 17188)
+-- Name: obligation obligation_id_user_creditor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.obligation
+    ADD CONSTRAINT obligation_id_user_creditor_fkey FOREIGN KEY (id_user_creditor) REFERENCES public."user"(id_user);
+
+
+--
+-- TOC entry 2918 (class 2606 OID 17183)
+-- Name: obligation obligation_id_user_debtor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.obligation
+    ADD CONSTRAINT obligation_id_user_debtor_fkey FOREIGN KEY (id_user_debtor) REFERENCES public."user"(id_user);
+
+
+-- Completed on 2021-05-18 01:57:46
 
 --
 -- PostgreSQL database dump complete

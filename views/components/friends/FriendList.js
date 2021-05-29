@@ -57,14 +57,16 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function FriendListLastSeen({ className, friend }) {
+function FriendListLastSeen({ className, friend, listItem = false }) {
 	const lastSeen = useDateComparison(new Date(friend.lastSeen), new Date());
-	return (
+	return listItem ? (
 		<ListItemText className={className}>
 			<Tooltip title={new Date(friend.lastSeen).toString()}>
 				<Typography>{lastSeen}</Typography>
 			</Tooltip>
 		</ListItemText>
+	) : (
+		<>{lastSeen}</>
 	);
 }
 
@@ -100,19 +102,27 @@ function FriendList({ friends, setFriends }) {
 					key={friend.id}
 				>
 					<Link
-						color="inherit"
 						className={classes.link}
+						color="inherit"
 						href={`/user/${friend.id}`}
 						underline="none"
 					>
 						<ListItemAvatar>
-							<Avatar alt={friend.username} />
+							<Avatar user={friend} />
 						</ListItemAvatar>
-						<ListItemText primary={friend.username} secondary={friend.email} />
+						<ListItemText
+							primary={friend.username}
+							primaryTypographyProps={{ noWrap: true }}
+							secondary={
+								bpsm ? friend.email : <FriendListLastSeen friend={friend} />
+							}
+							secondaryTypographyProps={{ noWrap: true }}
+						/>
 						{bpsm && (
 							<FriendListLastSeen
 								className={classes.lastSeen}
 								friend={friend}
+								listItem
 							/>
 						)}
 					</Link>

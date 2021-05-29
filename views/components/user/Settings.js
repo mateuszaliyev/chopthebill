@@ -61,6 +61,13 @@ const useStyles = makeStyles((theme) => ({
 		minWidth: 200,
 		textAlign: "center",
 	},
+	red: {
+		backgroundColor: theme.palette.error.main,
+		color: theme.palette.getContrastText(theme.palette.error.main),
+		"&:hover": {
+			backgroundColor: "rgb(170, 46, 37)",
+		},
+	},
 }));
 
 function Alert(props) {
@@ -387,9 +394,9 @@ function Settings() {
 			</Paper>
 			<div className={classes.buttons}>
 				<Button
-					variant="contained"
-					color="secondary"
+					className={classes.red}
 					onClick={handleChangePassClick}
+					variant="contained"
 				>
 					{t("change-password")}
 				</Button>
