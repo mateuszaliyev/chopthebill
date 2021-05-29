@@ -16,14 +16,15 @@
 		"url": "git+https://github.com/PRz-IO/P01-G01-ChopTheBill.git"
 	},
 	"scripts": {
-		"build": "npm run next-build",
 		"dev": "concurrently \"nodemon app.js\" \"npm run next-dev\"",
-		"generate": "node utils/secretGenerate.js",
+		"generate": "node config/secretGenerate.js",
+		"heroku-generate": "node config/dbGenerate.js",
 		"next-build": "cd views && npm run build",
 		"next-dev": "cd views && npm run dev",
 		"next-start": "cd views && npm run start",
 		"postinstall": "cd views && npm install",
-		"start": "concurrently \"node app.js\" \"npm run next-start\""
+		"start": "node app.js",
+		"start-local": "concurrently \"node app.js\" \"npm run next-start\""
 	},
 	"dependencies": {
 		"bcrypt": "^5.0.1",
