@@ -9,13 +9,17 @@ import Loader from "../Loader";
 import { host } from "../../config";
 
 // Context
+import { ThemeContext } from "../Theme";
 import { UserContext } from "./User";
 
 function Auth(props) {
-	const router = useRouter();
+	const [authenticated, setAuthenticated] = useState(false);
+
+	const { setPalette, setTheme } = useContext(ThemeContext);
 	const { accessToken, setAccessToken, user, setUser } =
 		useContext(UserContext);
-	const [authenticated, setAuthenticated] = useState(false);
+
+	const router = useRouter();
 
 	const authenticate = async () => {
 		const res = await fetch(`${host}/access`, {
@@ -26,6 +30,8 @@ function Auth(props) {
 		});
 		if (res.ok) {
 			const user = await res.json();
+			setPalette(user.theme.split("-")[1] || "light");
+			setTheme(user.theme.split("-")[0] || "default");
 			setUser(user);
 			setAuthenticated(true);
 		} else {
@@ -36,7 +42,9 @@ function Auth(props) {
 	const getAccessToken = async () => {
 		const res = await fetch(`${host}/refresh`, {
 			method: "GET",
-			credentials: "include",
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("refresh-token")}`,
+			},
 		});
 		if (res.ok) {
 			const data = await res.json();
@@ -55,7 +63,20 @@ function Auth(props) {
 		return () => clearInterval(interval);
 	}, [accessToken]);
 
-	return authenticated && user ? props.children : <Loader />;
+	return authenticated && user ? (
+		props.children
+	) : (
+		<main
+			style={{
+				display: "grid",
+				height: "100vh",
+				placeItems: "center",
+				width: "100vw",
+			}}
+		>
+			<Loader size="4rem" />
+		</main>
+	);
 }
 
 export default Auth;

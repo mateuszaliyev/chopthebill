@@ -1,14 +1,15 @@
 {
 	"email-invalid": "Podany adres email jest nieprawidłowy",
-	"email-taken": "Użytkownik o podanym adresie email już istnieje",
+	"email-taken": "Konto z podanym adresem email już istnieje",
 	"exclusion": "To ustawienie nie może być zaznaczone bez wprowadzenia nazwy użytkownika",
 	"internal-server-error": "Wewnętrzny Błąd Serwera",
 	"have-an-account": "Masz już konto? Zaloguj się",
-	"hide-email": "Ukryj mój adres e-mail",
+	"hide-email": "Ukryj mój adres email",
 	"meta-title": "Rejestracja",
 	"password-invalid": "Hasło musi zawierać małą literę, wielką literę, cyfrę oraz składać się z min. 6 znaków",
+	"passwords-do-not-match": "Hasła nie są zgodne",
 	"register": "Zarejestruj się",
-	"username-invalid": "Nazwa użytkownika musi składać się tylko z liter i cyfr",
+	"username-invalid": "Nazwa użytkownika może składać się tylko z liter i cyfr",
 	"username-length-invalid": "Nazwa użytkownika musi zawierać od 3 do 63 znaków",
-	"username-taken": "Konto z o podanej nazwie użytkownika już istnieje"
+	"username-taken": "Konto z podaną nazwą użytkownika już istnieje"
 }

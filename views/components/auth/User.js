@@ -10,7 +10,12 @@ function User({ children }) {
 
 	return (
 		<UserContext.Provider
-			value={{ accessToken, setAccessToken, user, setUser }}
+			value={{
+				accessToken,
+				setAccessToken,
+				user,
+				setUser,
+			}}
 		>
 			{children}
 		</UserContext.Provider>

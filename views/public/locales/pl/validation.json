@@ -1,0 +1,9 @@
+{
+	"new-password": "Nowe hasło",
+	"new-password-confirm": "Potwiedź nowe hasło",
+	"password": "Hasło",
+	"password-invalid": "Hasło musi zawierać małą literę, wielką literę, cyfrę oraz składać się z min. 6 znaków",
+	"passwords-do-not-match": "Hasła nie są zgodne",
+	"username-taken": "Konto z podaną nazwą użytkownika już istnieje",
+	"wrong-password": "Błędne hasło"
+}
