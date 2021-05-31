@@ -4,7 +4,13 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 // Material UI
-import { Paper, IconButton, Menu, MenuItem } from "@material-ui/core/";
+import {
+	Paper,
+	IconButton,
+	Menu,
+	MenuItem,
+	Typography,
+} from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
 
 // Components
@@ -114,26 +120,30 @@ function Profile({ user }) {
 				onClose={handleClose}
 			>
 				<input
-					type="file"
-					name="image"
 					accept="image/*"
 					id="upload"
 					multiple={false}
+					name="image"
 					onChange={handleModify}
 					style={{ display: "none" }}
+					type="file"
 				></input>
 				<label htmlFor="upload">
-					<MenuItem>{t("change")}</MenuItem>
+					<MenuItem>{t(user.avatar ? "change" : "add")}</MenuItem>
 				</label>
-				<MenuItem onClick={handleDelete}>{t("delete")}</MenuItem>
+				{user.avatar && (
+					<MenuItem onClick={handleDelete}>{t("delete")}</MenuItem>
+				)}
 			</Menu>
 
 			<div className={classes.details}>
-				<h1 className={classes.margin}>{user.username}</h1>
+				<Typography className={classes.margin} variant="h4">
+					{user.username}
+				</Typography>
 				{!user.hideEmail && user.username !== user.email && (
-					<h3 className={classes.margin}>{user.email}</h3>
+					<Typography className={classes.margin}>{user.email}</Typography>
 				)}
-				<h3 className={classes.margin}>{lastSeen}</h3>
+				<Typography className={classes.margin}>{lastSeen}</Typography>
 			</div>
 			{loggedUser.id !== user.id &&
 				(user.friend ? (
