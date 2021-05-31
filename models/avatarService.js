@@ -1,58 +1,53 @@
+// .env
 require("dotenv").config();
+
+// Filesystem
 const fs = require("fs");
 
+// Database
 const { db } = require("../config/db");
 
-const { verifyToken } = require("../utils/jwt");
+async function addAvatarService(decoded) {
+	const idQuery = await db.query(
+		`SELECT id_user, avatar, deleted FROM public."user" WHERE id_user = $1 AND deleted = FALSE`,
+		[decoded.id]
+	);
 
-async function addAvatarService(authHeader) {
-	const token = authHeader && authHeader.split(" ")[1];
-	if (!token) {
-		return "unauthorized";
-	}
-	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
-
-	if (decoded) {
-		const idQuery = await db.query(
-			`SELECT id_user, deleted FROM public."user" WHERE username = $1 AND deleted = FALSE`,
-			[decoded.username]
-		);
-
-		if (idQuery.rows[0]) {
-			return "";
+	if (idQuery.rows[0]) {
+		if (!idQuery.rows[0].avatar) {
+			await db.query(
+				`UPDATE public.user SET avatar = TRUE WHERE id_user = $1`,
+				[decoded.id]
+			);
 		}
-		return "bad-request";
+
+		return false;
 	}
-	return "forbidden";
+
+	return true;
 }
 
-async function deleteAvatarService(authHeader) {
-	const token = authHeader && authHeader.split(" ")[1];
-	if (!token) {
-		return "unauthorized";
-	}
-	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
+async function deleteAvatarService(decoded) {
+	const idQuery = await db.query(
+		`SELECT id_user, avatar, deleted FROM public."user" WHERE id_user = $1 AND avatar = TRUE AND deleted = FALSE`,
+		[decoded.id]
+	);
 
-	if (decoded) {
-		const idQuery = await db.query(
-			`SELECT id_user, deleted FROM public."user" WHERE username = $1 AND deleted = FALSE`,
-			[decoded.username]
-		);
+	if (idQuery.rows[0]) {
+		await db.query(`UPDATE public.user SET avatar = FALSE WHERE id_user = $1`, [
+			decoded.id,
+		]);
 
-		if (idQuery.rows[0]) {
-			const files = await fs.promises.readdir("public/avatars/");
+		const files = await fs.promises.readdir("public/avatars/");
 
-			for (const file of files) {
-				if (file.split(".")[0] === decoded.id) {
-					fs.promises.unlink(`public/avatars/${file}`);
-					console.log("test");
-					return "";
-				}
+		for (const file of files) {
+			if (file.split(".")[0] === decoded.id) {
+				fs.promises.unlink(`public/avatars/${file}`);
+				return false;
 			}
 		}
-		return "bad-request";
 	}
-	return "forbidden";
+	return true;
 }
 
 module.exports = { addAvatarService, deleteAvatarService };

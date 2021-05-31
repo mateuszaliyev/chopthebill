@@ -20,44 +20,31 @@ async function avatarController(req, res) {
 			);
 		}
 	}
-	res.sendStatus(204);
+	return res.sendStatus(404);
 }
 
 async function addAvatarController(req, res, next) {
 	try {
-		const error = await addAvatarService(req.headers.authorization);
-		if (error === "bad-request") {
+		const error = await addAvatarService(res.locals.decoded);
+		if (error) {
 			return res.sendStatus(400);
 		}
-		if (error === "unauthorized") {
-			return res.sendStatus(401);
-		}
-		if (error === "forbidden") {
-			return res.sendStatus(403);
-		}
-
 		next();
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		return res.sendStatus(500);
 	}
 }
 
 async function deleteAvatarController(req, res) {
 	try {
-		const error = await deleteAvatarService(req.headers.authorization);
-		if (error === "bad-request") {
+		const error = await deleteAvatarService(res.locals.decoded);
+		if (error) {
 			return res.sendStatus(400);
-		}
-		if (error === "unauthorized") {
-			return res.sendStatus(401);
-		}
-		if (error === "forbidden") {
-			return res.sendStatus(403);
 		}
 		return res.sendStatus(204);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		return res.sendStatus(500);
 	}
 }

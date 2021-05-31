@@ -17,6 +17,7 @@ CREATE TABLE public.user
 	username character varying(63) NOT NULL,
 	language character varying(15) NOT NULL,
 	theme character varying(63) NOT NULL,
+	avatar boolean NOT NULL,
 	hide_email boolean NOT NULL,
 	last_seen timestamp with time zone NOT NULL,
 	refresh_token character varying(255),
