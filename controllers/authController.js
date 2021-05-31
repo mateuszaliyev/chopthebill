@@ -14,6 +14,7 @@ async function registerController(req, res) {
 		email: req.body.email,
 		username: req.body.username,
 		password: req.body.password,
+		passwordConfirm: req.body.passwordConfirm,
 		hideEmail: req.body.hideEmail,
 		language: req.body.language,
 		theme: req.body.theme,
@@ -39,46 +40,30 @@ async function loginController(req, res) {
 			password
 		);
 		if (error) {
-			return res.status(401).json({ accessToken, user, error });
+			return res.status(401).json({ accessToken, refreshToken, user, error });
 		}
-		res
-			.status(200)
-			.cookie("refresh_token", `Bearer ${refreshToken}`, {
-				expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
-				httpOnly: true,
-			})
-			.json({ accessToken, user, error });
+		res.status(200).json({ accessToken, refreshToken, user, error });
 	} catch (err) {
-		console.log(err);
-		res.status(500).json({
-			accessToken: "",
-			user: {},
-			error: "internal-server-error",
-		});
+		console.error(err);
+		res.sendStatus(500);
 	}
 }
 
 async function accessController(req, res) {
 	try {
-		const { user, error } = await accessService(req.headers.authorization);
-		if (error === "unauthorized") {
-			return res.sendStatus(401);
-		}
-		if (error === "forbidden") {
-			return res.sendStatus(403);
-		}
-		if (user && !error) {
+		const user = await accessService(res.locals.decoded);
+		if (user) {
 			return res.status(200).json(user);
 		}
 	} catch (err) {
-		console.log(err);
-		res.sendStatus(500);
+		console.error(err);
+		return res.sendStatus(500);
 	}
 }
 
 async function refreshController(req, res) {
 	try {
-		const result = await refreshService(req.cookies.refresh_token);
+		const result = await refreshService(req.headers.authorization);
 		if (result === "unauthorized") {
 			return res.sendStatus(401);
 		}
@@ -94,16 +79,10 @@ async function refreshController(req, res) {
 
 async function logoutController(req, res) {
 	try {
-		const result = await logoutService(req);
-		if (result === "unauthorized") {
-			return res.sendStatus(401);
-		}
-		if (result === "forbidden") {
-			return res.sendStatus(403);
-		}
-		return res.clearCookie("refresh_token", { httpOnly: true }).sendStatus(204);
+		await logoutService(res.locals.decoded);
+		return res.sendStatus(204);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		res.sendStatus(500);
 	}
 }

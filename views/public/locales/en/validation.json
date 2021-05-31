@@ -1,0 +1,9 @@
+{
+	"new-password": "New password",
+	"new-password-confirm": "Confirm new password",
+	"password": "Password",
+	"password-invalid": "Password must contain a lowercase letter, an uppercase letter, a digit and be at least 6 characters long",
+	"passwords-do-not-match": "Passwords do not match",
+	"username-taken": "An account with this username already exists",
+	"wrong-password": "Wrong password"
+}

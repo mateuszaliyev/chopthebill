@@ -25,6 +25,7 @@ function Logout() {
 			},
 		});
 		if (res.ok) {
+			localStorage.removeItem("refresh-token");
 			setAccessToken("");
 			setUser({});
 			router.replace("/login");

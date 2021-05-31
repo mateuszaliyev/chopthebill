@@ -1,6 +1,7 @@
-// .env
+// Environmental variables
 require("dotenv").config();
 
+// JWT
 const jwt = require("jsonwebtoken");
 
 function getAccessToken(payload) {

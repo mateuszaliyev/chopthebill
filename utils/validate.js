@@ -5,6 +5,7 @@ function registerValidate({
 	email,
 	username,
 	password,
+	passwordConfirm,
 	hideEmail,
 	language,
 	theme,
@@ -27,6 +28,10 @@ function registerValidate({
 		}
 	} else if (hideEmail) {
 		issues.push("exclusion");
+	}
+
+	if (password !== passwordConfirm) {
+		issues.push("passwords-do-not-match");
 	}
 
 	if (
