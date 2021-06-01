@@ -140,7 +140,7 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 	return (
 		<Paper className={classes.root}>
 			<AppBar
-				className={palette !== "light" && classes.tabDark}
+				className={palette !== "light" ? classes.tabDark : ""}
 				color="primary"
 				position="static"
 			>
