@@ -17,8 +17,8 @@ function AvatarButton() {
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
 	const { user } = useContext(UserContext);
 
-	const handleClick = (event) => {
-		setAvatarAnchor(event.currentTarget);
+	const handleClick = (e) => {
+		setAvatarAnchor(e.currentTarget);
 	};
 
 	const handleClose = () => {
@@ -40,22 +40,25 @@ function AvatarButton() {
 	return (
 		<>
 			<Tooltip title={user.username}>
-				<IconButton color="inherit" onClick={handleClick}>
+				<IconButton color="inherit" edge="end" onClick={handleClick}>
 					<Avatar user={user} />
 				</IconButton>
 			</Tooltip>
 			<Menu
 				anchorEl={avatarAnchor}
 				keepMounted
-				open={Boolean(avatarAnchor)}
 				onClose={handleClose}
+				open={Boolean(avatarAnchor)}
 			>
 				{items.map((item) => (
-					<MenuItem key={item.text} onClick={handleClose}>
-						<Link color="inherit" href={item.href} underline="none">
-							{t(item.text)}
-						</Link>
-					</MenuItem>
+					<Link
+						color="inherit"
+						href={item.href}
+						key={item.text}
+						underline="none"
+					>
+						<MenuItem onClick={handleClose}>{t(item.text)}</MenuItem>
+					</Link>
 				))}
 			</Menu>
 		</>

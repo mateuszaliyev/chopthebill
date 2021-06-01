@@ -19,6 +19,8 @@ import ReceiptIcon from "@material-ui/icons/Receipt";
 
 // Components
 import AvatarButton from "./AvatarButton";
+import Loader from "../Loader";
+import MoreButton from "./MoreButton";
 import NotificationButton from "./NotificationButton";
 import SearchButton from "./SearchButton";
 import SideMenu from "./SideMenu";
@@ -27,10 +29,18 @@ import SwipeMenu from "./SwipeMenu";
 // Contexts
 import { ThemeContext } from "../Theme";
 
+// Hooks
+import useWindowSize from "../hooks/useWindowSize";
+
 // Styles
 const useStyles = makeStyles((theme) => ({
 	appBar: {
 		width: "calc(100% - 16rem)",
+	},
+	appBarMobile: {
+		display: "flex",
+		justifyContent: "center",
+		height: "4rem",
 	},
 	container: {
 		flexGrow: 1,
@@ -93,10 +103,14 @@ const menuItems = [
 function AppBarMobile({ title }) {
 	const { palette } = useContext(ThemeContext);
 	const classes = useStyles();
+	const { width } = useWindowSize();
 
 	return (
 		<header className={classes.root}>
-			<AppBar color={palette === "light" ? "primary" : "inherit"}>
+			<AppBar
+				className={classes.appBarMobile}
+				color={palette === "light" ? "primary" : "inherit"}
+			>
 				<Toolbar>
 					<SwipeMenu className={classes.menuButton} items={menuItems} />
 					<Typography
@@ -106,12 +120,18 @@ function AppBarMobile({ title }) {
 					>
 						{title}
 					</Typography>
-					<SearchButton />
-					<NotificationButton
-						amount={1}
-						color={palette === "light" ? "error" : "primary"}
-					/>
-					<AvatarButton />
+					{width >= 360 ? (
+						<>
+							<SearchButton />
+							<NotificationButton
+								amount={1}
+								color={palette === "light" ? "error" : "primary"}
+							/>
+							<AvatarButton />
+						</>
+					) : (
+						<MoreButton color="inherit" />
+					)}
 				</Toolbar>
 			</AppBar>
 		</header>
@@ -143,7 +163,7 @@ function AppBarDesktop({ title }) {
 	);
 }
 
-function Layout({ children, title }) {
+function Layout({ children = null, title }) {
 	const classes = useStyles();
 	const theme = useTheme();
 
@@ -158,7 +178,7 @@ function Layout({ children, title }) {
 					<main className={`${classes.main} ${classes.marginDesktop}`}>
 						<Divider variant="middle" />
 						<Container className={classes.container} maxWidth="xl">
-							{children}
+							{children || <Loader size="4rem" />}
 						</Container>
 					</main>
 				</>
@@ -166,7 +186,7 @@ function Layout({ children, title }) {
 				<>
 					<AppBarMobile title={title} />
 					<main className={`${classes.main} ${classes.marginMobile}`}>
-						{children}
+						{children || <Loader />}
 					</main>
 				</>
 			)}

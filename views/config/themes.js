@@ -1,4 +1,17 @@
-import { grey, teal } from "@material-ui/core/colors";
+import { teal } from "@material-ui/core/colors";
+
+const grey = {
+	50: "#f8f9fa",
+	100: "#e9ecef",
+	200: "#dee2e6",
+	300: "#ced4da",
+	400: "#adb5bd",
+	500: "#8c959d",
+	600: "#6c757d",
+	700: "#495057",
+	800: "#343a40",
+	900: "#212529",
+};
 
 // const errorPalette = {
 // 	light: "#e57373",
@@ -23,6 +36,7 @@ const typography = {
 
 export const alternativeTheme = {
 	palette: {
+		grey,
 		primary: teal,
 		secondary: brightPalette,
 	},
@@ -30,6 +44,11 @@ export const alternativeTheme = {
 
 export const darkTheme = {
 	palette: {
+		background: {
+			default: grey[900],
+			paper: grey[800],
+		},
+		grey,
 		type: "dark",
 	},
 	typography,
@@ -37,6 +56,7 @@ export const darkTheme = {
 
 export const defaultTheme = {
 	palette: {
+		grey,
 		primary: {
 			contrastText: "#fff",
 			dark: "#1a714b",
@@ -49,6 +69,11 @@ export const defaultTheme = {
 
 export const lightTheme = {
 	palette: {
+		background: {
+			default: grey[50],
+			paper: "#fff",
+		},
+		grey,
 		type: "light",
 	},
 	typography,

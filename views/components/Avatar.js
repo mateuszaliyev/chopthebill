@@ -19,32 +19,36 @@ const useStyles = makeStyles((theme) => ({
 	}),
 }));
 
-function Avatar({ alt = "default", className, src, user = null }) {
+function Avatar({ alt, className, src, user = null, ...props }) {
 	const [color, setColor] = useState(useTextToColor(alt));
 	const classes = useStyles({ color });
+
+	const avatarAlt = user
+		? user.username.toUpperCase()[0]
+		: alt
+		? alt.toUpperCase()[0]
+		: null;
+
+	const avatarSrc = user
+		? user.avatar
+			? `${host}/avatars/${user.id}`
+			: null
+		: src
+		? src
+		: null;
 
 	useEffect(() => {
 		user && setColor(useTextToColor(user.username));
 	}, [user]);
 
-	return user ? (
+	return (
 		<MuiAvatar
-			alt={user.username.toUpperCase()}
+			alt={avatarAlt}
 			className={`${className} ${classes.avatar}`}
-			src={`${host}/avatars/${user.id}`}
-		/>
-	) : src ? (
-		<MuiAvatar
-			alt={alt.toUpperCase()}
-			className={`${className} ${classes.avatar}`}
-			src={src}
-		/>
-	) : (
-		<MuiAvatar
-			alt={alt.toUpperCase()}
-			className={`${className} ${classes.avatar}`}
+			src={avatarSrc}
+			{...props}
 		>
-			{alt[0].toUpperCase()}
+			{avatarAlt}
 		</MuiAvatar>
 	);
 }
