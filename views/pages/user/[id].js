@@ -27,7 +27,8 @@ export async function getServerSideProps({ locale }) {
 				"common",
 				"date",
 				"friends",
-				"register",
+				"user",
+				"validation",
 			])),
 		},
 	};
@@ -53,8 +54,8 @@ function Account() {
 					Authorization: `Bearer ${accessToken}`,
 				},
 			});
-			const { error, user } = await res.json();
 			if (res.ok) {
+				const user = await res.json();
 				setUser(user);
 			}
 		} else {
@@ -66,12 +67,14 @@ function Account() {
 
 	return (
 		<Auth>
-			<Meta title={`${user.username} | ChopTheBill`} />
+			{user.username && <Meta title={`${user.username} | ChopTheBill`} />}
 			<Layout title={t("profile")}>
-				<Container maxWidth="sm">
-					{user.username && <Profile user={user}></Profile>}
-					{user.username && loggedUser.id === id && <Settings />}
-				</Container>
+				{user.username && (
+					<Container maxWidth="sm">
+						{user.username && <Profile setUser={setUser} user={user}></Profile>}
+						{user.username && loggedUser.id === id && <Settings />}
+					</Container>
+				)}
 			</Layout>
 		</Auth>
 	);
