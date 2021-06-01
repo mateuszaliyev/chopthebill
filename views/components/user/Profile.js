@@ -29,19 +29,10 @@ import useDateComparison from "../hooks/useDateComparison";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-	large: {
+	avatar: {
 		fontSize: "5rem",
-		height: theme.spacing(20),
-		width: theme.spacing(20),
-	},
-	root: {
-		display: "flex",
-		justifyContent: "flex-start",
-		alignItems: "center",
-		padding: theme.spacing(3),
-		gap: theme.spacing(3),
-		marginTop: theme.spacing(3),
-		marginBottom: theme.spacing(3),
+		height: "10rem",
+		width: "10rem",
 	},
 	details: {
 		display: "flex",
@@ -51,9 +42,19 @@ const useStyles = makeStyles((theme) => ({
 	margin: {
 		margin: "0",
 	},
+	root: {
+		alignItems: "center",
+		display: "flex",
+		gap: theme.spacing(3),
+		flexWrap: "wrap",
+		justifyContent: "center",
+		marginBottom: theme.spacing(3),
+		marginTop: theme.spacing(3),
+		padding: theme.spacing(3),
+	},
 }));
 
-function Profile({ user }) {
+function Profile({ setUser, user }) {
 	const { t } = useTranslation("common");
 	const router = useRouter();
 
@@ -71,6 +72,19 @@ function Profile({ user }) {
 
 	const handleClose = () => {
 		setAvatarAnchor(null);
+	};
+
+	const handleDelete = async () => {
+		handleClose();
+		const res = await fetch(`${host}/avatars/delete`, {
+			method: "DELETE",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+		if (res.ok) router.reload();
 	};
 
 	const handleModify = async (e) => {
@@ -91,27 +105,22 @@ function Profile({ user }) {
 		router.reload();
 	};
 
-	const handleDelete = async () => {
-		handleClose();
-		const res = await fetch(`${host}/avatars/delete`, {
-			method: "DELETE",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
-		if (res.ok) router.reload();
+	const onAddFriend = () => {
+		setUser((prevUser) => ({ ...prevUser, friend: true }));
+	};
+
+	const onUnfriend = (id) => {
+		setUser((prevUser) => ({ ...prevUser, friend: false }));
 	};
 
 	return (
 		<Paper className={classes.root}>
 			{user.id === loggedUser.id ? (
 				<IconButton onClick={handleClick}>
-					<Avatar className={classes.large} user={user} />
+					<Avatar className={classes.avatar} user={user} />
 				</IconButton>
 			) : (
-				<Avatar className={classes.large} user={user} />
+				<Avatar className={classes.avatar} user={user} />
 			)}
 			<Menu
 				anchorEl={avatarAnchor}
@@ -147,9 +156,18 @@ function Profile({ user }) {
 			</div>
 			{loggedUser.id !== user.id &&
 				(user.friend ? (
-					<UnfriendButton color="error" id={user.id} username={user.username} />
+					<UnfriendButton
+						color="error"
+						id={user.id}
+						onUnfriend={onUnfriend}
+						username={user.username}
+					/>
 				) : (
-					<AddFriendButton color="primary" id={user.id} />
+					<AddFriendButton
+						color="primary"
+						id={user.id}
+						onAddFriend={onAddFriend}
+					/>
 				))}
 		</Paper>
 	);

@@ -18,10 +18,7 @@ async function profileService(decoded, id) {
 			`SELECT * FROM public."friendship" WHERE id_user_1 = $1 AND id_user_2 = $2`,
 			[decoded.id, id]
 		);
-		let friend = false;
-		if (checkQuery.rows[0] && checkQuery.rows[0].valid) {
-			friend = true;
-		}
+		const friend = checkQuery.rows[0] && checkQuery.rows[0].valid;
 		const user = {
 			id: profileQuery.rows[0].id_user,
 			email: profileQuery.rows[0].email,

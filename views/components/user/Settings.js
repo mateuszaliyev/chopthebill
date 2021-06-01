@@ -254,6 +254,7 @@ function Settings() {
 							<Switch
 								checked={settings.theme.split("-")[1] === "light"}
 								color="primary"
+								edge="end"
 								onChange={handlePalette}
 							></Switch>
 						</ListItemSecondaryAction>
@@ -272,6 +273,7 @@ function Settings() {
 											<Switch
 												checked={settings.hideEmail}
 												color="primary"
+												edge="end"
 												onChange={handleHideEmail}
 											></Switch>
 										}

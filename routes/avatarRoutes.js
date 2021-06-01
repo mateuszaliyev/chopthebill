@@ -1,11 +1,14 @@
+// .env
 require("dotenv").config();
 
 // Express
 const express = require("express");
 const router = express.Router();
 
+// Multer
 const multer = require("multer");
 
+// JWT
 const { verifyToken } = require("../utils/jwt");
 
 const storage = multer.diskStorage({
@@ -34,9 +37,12 @@ const {
 	deleteAvatarController,
 } = require("../controllers/avatarController");
 
+// Middlewares
+const { authenticate } = require("../middlewares/authenticate");
+
 // Routes
-router.post("/new", addAvatarController, upload.single("image"));
-router.delete("/delete", deleteAvatarController);
+router.post("/new", authenticate, addAvatarController, upload.single("image"));
+router.delete("/delete", authenticate, deleteAvatarController);
 router.get("/:id", avatarController);
 
 module.exports = router;
