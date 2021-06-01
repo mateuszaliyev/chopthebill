@@ -71,7 +71,7 @@ function NewExpense() {
 				expense: {
 					...prevData.expense,
 					currency: user.language === "en" ? "GBP" : "PLN",
-					user: user,
+					user,
 				},
 			}));
 		}

@@ -98,7 +98,7 @@ function ExpenseForm({ className, data, setData }) {
 	const classes = useStyles({ bpsm });
 
 	const handleAmount = (e) => {
-		const amount = parseFloat(e.target.value) || "";
+		const amount = parseInt(100 * parseFloat(e.target.value || 0));
 		setData((prevData) => ({
 			...prevData,
 			expense: {
@@ -157,26 +157,19 @@ function ExpenseForm({ className, data, setData }) {
 
 	useEffect(() => {
 		let obligations = [];
-		if (
-			data.users.length > 2 &&
-			2 * data.expense.amount ===
-				data.users.reduce(
-					(prev, curr) => parseFloat(prev) + parseFloat(curr.amount),
-					0
-				)
-		) {
+		const sum = data.users.reduce((prev, curr) => prev + curr.amount, 0);
+		if (data.users.length > 2 && 2 * data.expense.amount === sum) {
 			const creditors = data.users.filter((user) => user.creditor);
 			const debtors = data.users.filter((user) => !user.creditor);
 
 			if (creditors.length > 0 && debtors.length > 0) {
 				debtors.forEach((debtor) => {
-					let debtorTotal = parseFloat(debtor.amount);
-					let total = parseFloat(data.expense.amount);
+					let debtorTotal = debtor.amount;
+					let total = data.expense.amount;
 
 					creditors.forEach((creditor) => {
-						const creditorAmount = Math.round(100 * creditor.amount) / 100;
-						const percent = creditorAmount / total;
-						const amount = Math.round(100 * (debtorTotal * percent)) / 100;
+						const percent = creditor.amount / total;
+						const amount = Math.round(debtorTotal * percent);
 
 						obligations.push({
 							amount,
@@ -186,7 +179,7 @@ function ExpenseForm({ className, data, setData }) {
 						});
 
 						debtorTotal -= amount;
-						total -= creditorAmount;
+						total -= creditor.amount;
 					});
 				});
 			}
@@ -195,22 +188,16 @@ function ExpenseForm({ className, data, setData }) {
 			...prevData,
 			obligations,
 		}));
-	}, [data.expense, data.users]);
+	}, [data.expense.amount, data.users]);
 
 	return (
 		<div className={`${className} ${classes.root}`}>
-			<TextField
-				label={t("title")}
-				onChange={handleTitle}
-				required
-				value={data.expense.title}
-			/>
+			<TextField label={t("title")} onChange={handleTitle} required />
 			<TextField
 				label={t("description")}
 				multiline
 				onChange={handleDescription}
 				required
-				value={data.expense.description}
 			/>
 			<MuiPickersUtilsProvider
 				locale={locales[router.locale]}
@@ -239,7 +226,6 @@ function ExpenseForm({ className, data, setData }) {
 					onChange={handleAmount}
 					required
 					type="number"
-					value={data.expense.amount}
 				/>
 				<FormControl className={classes.currencyItem} required>
 					<InputLabel>{t("currency")}</InputLabel>
@@ -261,7 +247,7 @@ function ExpenseForm({ className, data, setData }) {
 					startIcon={<DeleteForeverIcon />}
 					variant="outlined"
 				>
-					{t("cancel")}
+					{t("discard")}
 				</Button>
 				<Button
 					color="primary"

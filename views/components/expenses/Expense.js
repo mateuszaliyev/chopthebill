@@ -91,8 +91,8 @@ function Expense({ className, data }) {
 				</Typography>
 				<Typography color="textSecondary">
 					{data.expense.description
-						? data.expense.description.split("\n").map((line) => (
-								<span key={line}>
+						? data.expense.description.split("\n").map((line, index) => (
+								<span key={index}>
 									{line}
 									<br />
 								</span>
@@ -106,7 +106,10 @@ function Expense({ className, data }) {
 			/> */}
 			<CardContent>
 				<Typography align="right" variant="h4">
-					<Currency amount={data.expense.amount} code={data.expense.currency} />
+					<Currency
+						amount={data.expense.amount / 100}
+						code={data.expense.currency}
+					/>
 				</Typography>
 			</CardContent>
 			<CardActions>
@@ -154,7 +157,7 @@ function Expense({ className, data }) {
 								</Typography>
 								<Typography align="right">
 									<Currency
-										amount={obligation.amount}
+										amount={obligation.amount / 100}
 										code={data.expense.currency}
 									/>
 								</Typography>

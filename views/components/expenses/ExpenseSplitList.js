@@ -96,13 +96,18 @@ function ExpenseSplitList({
 	};
 
 	const handleInputAmount = (id, amountField) => {
-		const amount = parseFloat(amountField || 0);
+		const amount = parseInt(100 * parseFloat(amountField || 0));
 		const users = data.users.map((user) => {
 			if (user.id === id) {
 				return {
 					...user,
 					amount,
 					percentage: (100 * amount) / data.expense.amount,
+					textField: {
+						...user.textField,
+						amount: amount / 100,
+						percentage: (100 * amount) / data.expense.amount,
+					},
 				};
 			}
 			return user;
@@ -117,10 +122,16 @@ function ExpenseSplitList({
 		const percentage = parseFloat(percentageField || 0);
 		const users = data.users.map((user) => {
 			if (user.id === id) {
+				const amount = parseInt((data.expense.amount * percentage) / 100);
 				return {
 					...user,
-					amount: (data.expense.amount * percentage) / 100,
+					amount,
 					percentage,
+					textField: {
+						...user.textField,
+						amount: amount / 100,
+						percentage: (100 * amount) / data.expense.amount,
+					},
 				};
 			}
 			return user;
@@ -132,10 +143,11 @@ function ExpenseSplitList({
 	};
 
 	const handleInputShare = (id, shareField) => {
-		const share = parseInt(shareField || 0);
+		const shareInput = parseInt(shareField || 0);
+
 		let shareSum = data.users.reduce((prev, curr) => {
 			if (creditors === curr.creditor) {
-				return curr.id === id ? prev + share : prev + curr.share;
+				return curr.id === id ? prev + shareInput : prev + curr.share;
 			} else {
 				return prev;
 			}
@@ -145,15 +157,20 @@ function ExpenseSplitList({
 
 		const users = data.users.map((user) => {
 			if (creditors === user.creditor) {
-				const amount = (
-					(sum * (user.id === id ? share : user.share)) /
-					shareSum
-				).toFixed(2);
+				const amount = parseInt(
+					(sum * (user.id === id ? shareInput : user.share)) / shareSum
+				);
+				const share = user.id === id ? shareInput : user.share;
 				const newUser = {
 					...user,
 					amount,
 					percentage: (100 * amount) / data.expense.amount,
-					share: user.id === id ? share : user.share,
+					share,
+					textField: {
+						amount: amount / 100,
+						percentage: (100 * amount) / data.expense.amount,
+						share,
+					},
 				};
 				sum -= amount;
 				shareSum -= newUser.share;
@@ -161,6 +178,7 @@ function ExpenseSplitList({
 			}
 			return user;
 		});
+
 		setData((prevData) => ({
 			...prevData,
 			users,
@@ -229,11 +247,10 @@ function ExpenseSplitList({
 	};
 
 	const totalAmount = () => {
-		let sum = 0;
-		data.users.forEach((user) =>
-			creditors === user.creditor ? (sum += parseFloat(user.amount || 0)) : 0
+		return data.users.reduce(
+			(prev, curr) => (creditors === curr.creditor ? prev + curr.amount : prev),
+			0
 		);
-		return parseFloat(sum).toFixed(2);
 	};
 
 	return (
@@ -307,7 +324,7 @@ function ExpenseSplitList({
 												user.creditor ? "expenses:paid" : "expenses:to-pay"
 											)}: `}
 											<Currency
-												amount={user.amount}
+												amount={user.amount / 100}
 												code={data.expense.currency}
 											/>
 										</>
@@ -328,7 +345,7 @@ function ExpenseSplitList({
 												}
 												required
 												type="number"
-												value={user.amount}
+												value={user.textField.amount}
 											/>
 										) : method === "split-percentage" ? (
 											<TextField
@@ -339,7 +356,7 @@ function ExpenseSplitList({
 												}
 												required
 												type="number"
-												value={user.percentage}
+												value={user.textField.percentage}
 											/>
 										) : (
 											<TextField
@@ -356,7 +373,7 @@ function ExpenseSplitList({
 												}
 												required
 												type="number"
-												value={user.share}
+												value={user.textField.share}
 											/>
 										)}
 									</>
@@ -416,7 +433,7 @@ function ExpenseSplitList({
 													}
 													required
 													type="number"
-													value={user.amount}
+													value={user.textField.amount}
 												/>
 											) : method === "split-percentage" ? (
 												<TextField
@@ -427,7 +444,7 @@ function ExpenseSplitList({
 													}
 													required
 													type="number"
-													value={user.percentage}
+													value={user.textField.percentage}
 												/>
 											) : (
 												<TextField
@@ -446,7 +463,7 @@ function ExpenseSplitList({
 													}
 													required
 													type="number"
-													value={user.share}
+													value={user.textField.share}
 												/>
 											)}
 										</div>
@@ -483,7 +500,7 @@ function ExpenseSplitList({
 									}
 								>
 									<Currency
-										amount={totalAmount()}
+										amount={totalAmount() / 100}
 										code={data.expense.currency}
 									/>
 								</Typography>
@@ -492,7 +509,7 @@ function ExpenseSplitList({
 								<>
 									{`${t("remains")}: `}
 									<Currency
-										amount={differenceAmount()}
+										amount={differenceAmount() / 100}
 										code={data.expense.currency}
 									/>
 								</>

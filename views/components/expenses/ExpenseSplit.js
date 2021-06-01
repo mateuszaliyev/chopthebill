@@ -1,5 +1,5 @@
 // React & Next
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 // Material UI
@@ -21,6 +21,9 @@ import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import ExpenseSplitList from "./ExpenseSplitList";
 import SearchDialog from "../layout/SearchDialog";
 
+// Contexts
+import { ThemeContext } from "../Theme";
+
 // Hooks
 import useWindowSize from "../hooks/useWindowSize";
 
@@ -34,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
 	},
 	tab: {
 		minWidth: ({ bpsm }) => bpsm && "8rem",
+	},
+	tabDark: {
+		backgroundColor: theme.palette.grey[600],
 	},
 }));
 
@@ -53,6 +59,8 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 	const bpsm = width >= 600;
 	const classes = useStyles({ bpsm });
 
+	const { palette } = useContext(ThemeContext);
+
 	const handleChange = (e, newValue) => {
 		setValue(newValue);
 	};
@@ -65,14 +73,17 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 		);
 		const newUsers = data.users.map((user) => {
 			if (creditors === user.creditor) {
-				const amount = (
-					Math.round((100 * sum) / (usersOfKind.length - index)) / 100
-				).toFixed(2);
+				const amount = sum / (usersOfKind.length - index);
 				const newUser = {
 					...user,
 					amount,
 					percentage: 100 * (amount / data.expense.amount),
 					share: 1,
+					textField: {
+						amount: (amount / 100).toFixed(2),
+						percentage: (100 * amount) / data.expense.amount,
+						share: 1,
+					},
 				};
 				index++;
 				sum -= newUser.amount;
@@ -109,6 +120,11 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 							percentage: 0,
 							selected: false,
 							share: 0,
+							textField: {
+								amount: (0).toFixed(2),
+								percentage: (0).toFixed(2),
+								share: 0,
+							},
 						},
 					],
 				}));
@@ -117,9 +133,17 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 		setSearchDialogOpen(false);
 	};
 
+	useEffect(() => {
+		window.dispatchEvent(new CustomEvent("resize"));
+	}, []);
+
 	return (
 		<Paper className={classes.root}>
-			<AppBar position="static">
+			<AppBar
+				className={palette !== "light" && classes.tabDark}
+				color="primary"
+				position="static"
+			>
 				<Toolbar>
 					<Typography variant="h6">
 						{t(creditors ? "expenses:creditors" : "expenses:debtors")}
@@ -138,6 +162,7 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 							<IconButton
 								color="inherit"
 								className={classes.button}
+								edge="end"
 								onClick={handleEqualSplit}
 							>
 								<HorizontalSplitIcon />
