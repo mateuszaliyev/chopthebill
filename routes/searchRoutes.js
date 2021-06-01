@@ -5,7 +5,10 @@ const router = express.Router();
 // Controllers
 const { searchController } = require("../controllers/searchController");
 
+// Middlewares
+const { authenticate } = require("../middlewares/authenticate");
+
 // Routes
-router.post("/", searchController);
+router.post("/", authenticate, searchController);
 
 module.exports = router;

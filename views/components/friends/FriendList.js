@@ -1,8 +1,10 @@
 // React & Next
+import { useContext, useState } from "react";
 import { useTranslation } from "next-i18next";
 
 // Material UI
 import {
+	Avatar as MuiAvatar,
 	List,
 	ListItem,
 	ListItemAvatar,
@@ -13,11 +15,19 @@ import {
 	useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
 
 // Components
 import Avatar from "../Avatar";
 import Link from "../Link";
+import SearchDialog from "../layout/SearchDialog";
 import UnfriendButton from "./UnfriendButton";
+
+// Config
+import { host } from "../../config";
+
+// Contexts
+import { UserContext } from "../auth/User";
 
 // Hooks
 import useDateComparison from "../hooks/useDateComparison";
@@ -73,9 +83,44 @@ function FriendListLastSeen({ className, friend, listItem = false }) {
 function FriendList({ friends, setFriends }) {
 	const { t } = useTranslation(["common", "friends"]);
 
+	const [searchDialogOpen, setSearchDialogOpen] = useState(false);
+
+	const { accessToken, user: loggedUser } = useContext(UserContext);
+
 	const classes = useStyles();
 	const theme = useTheme();
 	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
+
+	const addFriend = async (user) => {
+		const res = await fetch(`${host}/friend`, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: JSON.stringify({
+				id: user.id,
+			}),
+		});
+		if (res.ok) {
+			setFriends((prevFriends) =>
+				[...prevFriends, user].sort(
+					(a, b) => new Date(b.lastSeen) - new Date(a.lastSeen)
+				)
+			);
+		}
+	};
+
+	const handleSearchDialogClose = (user) => {
+		if (user && user.id !== loggedUser.id) {
+			let includes = friends.filter((friend) => friend.id === user.id);
+			if (includes.length === 0) {
+				addFriend(user);
+			}
+		}
+		setSearchDialogOpen(false);
+	};
 
 	const onUnfriend = (id) => {
 		setFriends((prevFriends) =>
@@ -137,6 +182,24 @@ function FriendList({ friends, setFriends }) {
 					</ListItemSecondaryAction>
 				</ListItem>
 			))}
+			<ListItem
+				button
+				className={classes.padding}
+				onClick={() => setSearchDialogOpen(true)}
+			>
+				<ListItemAvatar>
+					<MuiAvatar>
+						<AddIcon />
+					</MuiAvatar>
+				</ListItemAvatar>
+				<ListItemText>{t("friends:add-friend")}</ListItemText>
+			</ListItem>
+			<SearchDialog
+				onClose={handleSearchDialogClose}
+				open={searchDialogOpen}
+				placeholder={t("search-users")}
+				title={t("friends:add-friend")}
+			/>
 		</List>
 	);
 }

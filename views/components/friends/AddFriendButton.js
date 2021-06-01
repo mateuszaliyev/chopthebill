@@ -1,6 +1,5 @@
 // React & Next
 import { useContext } from "react";
-import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 // Material UI
@@ -13,12 +12,10 @@ import { host } from "../../config";
 // Contexts
 import { UserContext } from "../auth/User";
 
-function AddFriendButton({ color = "inherit", edge = false, id }) {
+function AddFriendButton({ color = "inherit", edge = false, id, onAddFriend }) {
 	const { t } = useTranslation(["common", "friends"]);
 
 	const { accessToken } = useContext(UserContext);
-
-	const router = useRouter();
 
 	const addFriend = async () => {
 		const res = await fetch(`${host}/friend`, {
@@ -33,7 +30,7 @@ function AddFriendButton({ color = "inherit", edge = false, id }) {
 			}),
 		});
 		if (res.ok) {
-			router.reload();
+			onAddFriend(id);
 		}
 	};
 

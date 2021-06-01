@@ -4,6 +4,7 @@ import { useTranslation } from "next-i18next";
 
 // Material UI
 import {
+	Box,
 	Dialog,
 	DialogContent,
 	DialogTitle,
@@ -94,9 +95,11 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 				query: input,
 			}),
 		});
-		const data = await res.json();
-		setResults(data.results);
-		setSubmitted(true);
+		if (res.ok) {
+			const data = await res.json();
+			setResults(data);
+			setSubmitted(true);
+		}
 	};
 
 	useEffect(() => {
@@ -143,7 +146,11 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 					</Tooltip>
 				</Paper>
 				{!submitted && (
-					<Typography variant="caption">{t("characters-required")}</Typography>
+					<Box m={1}>
+						<Typography variant="caption">
+							{t("characters-required")}
+						</Typography>
+					</Box>
 				)}
 				{results && results.users && results.users.length > 0 ? (
 					<List>
