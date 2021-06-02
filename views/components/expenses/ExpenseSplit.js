@@ -73,7 +73,7 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 		);
 		const newUsers = data.users.map((user) => {
 			if (creditors === user.creditor) {
-				const amount = sum / (usersOfKind.length - index);
+				const amount = Math.round(sum / (usersOfKind.length - index));
 				const newUser = {
 					...user,
 					amount,

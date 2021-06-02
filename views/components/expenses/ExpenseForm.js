@@ -158,7 +158,7 @@ function ExpenseForm({ className, data, setData }) {
 	useEffect(() => {
 		let obligations = [];
 		const sum = data.users.reduce((prev, curr) => prev + curr.amount, 0);
-		if (data.users.length > 2 && 2 * data.expense.amount === sum) {
+		if (data.users.length >= 2 && 2 * data.expense.amount === sum) {
 			const creditors = data.users.filter((user) => user.creditor);
 			const debtors = data.users.filter((user) => !user.creditor);
 

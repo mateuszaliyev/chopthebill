@@ -86,7 +86,7 @@ function UnfriendButton({
 						{t("cancel")}
 					</Button>
 					<Button autoFocus className={classes.red} onClick={unfriend}>
-						{t("remove")}
+						{t("unfriend")}
 					</Button>
 				</DialogActions>
 			</Dialog>
