@@ -13,7 +13,11 @@ const useStyles = makeStyles((theme) => ({
 		backgroundSize: height > width ? `${width - 64}px` : `${height - 64}px`,
 		filter: `invert(1)`,
 		height: "100%",
+		left: "0",
 		opacity: "0.05",
+		position: "absolute",
+		top: "0",
+		width: "100%",
 	}),
 }));
 

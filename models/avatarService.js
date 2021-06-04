@@ -1,6 +1,3 @@
-// .env
-require("dotenv").config();
-
 // Filesystem
 const fs = require("fs");
 

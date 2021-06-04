@@ -47,10 +47,10 @@ CREATE TABLE public.affiliation
 CREATE TABLE public.expense
 (
 	id_expense bigserial NOT NULL,
-	name character varying(63) NOT NULL,
+	title character varying(63) NOT NULL,
 	description text,
 	date timestamp with time zone NOT NULL,
-	value bigint NOT NULL,
+	amount bigint NOT NULL,
 	currency character varying(3) NOT NULL,
 	settled boolean NOT NULL,
 	id_user bigint NOT NULL REFERENCES public.user (id_user),
@@ -81,7 +81,7 @@ CREATE TABLE public.notification
 CREATE TABLE public.obligation
 (
     id_obligation bigserial NOT NULL,
-    value bigint NOT NULL,
+    amount bigint NOT NULL,
     settled boolean NOT NULL,
     id_user_debtor bigint NOT NULL REFERENCES public.user (id_user),
     id_user_creditor bigint NOT NULL REFERENCES public.user (id_user),

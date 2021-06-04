@@ -57,10 +57,11 @@ function Friends() {
 			<Layout title={t("friends:meta-title")}>
 				{loading ? (
 					<Loader size="4rem" />
-				) : friends.length ? (
-					<FriendList friends={friends} setFriends={setFriends} />
 				) : (
-					<Empty />
+					<>
+						{friends.length === 0 && <Empty />}
+						<FriendList friends={friends} setFriends={setFriends} />
+					</>
 				)}
 			</Layout>
 		</Auth>

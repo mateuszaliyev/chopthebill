@@ -15,6 +15,7 @@
 		"@material-ui/pickers": "^3.3.10",
 		"date-fns": "^2.21.3",
 		"emailjs-com": "^2.6.4",
+		"idb-keyval": "^5.0.6",
 		"lodash": "^4.17.21",
 		"next": "^10.2.0",
 		"next-i18next": "^8.2.0",

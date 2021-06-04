@@ -9,7 +9,7 @@ import { IconButton, Menu, MenuItem, Tooltip } from "@material-ui/core";
 import Avatar from "../Avatar";
 import Link from "../Link";
 
-// Context
+// Contexts
 import { UserContext } from "../auth/User";
 
 function AvatarButton() {

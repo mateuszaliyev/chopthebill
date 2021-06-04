@@ -31,7 +31,7 @@ import Link from "../Link";
 // Config
 import { host } from "../../config";
 
-// Context
+// Contexts
 import { UserContext } from "../auth/User";
 
 // Styles

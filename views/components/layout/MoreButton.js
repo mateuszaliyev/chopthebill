@@ -11,7 +11,7 @@ import Link from "../Link";
 import NotificationDialog from "./NotificationDialog";
 import SearchDialog from "./SearchDialog";
 
-// Context
+// Contexts
 import { UserContext } from "../auth/User";
 
 function MoreButton({ ...props }) {

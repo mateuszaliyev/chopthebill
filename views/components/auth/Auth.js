@@ -2,13 +2,16 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+// IndexedDB
+import { get } from "idb-keyval";
+
 // Components
 import Loader from "../Loader";
 
 // Config
 import { host } from "../../config";
 
-// Context
+// Contexts
 import { ThemeContext } from "../Theme";
 import { UserContext } from "./User";
 
@@ -40,10 +43,11 @@ function Auth(props) {
 	};
 
 	const getAccessToken = async () => {
+		const refreshToken = await get("refresh-token");
 		const res = await fetch(`${host}/refresh`, {
 			method: "GET",
 			headers: {
-				Authorization: `Bearer ${localStorage.getItem("refresh-token")}`,
+				Authorization: `Bearer ${refreshToken}`,
 			},
 		});
 		if (res.ok) {

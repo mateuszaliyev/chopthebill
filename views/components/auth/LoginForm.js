@@ -15,13 +15,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
+// IndexedDB
+import { set } from "idb-keyval";
+
 // Components
 import Link from "../Link";
 
 // Config
 import { host } from "../../config";
 
-// Context
+// Contexts
 import { ThemeContext } from "../Theme";
 import { UserContext } from "./User";
 
@@ -66,6 +69,7 @@ function LoginForm() {
 
 			setAccessToken(accessToken);
 			localStorage.setItem("refresh-token", refreshToken);
+			await set("refresh-token", `${refreshToken}`);
 
 			setPalette(user.theme.split("-")[1] || "light");
 			setTheme(user.theme.split("-")[0] || "default");

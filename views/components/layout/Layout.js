@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 		display: "flex",
 		flexDirection: "column",
 		height: "calc(100vh - 4rem)",
+		position: "relative",
 	},
 	marginDesktop: {
 		marginLeft: "16rem",

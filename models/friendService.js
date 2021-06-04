@@ -1,6 +1,3 @@
-// .env
-require("dotenv").config();
-
 // Config
 const { db } = require("../config/db");
 
