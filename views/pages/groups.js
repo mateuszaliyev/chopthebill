@@ -74,6 +74,9 @@ function Groups() {
 	}
 
 	useEffect(() => {getGroups()}, [refreshGroups]);
+	useEffect(() => {
+		getGroups();
+	}, [user]);
 	
 	return (
 		<Auth>

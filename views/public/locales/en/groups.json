@@ -6,5 +6,9 @@
 	"group-name": "Group name",
 	"change-name": "Change name",
 	"group-description": "Group description",
-	"change-description": "Change description"
+	"change-description": "Change description",
+	"add-user": "Add user",
+	"create-group": "Create group",
+	"group-settings": "Group settings",
+	"member-list": "Member list"
 }

@@ -7,19 +7,21 @@ const {
 	getMembersController,
 	getGroupsController,
 	createGroupController,
-	addAffiliationController,
 	deleteGroupController,
 	groupNameController,
-	groupDescriptionController
+	groupDescriptionController,
+	deleteMemberController,
+	addMemberController
 } = require("../controllers/groupController");
 
 // Routes
-router.post("/members", getMembersController);
 router.post("/", getGroupsController);
 router.post("/create", createGroupController);
-router.post("/addAffiliation", addAffiliationController);
 router.delete("/delete", deleteGroupController);
 router.put("/name", groupNameController);
 router.put("/description", groupDescriptionController);
+router.post("/members", getMembersController);
+router.post("/member/delete", deleteMemberController);
+router.post("/member/add", addMemberController);
 
 module.exports = router;

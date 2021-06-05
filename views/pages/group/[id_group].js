@@ -27,15 +27,14 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Group() {
-    const router = useRouter();
-    const { id_group } = router.query;
+	const router = useRouter();
+	const { id_group } = router.query;
 	const { t } = useTranslation(["common", "groups"]);
 
 	const { user, accessToken } = useContext(UserContext);
 	const [results, setResults] = useState([]);
 
     const getMembers = async () => {
-		console.log("fetching");
 		const res = await fetch(`${host}/groups/members`, {
 			method: "POST",
 			credentials: "include",
@@ -54,13 +53,13 @@ function Group() {
 		}
 	}
 
-	useEffect(() => {getMembers()}, []);
+	useEffect(() => {getMembers()}, [user]);
 
 	return (
 		<Auth>
 			<Meta title={`${t("groups:meta-title")} | ChopTheBill`} />
 			<Layout title={`${t("groups:meta-title")}`}>
-                <MemberList members={results} />
+				<MemberList members={results} getMembers={getMembers} />
 			</Layout>
 		</Auth>
 	);

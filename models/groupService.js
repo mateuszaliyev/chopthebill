@@ -52,7 +52,7 @@ async function userGroupsService(userId, authHeader) {
 	if (decoded) {
 		const queryRes = await db.query(
 			`SELECT g.id_group, g.name, g.description FROM public.affiliation a, public."group" g
-			WHERE a.id_user = $1 AND a.id_group = g.id_group AND g.deleted = False`,
+			WHERE a.id_user = $1 AND a.id_group = g.id_group AND g.deleted = false`,
 			[userId]
 		);
 		return { error: "", result: queryRes.rows };
@@ -75,8 +75,8 @@ async function createGroupService(name, description, members, authHeader) {
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
 	if (decoded) {
 		// get group id
-		const groupId = await db.query(`SELECT nextval('group_id_group_seq') AS "id";`).rows[0].id;
-		
+		const queryResId = await db.query(`SELECT nextval('group_id_group_seq') AS "id";`);
+		const groupId = queryResId.rows[0].id
 		// create group
 		const queryResCreateGroup = await db.query(
 			`INSERT INTO public."group" (id_group, name, description, deleted)
@@ -93,38 +93,6 @@ async function createGroupService(name, description, members, authHeader) {
 		);
 
 		return {error: "", result: []};
-	}
-	return { error: "forbidden", result: [] };
-}
-
-/**
- * Creates affiliation between groupId and userId.
- * @param {*} groupId group id
- * @param {*} userId id of a user that's getting added to a group
- * @param {*} ownerId id of a user that's trying to add a new user
- * @param {*} owner true if new user has an owner
- * @param {*} authHeader header containing authentication token
- */
-async function addUserToGroupService(groupId, userId, ownerId, owner, authHeader) {
-	const token = authHeader && authHeader.split(" ")[1];
-	if (!token) {
-		return { error: "unauthorized", result: [] };
-	}
-	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
-	if (decoded) {
-		// check if ownerId has an owner in that group
-		const hasOwner = await db.query(
-			`SELECT a.owner FROM public."group" g, public.affiliation a 
-			WHERE g.id_group = a.id_group AND 
-			g.id_group = $1 AND a.id_user = $2;`,
-			[groupId, ownerId]);
-		
-		if (hasOwner.rows[0].owner == true) {
-			const queryRes = await db.query(
-				`INSERT INTO public.affiliation (id_group, id_user, owner, valid)
-				VALUES ($1, $2, $3, true);`,
-				[groupId, userId, owner]);
-		}
 	}
 	return { error: "forbidden", result: [] };
 }
@@ -232,12 +200,79 @@ async function groupDescriptionService(groupId, userId, description, authHeader)
 	return { error: "forbidden", result: [] };
 }
 
+/**
+ * Removes user from group
+ * @param {*} groupId group id
+ * @param {*} userId id of a user to remove from group
+ * @param {*} ownerId id of a user that's trying to remove a user
+ * @param {*} authHeader header containing authentication token
+ */
+async function deleteMemberService(groupId, userId, ownerId, authHeader) {
+	const token = authHeader && authHeader.split(" ")[1];
+	if (!token) {
+		return { error: "unauthorized", result: [] };
+	}
+	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
+	if (decoded) {
+		// check if ownerId has an owner in that group
+		const hasOwner = await db.query(
+			`SELECT a.owner FROM public."group" g, public.affiliation a 
+			WHERE g.id_group = a.id_group AND 
+			g.id_group = $1 AND a.id_user = $2;`,
+			[groupId, ownerId]);
+		
+		if (hasOwner.rows[0].owner == true) {
+			const queryRes = await db.query(
+				`UPDATE public.affiliation
+				SET valid = false
+				WHERE id_group = $1 AND id_user = $2;`,
+				[groupId, userId]);
+			
+			return { error: "", result: []};
+		}
+	}
+	return { error: "forbidden", result: [] };
+}
+
+/**
+ * Add new member to group
+ * @param {*} groupId group id
+ * @param {*} userId id of a user that's getting added to a group
+ * @param {*} ownerId id of a user that's trying to add a new user
+ * @param {*} authHeader header containing authentication token
+ */
+ async function addMemberService(groupId, userId, ownerId, authHeader) {
+	const token = authHeader && authHeader.split(" ")[1];
+	if (!token) {
+		return { error: "unauthorized", result: [] };
+	}
+	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
+	if (decoded) {
+		// check if ownerId has an owner in that group
+		const hasOwner = await db.query(
+			`SELECT a.owner FROM public."group" g, public.affiliation a 
+			WHERE g.id_group = a.id_group AND 
+			g.id_group = $1 AND a.id_user = $2;`,
+			[groupId, ownerId]);
+		
+		if (hasOwner.rows[0].owner == true) {
+			const queryRes = await db.query(
+				`INSERT INTO public.affiliation (id_group, id_user, owner, valid)
+				VALUES ($1, $2, false, true);`,
+				[groupId, userId]);
+		}
+		return { error: "", result: [] }
+	}
+	return { error: "forbidden", result: [] };
+}
+
 module.exports = {
 	getMembersService,
 	userGroupsService,
 	createGroupService,
-	addUserToGroupService,
 	deleteGroupService,
 	groupNameService,
-	groupDescriptionService	
+	groupDescriptionService,
+	deleteMemberService,
+	addMemberService
 };

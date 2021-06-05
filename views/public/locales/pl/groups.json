@@ -6,5 +6,9 @@
 	"group-name": "Nazwa grupy",
 	"change-name": "Zmień nazwę",
 	"group-description": "Opis grupy",
-	"change-description": "Zmień opis"
+	"change-description": "Zmień opis",
+	"add-user": "Dodaj użytkownika",
+	"create-group": "Utwórz grupę",
+	"group-settings": "Ustawienia grupy",
+	"member-list": "Lista czlonków"
 }

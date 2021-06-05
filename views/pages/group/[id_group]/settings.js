@@ -59,7 +59,7 @@ function GroupSettings() {
 		}
 	}
 
-	useEffect(() => {getMembers()}, []);
+	useEffect(() => {getMembers()}, [user]);
 
 	const handleName = (e) => {
 		setGroupName(e.target.value);
@@ -107,7 +107,7 @@ function GroupSettings() {
 		<Auth>
 			<Meta title={`${t("groups:meta-title")} | ChopTheBill`} />
 			<Layout title={`${t("groups:meta-title")}`}>
-				<h1>Group Settings</h1>
+				<h1>{`${t("groups:group-settings")}`}</h1>
 				<TextField
 					id="form-name"
 					label={`${t("groups:group-name")}`}
@@ -135,7 +135,7 @@ function GroupSettings() {
 				>
 					{`${t("groups:change-description")}`}
 				</Button>
-                <MemberList members={results} />
+                <MemberList members={results} getMembers={getMembers} />
 			</Layout>
 		</Auth>
 	);

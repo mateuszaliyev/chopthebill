@@ -2,10 +2,11 @@ const {
 	getMembersService,
 	userGroupsService,
 	createGroupService,
-	addUserToGroupService,
 	deleteGroupService,
 	groupNameService,
-	groupDescriptionService
+	groupDescriptionService,
+	deleteMemberService,
+	addMemberService
 } = require("../models/groupService");
 
 async function getMembersController(req, res) {
@@ -73,34 +74,6 @@ async function createGroupController(req, res) {
 			return res.status(403).json({ error, result });
 		}
 		// OK
-		return res.status(200).json({ error, result });
-	} catch (err) {
-		console.log(err);
-		return res.status(500).json({
-			error: "internal-server-error",
-			result: []
-		});
-	}
-}
-
-async function addAffiliationController(req, res) {
-	try {
-		const authHeader = req.headers.authorization;
-		const affiliation = {
-			groupId: req.body.groupId,
-			userId: req.body.userId,
-			owner: req.body.owner
-		}
-		
-		// TODO: check if affiliation doesn't already exist
-		const { error, result } = addUserToGroupService(affiliation.groupId, affiliation.userId, owner, authHeader);
-		if (error === "unauthorized") {
-			return res.status(401).json({ error, result });
-		}
-		if (error === "forbidden") {
-			return res.status(403).json({ error, result });
-		}
-
 		return res.status(200).json({ error, result });
 	} catch (err) {
 		console.log(err);
@@ -189,12 +162,66 @@ async function groupDescriptionController(req, res) {
 	}
 }
 
+async function deleteMemberController(req, res) {
+	try {
+		const authHeader = req.headers.authorization;
+		const groupId = req.body.id_group;
+		const userId = req.body.id_user;
+		const ownerId = req.body.id_owner;
+
+		const { error, result } = await deleteMemberService(groupId, userId, ownerId, authHeader);
+
+		if (error === "unauthorized") {
+			return res.status(401).json({ error, result });
+		}
+		if (error === "forbidden") {
+			return res.status(403).json({ error, result });
+		}
+		// OK
+		return res.status(200).json({ error, result });
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			error: "internal-server-error",
+			result: []
+		});
+	}
+}
+
+async function addMemberController(req, res) {
+	try {
+		const authHeader = req.headers.authorization;
+		const groupId = req.body.id_group;
+		const userId = req.body.id_user;
+		const ownerId = req.body.id_owner;
+		const owner = req.body.owner;
+
+		const { error, result } = await addMemberService(groupId, userId, ownerId, authHeader);
+
+		if (error === "unauthorized") {
+			return res.status(401).json({ error, result });
+		}
+		if (error === "forbidden") {
+			return res.status(403).json({ error, result });
+		}
+		// OK
+		return res.status(200).json({ error, result });
+	} catch (err) {
+		console.log(err);
+		return res.status(500).json({
+			error: "internal-server-error",
+			result: []
+		});
+	}
+}
+
 module.exports = {
 	getMembersController,
 	getGroupsController,
 	createGroupController,
-	addAffiliationController,
 	deleteGroupController,
 	groupNameController,
-	groupDescriptionController
+	groupDescriptionController,
+	deleteMemberController,
+	addMemberController
 };
