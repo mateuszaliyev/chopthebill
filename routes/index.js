@@ -9,6 +9,7 @@ const expenseRoutes = require("./expenseRoutes");
 const friendRoutes = require("./friendRoutes");
 const searchRoutes = require("./searchRoutes");
 const userRoutes = require("./userRoutes");
+const obligationRoutes = require("./obligationRoutes");
 
 router.use("/", authRoutes);
 router.use("/avatars", avatarRoutes);
@@ -16,5 +17,6 @@ router.use("/expenses", expenseRoutes);
 router.use("/friend", friendRoutes);
 router.use("/search", searchRoutes);
 router.use("/", userRoutes);
+router.use("/obligations", obligationRoutes);
 
 module.exports = router;

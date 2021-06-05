@@ -32,8 +32,7 @@ async function addExpenseService({ expense, obligations }) {
 
 		await db.query(obligationQueryText);
 
-		// return false;
-		return true;
+		return false;
 	}
 
 	return true;
