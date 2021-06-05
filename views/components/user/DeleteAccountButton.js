@@ -35,7 +35,11 @@ const useStyles = makeStyles((theme) => ({
 		border: `1px solid ${theme.palette.error.main}80`,
 		color: theme.palette.error.main,
 		"&:hover": {
-			backgroundColor: `${theme.palette.error.main}0a`,
+			backgroundColor: `${theme.palette.error.main}${parseInt(
+				255 * theme.palette.action.hoverOpacity
+			)
+				.toString(16)
+				.padStart(2, "0")}`,
 			border: `1px solid ${theme.palette.error.main}`,
 		},
 	},
@@ -52,7 +56,11 @@ const useStyles = makeStyles((theme) => ({
 	red: {
 		color: theme.palette.error.main,
 		"&:hover": {
-			backgroundColor: `${theme.palette.error.main}0a`,
+			backgroundColor: `${theme.palette.error.main}${parseInt(
+				255 * theme.palette.action.hoverOpacity
+			)
+				.toString(16)
+				.padStart(2, "0")}`,
 		},
 	},
 	text: {

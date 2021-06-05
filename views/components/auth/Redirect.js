@@ -54,10 +54,6 @@ function Redirect({ children }) {
 		authenticate();
 	}, [accessToken]);
 
-	Router.events.on("routeChangeComplete", () => {
-		setLoading(false);
-	});
-
 	return loading ? (
 		<main
 			style={{
