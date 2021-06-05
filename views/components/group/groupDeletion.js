@@ -48,7 +48,7 @@ function GroupDeletionDialog({ onClose, open, setOpen, title, groupId, refreshGr
 	return (
 		<Dialog onClose={onClose} open={open}>
 			<DialogTitle>{title}</DialogTitle>
-                <Button variant="contained" color="secondary" onClick={deleteRequest}>
+                <Button variant="contained" color="primary" onClick={deleteRequest}>
 					<Tooltip title={`Config`}>
                         <DeleteIcon />
 					</Tooltip>

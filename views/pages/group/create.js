@@ -94,9 +94,7 @@ function GroupCreate() {
 		if (res.ok)
 		{
 			const data = await res.json();
-			console.log("Data ", data);
 			setResult(data.result);
-			console.log("Result ", result);
 		}
 	};
 
@@ -159,7 +157,7 @@ function GroupCreate() {
 
 	useEffect(() => {
 		if (result == "created") {
-			window.location = "/groups";
+			router.back();
 		}
 	}, [result]);
 
@@ -189,9 +187,9 @@ function GroupCreate() {
 						color="primary"
 						onClick={handleClick}
 					>
-						{`${t("groups:add-user")}`}
+						{`${t("common:add-user")}`}
 					</Button>
-					<SearchUserDialog onClose={handleClose} open={open} title={"TODO: add user"} addMember={addMember}/>
+					<SearchUserDialog onClose={handleClose} open={open} title={`${t("common:add-user")}`} addMember={addMember}/>
 					<List>
 						{groupMembers.map((member, index) => (
 							<div key={index}>
@@ -199,11 +197,6 @@ function GroupCreate() {
 									className={classes.input}
 									label={`Member ${index}`}
 								>
-									<ListItemAvatar>
-										<Avatar
-											alt={user.username}
-										/>
-									</ListItemAvatar>
 									<ListItemText 
 										primary={member.name}
 									/>
@@ -217,7 +210,7 @@ function GroupCreate() {
 										<Tooltip title={`${t("groups:delete-button")}`}>
 											<IconButton
 												edge="end"
-												color="secondary"
+												color="primary"
 												onClick={removeMember(index)}
 											>
 												<CloseIcon />

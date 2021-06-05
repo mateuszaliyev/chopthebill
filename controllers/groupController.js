@@ -68,7 +68,7 @@ async function createGroupController(req, res) {
 		// Create group
 		const { error, result } = await createGroupService(group.name, group.description, group.members, authHeader);
 		if (error === "bad-request") {
-			return res.sendStatus(400).json({ error, result });
+			return res.status(400).json({ error, result });
 		}
 		if (error === "unauthorized") {
 			return res.status(401).json({ error, result });
@@ -77,7 +77,6 @@ async function createGroupController(req, res) {
 			return res.status(403).json({ error, result });
 		}
 		// OK
-		console.log(error, result);
 		return res.status(200).json({ error, result });
 	} catch (err) {
 		console.log(err);

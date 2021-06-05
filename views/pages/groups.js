@@ -87,7 +87,7 @@ function Groups() {
 						<Fab className={classes.absolute} color="secondary" 
 						component={Link} href="/group/create" as="/group/create"
 						>
-							<AddIcon fontSize="large" variant="contained"/>
+							<AddIcon fontSize="large" variant="contained" color="primary"/>
 						</Fab>
 					</Tooltip>
 			</Layout>

@@ -82,7 +82,7 @@ const GroupList = ({groups, refreshGroupList}) => {
 									edge="end"
 									onClick={handleClick(row.name, row.id_group)}
 								>
-									<DeleteIcon color="secondary"/>
+									<DeleteIcon color="primary"/>
 								</IconButton>
 							</Tooltip>
 						</ListItemSecondaryAction>

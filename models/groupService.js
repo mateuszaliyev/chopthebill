@@ -70,35 +70,44 @@ async function userGroupsService(userId, authHeader) {
 async function createGroupService(name, description, members, authHeader) {
 	const token = authHeader && authHeader.split(" ")[1];
 	if (!token) {
-		return { error: "unauthorized", result: [] };
+		return { error: "unauthorized", result: "" };
 	}
 	
-	if (!name && !description && !Array.isArray(members) && !members.length) {
-		return { error: "bad-request", result: [] }
+	if (!name || !description || !Array.isArray(members) || !members.length) {
+		return { error: "bad-request", result: "" };
 	}
 
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
 	if (decoded) {
-		// get group id
-		const queryResId = await db.query(`SELECT nextval('group_id_group_seq') AS "id";`);
-		const groupId = queryResId.rows[0].id
-		// create group
-		const queryResCreateGroup = await db.query(
-			`INSERT INTO public."group" (id_group, name, description, deleted)
-			VALUES ($1, $2, $3, false);`,
-			[groupId, name, description]
-		);
+		try {
+			await db.query('BEGIN');
+			// get group id
+			const queryResId = await db.query(`SELECT nextval('group_id_group_seq') AS "id";`);
+			const groupId = queryResId.rows[0].id;
+			
+			// create group
+			await db.query(
+				`INSERT INTO public."group" (id_group, name, description, deleted)
+				VALUES ($1, $2, $3, false);`,
+				[groupId, name, description]
+			);
 
-		// create affiliations
-		let i = 1;
-		const queryResAffiliations = await db.query(
-			`INSERT INTO public.affiliation (id_group, id_user, owner, valid)
-			VALUES ${members.map(() => `(${groupId}, $${i++}, $${i++}, true)`).join(',')}`,
-			members.reduce((params, m) => params.concat([m.id_user, m.owner]), [])
-		);
-		return {error: "", result: "created"};
+			// create affiliations
+			let i = 1;
+			await db.query(
+				`INSERT INTO public.affiliation (id_group, id_user, owner, valid)
+				VALUES ${members.map(() => `(${groupId}, $${i++}, $${i++}, true)`).join(',')}`,
+				members.reduce((params, m) => params.concat([m.id_user, m.owner]), [])
+			);
+			await db.query('COMMIT');
+			return {error: "", result: "created"};
+		}
+		catch (e) {
+			await db.query('ROLLBACK');
+			throw e;
+		}
 	}
-	return { error: "forbidden", result: [] };
+	return { error: "forbidden", result: "" };
 }
 
 /**

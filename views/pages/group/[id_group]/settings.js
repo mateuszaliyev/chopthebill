@@ -115,7 +115,7 @@ function GroupSettings() {
 				/>
 				<Button 
 					variant="outlined"
-					color="secondary"
+					color="primary"
 					onClick={changeName}
 				>
 					{`${t("groups:change-name")}`}
@@ -130,7 +130,7 @@ function GroupSettings() {
 				/>
 				<Button
 					variant="outlined"
-					color="secondary"
+					color="primary"
 					onClick={changeDescription}
 				>
 					{`${t("groups:change-description")}`}

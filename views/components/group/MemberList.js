@@ -109,7 +109,7 @@ const MemberList = ({members, getMembers}) => {
 		>
 			{`${t("groups:add-user")}`}
 		</Button>
-		<AddMemberDialog onClose={handleClose} open={open} title={"TODO: add user"} addMember={addMember}/>
+		<AddMemberDialog onClose={handleClose} open={open} title={`${t("common:add-user")}`} addMember={addMember}/>
 		<List className={classes.root}>
 			{members.map((row) => (
 				<div key={row.id_user}>
@@ -121,7 +121,7 @@ const MemberList = ({members, getMembers}) => {
 						<ListItemSecondaryAction>
 							<Tooltip title={`${t("groups:delete-button")}`}>
 								<IconButton edge="end" onClick={async () => {await deleteMember(row.id_user)} }>
-									<DeleteIcon color="secondary"/>
+									<DeleteIcon color="primary"/>
 								</IconButton>
 							</Tooltip>
 						</ListItemSecondaryAction>
