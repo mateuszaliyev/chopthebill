@@ -114,9 +114,10 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 					users: [
 						...prevData.users,
 						{
-							...user,
+							avatar: user.avatar,
 							amount: 0,
 							creditor: creditors,
+							id: user.id,
 							percentage: 0,
 							selected: false,
 							share: 0,
@@ -125,6 +126,7 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 								percentage: (0).toFixed(2),
 								share: 0,
 							},
+							username: user.username,
 						},
 					],
 				}));

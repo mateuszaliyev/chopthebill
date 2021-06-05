@@ -48,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 	red: {
 		color: theme.palette.error.main,
+		"&:hover": {
+			backgroundColor: `${theme.palette.error.main}${parseInt(
+				255 * theme.palette.action.hoverOpacity
+			)
+				.toString(16)
+				.padStart(2, "0")}`,
+		},
 	},
 	textField: {
 		maxWidth: "7rem",

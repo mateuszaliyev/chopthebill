@@ -5,14 +5,16 @@ const router = express.Router();
 // Routes
 const authRoutes = require("./authRoutes");
 const avatarRoutes = require("./avatarRoutes");
+const expenseRoutes = require("./expenseRoutes");
+const friendRoutes = require("./friendRoutes");
 const searchRoutes = require("./searchRoutes");
 const userRoutes = require("./userRoutes");
-const friendRoutes = require("./friendRoutes");
 
 router.use("/", authRoutes);
 router.use("/avatars", avatarRoutes);
+router.use("/expenses", expenseRoutes);
+router.use("/friend", friendRoutes);
 router.use("/search", searchRoutes);
 router.use("/", userRoutes);
-router.use("/friend", friendRoutes);
 
 module.exports = router;

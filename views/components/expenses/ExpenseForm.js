@@ -1,5 +1,5 @@
 // React & Next
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
@@ -15,10 +15,12 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
+	Snackbar,
 	TextField,
 	useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import AddIcon from "@material-ui/icons/Add";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
@@ -27,6 +29,12 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 // Components
 import DiscardChanges from "../DiscardChanges";
 import ExpenseSplit from "./ExpenseSplit";
+
+// Config
+import { host } from "../../config";
+
+// Contexts
+import { UserContext } from "../auth/User";
 
 // Currencies
 import currencies from "../../config/currencies";
@@ -58,7 +66,11 @@ const useStyles = makeStyles((theme) => ({
 		border: `1px solid ${theme.palette.error.main}80`,
 		color: theme.palette.error.main,
 		"&:hover": {
-			backgroundColor: `${theme.palette.error.main}0a`,
+			backgroundColor: `${theme.palette.error.main}${parseInt(
+				255 * theme.palette.action.hoverOpacity
+			)
+				.toString(16)
+				.padStart(2, "0")}`,
 			border: `1px solid ${theme.palette.error.main}`,
 		},
 	},
@@ -90,7 +102,10 @@ function ExpenseForm({ className, data, setData }) {
 	const { t } = useTranslation("common");
 
 	const [discardOpen, setDiscardOpen] = useState(false);
+	const [snackbarSeverity, setSnackbarSeverity] = useState("error");
+	const [snackbarText, setSnackbarText] = useState(null);
 
+	const { accessToken } = useContext(UserContext);
 	const router = useRouter();
 
 	const theme = useTheme();
@@ -145,6 +160,50 @@ function ExpenseForm({ className, data, setData }) {
 		}
 	};
 
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (
+			data.users.filter((user) => user.id === data.expense.user.id).length === 0
+		) {
+			setSnackbarSeverity("warning");
+			setSnackbarText("User that created the expense must be involved.");
+			return;
+		}
+
+		const sum = data.users.reduce((prev, curr) => prev + curr.amount, 0);
+		if (data.users.length >= 2 && 2 * data.expense.amount === sum) {
+			const submittedData = {
+				expense: {
+					...data.expense,
+					group: data.expense.group.id,
+					user: data.expense.user.id,
+				},
+				obligations: data.obligations.map((obligation) => ({
+					amount: obligation.amount,
+					creditor: obligation.creditor.id,
+					debtor: obligation.debtor.id,
+				})),
+			};
+
+			const res = await fetch(`${host}/expenses`, {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					Authorization: `Bearer ${accessToken}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(submittedData),
+			});
+
+			if (res.ok) {
+				router.push("/expenses");
+			} else {
+				setSnackbarSeverity("error");
+				setSnackbarText(`${t("something-went-wrong")}. ${t("try-again")}.`);
+			}
+		}
+	};
+
 	const handleTitle = (e) => {
 		setData((prevData) => ({
 			...prevData,
@@ -175,7 +234,6 @@ function ExpenseForm({ className, data, setData }) {
 							amount,
 							creditor,
 							debtor,
-							settled: false,
 						});
 
 						debtorTotal -= amount;
@@ -191,80 +249,109 @@ function ExpenseForm({ className, data, setData }) {
 	}, [data.expense.amount, data.users]);
 
 	return (
-		<div className={`${className} ${classes.root}`}>
-			<TextField label={t("title")} onChange={handleTitle} required />
-			<TextField
-				label={t("description")}
-				multiline
-				onChange={handleDescription}
-				required
-			/>
-			<MuiPickersUtilsProvider
-				locale={locales[router.locale]}
-				utils={DateFnsUtils}
+		<>
+			<form
+				className={`${className} ${classes.root}`}
+				onSubmit={(e) => e.preventDefault()}
 			>
-				<DateTimePicker
-					ampm={false}
-					cancelLabel={t("cancel")}
-					disableFuture
-					format={
-						router.locale === "en" ? "yyyy-MM-dd hh:mm a" : "yyyy-MM-dd HH:mm"
-					}
-					label={t("date")}
-					onChange={handleDate}
-					required
-					showTodayButton
-					todayLabel={t("today")}
-					value={data.expense.date}
-				/>
-			</MuiPickersUtilsProvider>
-			<div className={classes.currency}>
+				<TextField label={t("title")} onChange={handleTitle} required />
 				<TextField
-					className={classes.currencyItem}
-					inputProps={{ min: 0, step: 0.01 }}
-					label={t("amount")}
-					onChange={handleAmount}
+					label={t("description")}
+					multiline
+					onChange={handleDescription}
 					required
-					type="number"
 				/>
-				<FormControl className={classes.currencyItem} required>
-					<InputLabel>{t("currency")}</InputLabel>
-					<Select onChange={handleCurrency} value={data.expense.currency}>
-						{currencies.map((currency) => (
-							<MenuItem key={currency.code} value={currency.code}>
-								{currency.code}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-			</div>
-			<ExpenseSplit creditors data={data} methods={methods} setData={setData} />
-			<ExpenseSplit data={data} methods={methods} setData={setData} />
-			<div className={classes.buttons}>
-				<Button
-					className={classes.red}
-					onClick={() => setDiscardOpen(true)}
-					startIcon={<DeleteForeverIcon />}
-					variant="outlined"
+				<MuiPickersUtilsProvider
+					locale={locales[router.locale]}
+					utils={DateFnsUtils}
 				>
-					{t("discard")}
-				</Button>
-				<Button
-					color="primary"
-					startIcon={<AddAPhotoIcon />}
-					variant="outlined"
+					<DateTimePicker
+						ampm={false}
+						cancelLabel={t("cancel")}
+						disableFuture
+						format={
+							router.locale === "en" ? "yyyy-MM-dd hh:mm a" : "yyyy-MM-dd HH:mm"
+						}
+						label={t("date")}
+						onChange={handleDate}
+						required
+						showTodayButton
+						todayLabel={t("today")}
+						value={data.expense.date}
+					/>
+				</MuiPickersUtilsProvider>
+				<div className={classes.currency}>
+					<TextField
+						className={classes.currencyItem}
+						inputProps={{ min: 0, step: 0.01 }}
+						label={t("amount")}
+						onChange={handleAmount}
+						required
+						type="number"
+					/>
+					<FormControl className={classes.currencyItem} required>
+						<InputLabel>{t("currency")}</InputLabel>
+						<Select onChange={handleCurrency} value={data.expense.currency}>
+							{currencies.map((currency) => (
+								<MenuItem key={currency.code} value={currency.code}>
+									{currency.code}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</div>
+				<ExpenseSplit
+					creditors
+					data={data}
+					methods={methods}
+					setData={setData}
+				/>
+				<ExpenseSplit data={data} methods={methods} setData={setData} />
+				<div className={classes.buttons}>
+					<Button
+						className={classes.red}
+						onClick={() => setDiscardOpen(true)}
+						startIcon={<DeleteForeverIcon />}
+						variant="outlined"
+					>
+						{t("discard")}
+					</Button>
+					<Button
+						color="primary"
+						startIcon={<AddAPhotoIcon />}
+						variant="outlined"
+					>
+						{t("upload")}
+					</Button>
+					<Button
+						color="primary"
+						onClick={handleSubmit}
+						startIcon={<AddIcon />}
+						variant="contained"
+					>
+						{t("add")}
+					</Button>
+					<DiscardChanges
+						onClose={handleDiscard}
+						open={discardOpen}
+					></DiscardChanges>
+				</div>
+			</form>
+			<Snackbar
+				autoHideDuration={6000}
+				onClose={() => setSnackbarText(null)}
+				open={Boolean(snackbarText)}
+			>
+				<Alert
+					elevation={6}
+					onClose={() => setSnackbarText(null)}
+					severity={snackbarSeverity}
+					variant="filled"
 				>
-					{t("upload")}
-				</Button>
-				<Button color="primary" startIcon={<AddIcon />} variant="contained">
-					{t("add")}
-				</Button>
-				<DiscardChanges
-					onClose={handleDiscard}
-					open={discardOpen}
-				></DiscardChanges>
-			</div>
-		</div>
+					{snackbarText}
+				</Alert>
+			</Snackbar>
+		</>
 	);
 }
 
