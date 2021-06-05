@@ -2,6 +2,9 @@
 import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 
+// IndexedDB
+import { set } from "idb-keyval";
+
 // Components
 import Auth from "../components/auth/Auth";
 import Loader from "../components/Loader";
@@ -9,7 +12,7 @@ import Loader from "../components/Loader";
 // Config
 import { host } from "../config";
 
-// Context
+// Contexts
 import { UserContext } from "../components/auth/User";
 
 function Logout() {
@@ -25,6 +28,8 @@ function Logout() {
 			},
 		});
 		if (res.ok) {
+			localStorage.removeItem("refresh-token");
+			await set("refresh-token", "");
 			setAccessToken("");
 			setUser({});
 			router.replace("/login");

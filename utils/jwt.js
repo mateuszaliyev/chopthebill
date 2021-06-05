@@ -1,6 +1,7 @@
-// .env
+// Environmental variables
 require("dotenv").config();
 
+// JWT
 const jwt = require("jsonwebtoken");
 
 function getAccessToken(payload) {
@@ -24,14 +25,15 @@ function verifyToken(token, secret) {
 	}
 }
 
-function getResetPasswordLink(payload, secret) {
-	const token = jwt.sign(payload, secret, { expiresIn: "15m" });
-	return `http://localhost:3000/reset-password/${payload.id}/${token}`;
+function getToken(payload, secret) {
+	return jwt.sign(payload, secret, {
+		expiresIn: "15m",
+	});
 }
 
 module.exports = {
 	getAccessToken,
 	getRefreshToken,
 	verifyToken,
-	getResetPasswordLink,
+	getToken,
 };

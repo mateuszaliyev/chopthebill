@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }) {
 				<meta name="description" content="Description" />
 				<meta name="keywords" content="Keywords" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-				<meta name="theme-color" content="#009688" />
+				<meta name="theme-color" content="#26a26c" />
 				<title>ChopTheBill</title>
 			</Head>
 

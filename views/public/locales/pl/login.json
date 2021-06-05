@@ -3,5 +3,13 @@
 	"have-no-account": "Nie masz konta? Zarejestruj się!",
 	"login": "Zaloguj się",
 	"login-data-invalid": "Nieprawidłowy adres email lub hasło",
-	"meta-title": "Logowanie"
+	"meta-title": "Logowanie",
+	"send": "Wyślij",
+	"forgot-password-text": "Podaj adres email, na który otrzymasz link resetujący hasło",
+	"invalid-email": "Konto z tym adresem email nie istnieje",
+	"enter-new-password": "Wprowadź nowe hasło",
+	"reset-password": "Zresetuj hasło",
+	"link-expired": "Link wygasł",
+	"invalid-link": "Link jest niepoprawny",
+	"email-sent": "Email z linkiem resetującym hasło został wysłany"
 }

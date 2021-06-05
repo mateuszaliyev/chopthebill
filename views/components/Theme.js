@@ -73,8 +73,8 @@ function Theme(props) {
 		<>
 			<Head>
 				<meta
-					name="theme-color"
 					content={muiTheme?.palette?.primary?.main ?? "#009688"}
+					name="theme-color"
 				/>
 			</Head>
 			<ThemeContext.Provider

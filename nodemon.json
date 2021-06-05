@@ -1,5 +1,13 @@
 {
 	"ignore": [".git", "node_modules", "views"],
-	"watch": ["config", "controllers", "models", "routes", "app.js", "utils"],
+	"watch": [
+		"app.js",
+		"config",
+		"controllers",
+		"middlewares",
+		"models",
+		"routes",
+		"utils"
+	],
 	"ext": "js json"
 }

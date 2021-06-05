@@ -21,6 +21,7 @@ function ResetPasswordForm() {
 	const router = useRouter();
 	const { id, token } = router.query;
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 
 	const { t } = useTranslation(["common", "login"]);
 
@@ -39,6 +40,18 @@ function ResetPasswordForm() {
 			}),
 		});
 		const { error } = await res.json();
+		if (error === "invalid-password") {
+			setError(t("new-password-invalid"));
+			return;
+		}
+		if (error === "link-expired") {
+			setError(t("login:link-expired"));
+			return;
+		}
+		if (error === "invalid-link") {
+			setError(t("login:invalid-link"));
+			return;
+		}
 		if (!error) {
 			router.push("/login");
 		}
@@ -49,6 +62,7 @@ function ResetPasswordForm() {
 	return (
 		<form onSubmit={handleSubmit} autoComplete="off">
 			<FormControl fullWidth>
+				{t("login:enter-new-password")}
 				<TextField
 					id="password"
 					label={t("password")}
@@ -56,15 +70,16 @@ function ResetPasswordForm() {
 					onChange={(e) => setPassword(e.target.value)}
 					fullWidth
 					className={classes.margin}
+					helperText={error}
+					error={error.length > 0}
 				/>
-
 				<Button
 					className={classes.margin}
 					color="primary"
 					type="submit"
 					variant="contained"
 				>
-					{t("login:login")}
+					{t("login:reset-password")}
 				</Button>
 			</FormControl>
 		</form>

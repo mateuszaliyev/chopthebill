@@ -9,9 +9,12 @@ const {
 	friendsController,
 } = require("../controllers/friendController");
 
+// Middlewares
+const { authenticate } = require("../middlewares/authenticate");
+
 // Routes
-router.post("/", addFriendController);
-router.delete("/", unfriendController);
-router.get("/", friendsController);
+router.post("/", authenticate, addFriendController);
+router.delete("/", authenticate, unfriendController);
+router.get("/", authenticate, friendsController);
 
 module.exports = router;

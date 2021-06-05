@@ -29,7 +29,13 @@ function SearchButton() {
 					<SearchIcon />
 				</IconButton>
 			</Tooltip>
-			<SearchDialog onClose={handleClose} open={open} title={t("search")} />
+			<SearchDialog
+				onClose={handleClose}
+				open={open}
+				placeholder={t("search-anything")}
+				redirect
+				title={t("search")}
+			/>
 		</>
 	);
 }

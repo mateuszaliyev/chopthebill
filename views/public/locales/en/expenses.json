@@ -1,0 +1,11 @@
+{
+	"creditors": "Creditors",
+	"debtors": "Debtors",
+	"equal-split": "Equal split",
+	"paid": "Paid",
+	"split-amount": "Amount",
+	"split-percentage": "Percentage",
+	"split-share": "Share",
+	"to-pay": "To pay",
+	"toggle-creditor": "Toggle creditor/debtor"
+}

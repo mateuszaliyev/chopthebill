@@ -8,9 +8,13 @@ import { host } from "../../config";
 // Material UI
 import {
 	Button,
+	FormControl,
+	FormControlLabel,
+	FormHelperText,
+	FormGroup,
+	InputLabel,
 	List,
 	ListItem,
-	ListItemIcon,
 	ListItemSecondaryAction,
 	ListItemText,
 	MenuItem,
@@ -18,31 +22,25 @@ import {
 	Select,
 	Switch,
 	TextField,
-	FormControl,
-	FormControlLabel,
-	FormHelperText,
-	FormGroup,
-	Dialog,
-	DialogContent,
-	DialogTitle,
 	useMediaQuery,
-	Snackbar,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import EmailIcon from "@material-ui/icons/Email";
 import PaletteIcon from "@material-ui/icons/Palette";
+import SaveIcon from "@material-ui/icons/Save";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import TranslateIcon from "@material-ui/icons/Translate";
 
-// Contexts
-import { UserContext } from "../auth/User";
-import { ThemeContext } from "../Theme";
-
+// Components
+import ChangePasswordButton from "./ChangePasswordButton";
 import DeleteAccountButton from "./DeleteAccountButton";
+
+// Contexts
+import { ThemeContext } from "../Theme";
+import { UserContext } from "../auth/User";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -57,36 +55,37 @@ const useStyles = makeStyles((theme) => ({
 		margin: theme.spacing(2),
 		gap: theme.spacing(3),
 	},
+	item: {
+		alignItems: "flex-end",
+		display: "flex",
+		gap: "1rem",
+		"& > svg": {
+			marginBottom: "0.25rem",
+		},
+	},
 	inputField: {
-		minWidth: 200,
-		textAlign: "center",
+		flexGrow: "1",
+	},
+	switch: {
+		// marginLeft: "0",
 	},
 }));
 
-function Alert(props) {
-	return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
 function Settings() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation(["common", "user", "validation"]);
 
-	const { user, accessToken } = useContext(UserContext);
 	const { setTheme, setPalette } = useContext(ThemeContext);
-
-	const classes = useStyles();
+	const { user, accessToken } = useContext(UserContext);
 
 	const router = useRouter();
-
+	const classes = useStyles();
 	const theme = useTheme();
-	const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
 
 	const [fieldsHelper, setFieldsHelper] = useState({
 		email: "",
 		username: "",
 		hideEmail: "",
-		oldPassword: "",
-		newPassword: "",
-		newPasswordRepeated: "",
 	});
 
 	const [settings, setSettings] = useState({
@@ -100,20 +99,6 @@ function Settings() {
 	const changeTheme = () => {
 		setTheme(settings.theme.split("-")[0]);
 		setPalette(settings.theme.split("-")[1]);
-	};
-
-	const handleLanguage = (e) => {
-		setSettings((prevSettings) => ({
-			...prevSettings,
-			language: e.target.value,
-		}));
-	};
-
-	const handleUsername = (e) => {
-		setSettings((prevSettings) => ({
-			...prevSettings,
-			username: e.target.value,
-		}));
 	};
 
 	const handleEmail = (e) => {
@@ -130,10 +115,10 @@ function Settings() {
 		}));
 	};
 
-	const handleTheme = (e) => {
+	const handleLanguage = (e) => {
 		setSettings((prevSettings) => ({
 			...prevSettings,
-			theme: `${e.target.value}-${prevSettings.theme.split("-")[1]}`,
+			language: e.target.value,
 		}));
 	};
 
@@ -145,7 +130,12 @@ function Settings() {
 		}));
 	};
 
-	useEffect(changeTheme, [settings]);
+	const handleTheme = (e) => {
+		setSettings((prevSettings) => ({
+			...prevSettings,
+			theme: `${e.target.value}-${prevSettings.theme.split("-")[1]}`,
+		}));
+	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -159,7 +149,7 @@ function Settings() {
 			},
 			body: JSON.stringify(settings),
 		});
-		const { issues } = await res.json();
+		const issues = await res.json();
 
 		if (issues.length > 0) {
 			const newFieldsHelper = {
@@ -176,7 +166,7 @@ function Settings() {
 				}
 
 				if (issue.indexOf("username") !== -1) {
-					newFieldsHelper.username += t(`register:${issue}`) + ". ";
+					newFieldsHelper.username += t(`validation:${issue}`) + ". ";
 				}
 
 				if (issue.indexOf("exclusion") !== -1) {
@@ -193,312 +183,124 @@ function Settings() {
 		}
 	};
 
-	const [password, setPassword] = useState({
-		oldPassword: "",
-		newPassword: "",
-		newPasswordRepeated: "",
-	});
-
-	const [openPassword, setPasswordOpen] = useState(false);
-
-	const handleChangePassClick = () => {
-		setPasswordOpen((prevPasswordOpen) => !prevPasswordOpen);
+	const handleUsername = (e) => {
+		setSettings((prevSettings) => ({
+			...prevSettings,
+			username: e.target.value,
+		}));
 	};
 
-	const [openSnackbar, setSnackbar] = useState(false);
-
-	const handleChangePassSubmit = async (e) => {
-		e.preventDefault();
-
-		const res = await fetch(`${host}/password`, {
-			method: "PUT",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: JSON.stringify(password),
-		});
-		const { issues } = await res.json();
-
-		if (issues.length > 0) {
-			const newFieldsHelper = {
-				email: "",
-				username: "",
-				hideEmail: "",
-				oldPassword: "",
-				newPassword: "",
-				newPasswordRepeated: "",
-			};
-			issues.forEach((issue) => {
-				if (issue === "password-different") {
-					newFieldsHelper.oldPassword += t(`${issue}`) + ". ";
-				}
-
-				if (issue === "new-password-invalid") {
-					newFieldsHelper.newPassword += t(`${issue}`) + ". ";
-				}
-
-				if (issue === "new-password-repeated-different") {
-					newFieldsHelper.newPasswordRepeated += t(`${issue}`) + ". ";
-				}
-			});
-			setFieldsHelper(newFieldsHelper);
-		} else {
-			setPasswordOpen(false);
-			setSnackbar(true);
-		}
-	};
-
-	const [openDeleteAccount, setDeleteAccount] = useState(false);
-
-	const handleDeleteAccClick = () => {
-		setDeleteAccount((prevPasswordOpen) => !prevPasswordOpen);
-	};
-
-	const handleClose = () => {
-		setPasswordOpen(false);
-		setDeleteAccount(false);
-	};
+	useEffect(changeTheme, [settings]);
 
 	return (
 		<>
 			<Paper component="form" id="settings" onSubmit={handleSubmit}>
 				<List>
-					<ListItem>
-						<ListItemIcon>
-							<TextFieldsIcon />
-						</ListItemIcon>
-						<ListItemText>{t("username")}</ListItemText>
-						<ListItemSecondaryAction>
-							<TextField
-								className={classes.inputField}
-								inputProps={{ style: { textAlign: "center" } }}
-								defaultValue={
-									settings.username === settings.email ? "" : settings.username
-								}
-								onChange={handleUsername}
-								helperText={fieldsHelper.username}
-								error={fieldsHelper.username.length > 0}
-							/>
-						</ListItemSecondaryAction>
+					<ListItem className={classes.item}>
+						<TextFieldsIcon />
+						<TextField
+							className={classes.inputField}
+							defaultValue={
+								settings.username === settings.email ? "" : settings.username
+							}
+							error={fieldsHelper.username.length > 0}
+							helperText={fieldsHelper.username}
+							label={t("username")}
+							onChange={handleUsername}
+						/>
 					</ListItem>
-					<ListItem>
-						<ListItemIcon>
-							<AlternateEmailIcon />
-						</ListItemIcon>
-						<ListItemText>Email</ListItemText>
-						<ListItemSecondaryAction>
-							<TextField
-								type="email"
-								className={classes.inputField}
-								inputProps={{ style: { textAlign: "center" } }}
-								defaultValue={settings.email}
-								onChange={handleEmail}
-								helperText={fieldsHelper.email}
-								error={fieldsHelper.email.length > 0}
-							/>
-						</ListItemSecondaryAction>
+					<ListItem className={classes.item}>
+						<AlternateEmailIcon />
+						<TextField
+							className={classes.inputField}
+							defaultValue={settings.email}
+							error={fieldsHelper.email.length > 0}
+							helperText={fieldsHelper.email}
+							label={t("email-address")}
+							onChange={handleEmail}
+						/>
 					</ListItem>
-					<ListItem>
-						<ListItemIcon>
-							<TranslateIcon />
-						</ListItemIcon>
-						<ListItemText>{t("language")}</ListItemText>
-						<ListItemSecondaryAction>
-							<Select
-								className={classes.inputField}
-								value={settings.language}
-								onChange={handleLanguage}
-							>
+					<ListItem className={classes.item}>
+						<TranslateIcon />
+						<FormControl className={classes.inputField}>
+							<InputLabel shrink>{t("language")}</InputLabel>
+							<Select onChange={handleLanguage} value={settings.language}>
 								<MenuItem value="en">{t("en")}</MenuItem>
 								<MenuItem value="pl">{t("pl")}</MenuItem>
 							</Select>
-						</ListItemSecondaryAction>
+						</FormControl>
 					</ListItem>
-					<FormControl
-						error={fieldsHelper.hideEmail.length > 0}
-						style={{ width: "100%" }}
-					>
-						<FormGroup>
-							<ListItem>
-								<ListItemIcon>
-									<EmailIcon />
-								</ListItemIcon>
-								<ListItemText>{t("hide-email")}</ListItemText>
-								<ListItemSecondaryAction>
-									<FormControlLabel
-										style={{ marginRight: "0" }}
-										control={
-											<Switch
-												color="primary"
-												onChange={handleHideEmail}
-												checked={settings.hideEmail}
-											></Switch>
-										}
-									/>
-								</ListItemSecondaryAction>
-							</ListItem>
-						</FormGroup>
-						<FormHelperText style={{ textAlign: "center" }}>
-							{fieldsHelper.hideEmail}
-						</FormHelperText>
-					</FormControl>
-					<ListItem>
-						<ListItemIcon>
-							<PaletteIcon />
-						</ListItemIcon>
-						<ListItemText>{t("theme")}</ListItemText>
-						<ListItemSecondaryAction>
+					<ListItem className={classes.item}>
+						<PaletteIcon />
+						<FormControl className={classes.inputField}>
+							<InputLabel shrink>{t("theme")}</InputLabel>
 							<Select
-								className={classes.inputField}
-								value={settings.theme.split("-")[0]}
 								onChange={handleTheme}
+								value={settings.theme.split("-")[0]}
 							>
 								<MenuItem value="default">{t("default")}</MenuItem>
 								<MenuItem value="alternative">{t("alternative")}</MenuItem>
 							</Select>
-						</ListItemSecondaryAction>
+						</FormControl>
 					</ListItem>
-					<ListItem>
-						<ListItemIcon>
-							{settings.theme.split("-")[1] === "light" ? (
-								<Brightness7Icon />
-							) : (
-								<Brightness4Icon />
-							)}
-						</ListItemIcon>
+					<ListItem className={classes.item}>
+						{settings.theme.split("-")[1] === "light" ? (
+							<Brightness7Icon />
+						) : (
+							<Brightness4Icon />
+						)}
 						<ListItemText>{t("palette")}</ListItemText>
 						<ListItemSecondaryAction>
 							<Switch
-								color="primary"
-								onChange={handlePalette}
 								checked={settings.theme.split("-")[1] === "light"}
+								color="primary"
+								edge="end"
+								onChange={handlePalette}
 							></Switch>
+						</ListItemSecondaryAction>
+					</ListItem>
+					<ListItem className={classes.item}>
+						<EmailIcon />
+						<ListItemText>{t("user:hide-email-address")}</ListItemText>
+						<ListItemSecondaryAction>
+							<FormControl
+								className={classes.switch}
+								error={fieldsHelper.hideEmail.length > 0}
+							>
+								<FormGroup>
+									<FormControlLabel
+										control={
+											<Switch
+												checked={settings.hideEmail}
+												color="primary"
+												edge="end"
+												onChange={handleHideEmail}
+											></Switch>
+										}
+										style={{ marginRight: "0" }}
+									/>
+								</FormGroup>
+								<FormHelperText>{fieldsHelper.hideEmail}</FormHelperText>
+							</FormControl>
 						</ListItemSecondaryAction>
 					</ListItem>
 					<div className={classes.button}>
 						<Button
-							variant="contained"
 							color="primary"
-							type="submit"
+							startIcon={<SaveIcon />}
 							form="settings"
+							type="submit"
+							variant="contained"
 						>
-							{t("confirm")}
+							{t("save")}
 						</Button>
 					</div>
 				</List>
 			</Paper>
 			<div className={classes.buttons}>
-				<Button
-					variant="contained"
-					color="secondary"
-					onClick={handleChangePassClick}
-				>
-					{t("change-password")}
-				</Button>
+				<ChangePasswordButton />
 				<DeleteAccountButton />
 			</div>
-			<Dialog
-				fullScreen={fullScreen}
-				onClose={handleClose}
-				fullWidth={true}
-				open={openPassword}
-			>
-				<DialogTitle>Test</DialogTitle>
-				<DialogContent dividers>
-					<Paper
-						component="form"
-						id="password"
-						onSubmit={handleChangePassSubmit}
-					>
-						<List>
-							<ListItem>
-								<ListItemText>{t("old-password")}</ListItemText>
-								<ListItemSecondaryAction>
-									<TextField
-										className={classes.inputField}
-										inputProps={{ style: { textAlign: "center" } }}
-										type="password"
-										onChange={(e) => {
-											setPassword((prevPassword) => ({
-												...prevPassword,
-												oldPassword: e.target.value,
-											}));
-										}}
-										helperText={fieldsHelper.oldPassword}
-										error={fieldsHelper.oldPassword.length > 0}
-									/>
-								</ListItemSecondaryAction>
-							</ListItem>
-							<ListItem>
-								<ListItemText>{t("new-password")}</ListItemText>
-								<ListItemSecondaryAction>
-									<TextField
-										className={classes.inputField}
-										inputProps={{ style: { textAlign: "center" } }}
-										type="password"
-										onChange={(e) => {
-											setPassword((prevPassword) => ({
-												...prevPassword,
-												newPassword: e.target.value,
-											}));
-										}}
-										helperText={fieldsHelper.newPassword}
-										error={fieldsHelper.newPassword.length > 0}
-									/>
-								</ListItemSecondaryAction>
-							</ListItem>
-							<ListItem>
-								<ListItemText>{t("old-password-repeated")}</ListItemText>
-								<ListItemSecondaryAction>
-									<TextField
-										className={classes.inputField}
-										inputProps={{ style: { textAlign: "center" } }}
-										type="password"
-										onChange={(e) => {
-											setPassword((prevPassword) => ({
-												...prevPassword,
-												newPasswordRepeated: e.target.value,
-											}));
-										}}
-										helperText={fieldsHelper.newPasswordRepeated}
-										error={fieldsHelper.newPasswordRepeated.length > 0}
-									/>
-								</ListItemSecondaryAction>
-							</ListItem>
-							<div className={classes.button}>
-								<Button
-									variant="contained"
-									color="primary"
-									//Click={handleChangePassSubmit}
-									type="submit"
-								>
-									{t("confirm")}
-								</Button>
-							</div>
-						</List>
-					</Paper>
-				</DialogContent>
-			</Dialog>
-			<Snackbar
-				open={openSnackbar}
-				autoHideDuration={6000}
-				onClose={() => setSnackbar(false)}
-			>
-				<Alert onClose={handleClose} severity="success">
-					{t("password-change-success")}
-				</Alert>
-			</Snackbar>
-			<Dialog
-				fullScreen={fullScreen}
-				onClose={handleClose}
-				fullWidth={true}
-				open={openDeleteAccount}
-			>
-				<DialogTitle>Test</DialogTitle>
-				<DialogContent dividers>test2</DialogContent>
-			</Dialog>
 		</>
 	);
 }

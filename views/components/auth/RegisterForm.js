@@ -10,9 +10,13 @@ import {
 	FormControl,
 	FormControlLabel,
 	FormHelperText,
+	IconButton,
+	InputAdornment,
 	TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
 // Components
 import Link from "../Link";
@@ -31,20 +35,29 @@ const useStyles = makeStyles({
 });
 
 function RegisterForm() {
+	const { t } = useTranslation(["common", "register"]);
+
 	const [email, setEmail] = useState("");
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
 	const [hideEmail, setHideEmail] = useState(false);
 	const [fieldsHelper, setFieldsHelper] = useState({
 		email: "",
 		username: "",
 		password: "",
+		passwordConfirm: "",
 		hideEmail: "",
+	});
+	const [password, setPassword] = useState("");
+	const [passwordConfirm, setPasswordConfirm] = useState("");
+	const [username, setUsername] = useState("");
+	const [visibility, setVisibility] = useState({
+		password: false,
+		passwordConfirm: false,
 	});
 
 	const { palette, theme } = useContext(ThemeContext);
+
+	const classes = useStyles();
 	const router = useRouter();
-	const { t } = useTranslation(["common", "register"]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -58,6 +71,7 @@ function RegisterForm() {
 				email,
 				username,
 				password,
+				passwordConfirm,
 				hideEmail,
 				language: router.locale,
 				theme: `${theme}-${palette}`,
@@ -70,6 +84,7 @@ function RegisterForm() {
 				email: "",
 				username: "",
 				password: "",
+				passwordConfirm: "",
 				hideEmail: "",
 			};
 			issues.forEach((issue) => {
@@ -82,7 +97,9 @@ function RegisterForm() {
 				}
 
 				if (issue.indexOf("password") !== -1) {
-					newFieldsHelper.password += t(`register:${issue}`) + ". ";
+					issue === "passwords-do-not-match"
+						? (newFieldsHelper.passwordConfirm += t(`register:${issue}`) + ". ")
+						: (newFieldsHelper.password += t(`register:${issue}`) + ". ");
 				}
 
 				if (issue.indexOf("exclusion") !== -1) {
@@ -95,45 +112,88 @@ function RegisterForm() {
 		}
 	};
 
-	const classes = useStyles();
+	const handleVisibility = (key) => {
+		setVisibility((prevVisibility) => ({
+			...prevVisibility,
+			[key]: !prevVisibility[key],
+		}));
+	};
 
 	return (
-		<form onSubmit={handleSubmit} autoComplete="off" className="auth-form">
+		<form autoComplete="off" onSubmit={handleSubmit}>
 			<FormControl fullWidth>
 				<TextField
-					id="email"
-					label="Email"
-					type="email"
-					onChange={(e) => setEmail(e.target.value)}
-					fullWidth
 					className={classes.margin}
-					helperText={fieldsHelper.email}
 					error={fieldsHelper.email.length > 0}
+					helperText={fieldsHelper.email}
+					label={t("email-address")}
+					onChange={(e) => setEmail(e.target.value)}
+					type="email"
 				/>
 
 				<TextField
-					id="username"
-					label={t("username")}
-					type="text"
-					onChange={(e) => setUsername(e.target.value)}
-					fullWidth
 					className={classes.margin}
-					helperText={fieldsHelper.username}
 					error={fieldsHelper.username.length > 0}
+					helperText={fieldsHelper.username}
+					label={t("username")}
+					onChange={(e) => setUsername(e.target.value)}
+					type="text"
 				/>
 
 				<TextField
-					id="password"
-					label={t("password")}
-					type="password"
-					onChange={(e) => setPassword(e.target.value)}
-					fullWidth
 					className={classes.margin}
-					helperText={fieldsHelper.password}
 					error={fieldsHelper.password.length > 0}
+					helperText={fieldsHelper.password}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<IconButton
+									onClick={() => handleVisibility("password")}
+									tabIndex="-1"
+								>
+									{visibility.password ? (
+										<VisibilityOffIcon />
+									) : (
+										<VisibilityIcon />
+									)}
+								</IconButton>
+							</InputAdornment>
+						),
+					}}
+					label={t("password")}
+					onChange={(e) => setPassword(e.target.value)}
+					type={visibility.password ? "text" : "password"}
 				/>
 
-				<FormControl error={fieldsHelper.hideEmail.length > 0}>
+				<TextField
+					className={classes.margin}
+					error={fieldsHelper.passwordConfirm.length > 0}
+					helperText={fieldsHelper.passwordConfirm}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<IconButton
+									onClick={() => handleVisibility("passwordConfirm")}
+									tabIndex="-1"
+								>
+									{visibility.passwordConfirm ? (
+										<VisibilityOffIcon />
+									) : (
+										<VisibilityIcon />
+									)}
+								</IconButton>
+							</InputAdornment>
+						),
+					}}
+					label={t("password-confirm")}
+					onChange={(e) => setPasswordConfirm(e.target.value)}
+					type={visibility.passwordConfirm ? "text" : "password"}
+				/>
+
+				<FormControl
+					className={classes.margin}
+					error={fieldsHelper.hideEmail.length > 0}
+				>
 					<FormControlLabel
 						control={
 							<Checkbox
@@ -148,7 +208,13 @@ function RegisterForm() {
 					<FormHelperText>{fieldsHelper.hideEmail}</FormHelperText>
 				</FormControl>
 
-				<Button color="primary" size="large" type="submit" variant="contained">
+				<Button
+					className={classes.margin}
+					color="primary"
+					size="large"
+					type="submit"
+					variant="contained"
+				>
 					{t("register:register")}
 				</Button>
 

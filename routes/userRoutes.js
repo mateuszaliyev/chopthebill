@@ -10,10 +10,13 @@ const {
 	deleteController,
 } = require("../controllers/userController");
 
+// Middlewares
+const { authenticate } = require("../middlewares/authenticate");
+
 // Routes
-router.get("/user/:id", profileController);
-router.put("/settings", settingsController);
-router.put("/password", passwordController);
-router.delete("/delete", deleteController);
+router.get("/user/:id", authenticate, profileController);
+router.put("/settings", authenticate, settingsController);
+router.put("/password", authenticate, passwordController);
+router.delete("/delete", authenticate, deleteController);
 
 module.exports = router;

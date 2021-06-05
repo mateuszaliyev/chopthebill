@@ -7,7 +7,7 @@ import { Button, IconButton, Menu, MenuItem, Tooltip } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PaletteIcon from "@material-ui/icons/Palette";
 
-// Context
+// Contexts
 import { ThemeContext } from "./Theme";
 
 function PaletteList({ expand, size }) {

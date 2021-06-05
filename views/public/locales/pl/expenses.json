@@ -1,0 +1,11 @@
+{
+	"creditors": "Wierzyciele",
+	"debtors": "Dłużnicy",
+	"equal-split": "Równy podział",
+	"paid": "Zapłacono",
+	"split-amount": "Kwota",
+	"split-percentage": "Procent",
+	"split-share": "Część",
+	"to-pay": "Do zapłaty",
+	"toggle-credtor": "Przełącz wierzyciel/dłużnik"
+}

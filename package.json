@@ -16,29 +16,30 @@
 		"url": "git+https://github.com/PRz-IO/P01-G01-ChopTheBill.git"
 	},
 	"scripts": {
-		"build": "npm run next-build",
 		"dev": "concurrently \"nodemon app.js\" \"npm run next-dev\"",
-		"generate": "node utils/secretGenerate.js",
+		"generate": "node config/secretGenerate.js",
+		"heroku-generate": "node config/dbGenerate.js",
 		"next-build": "cd views && npm run build",
 		"next-dev": "cd views && npm run dev",
 		"next-start": "cd views && npm run start",
 		"postinstall": "cd views && npm install",
-		"start": "concurrently \"node app.js\" \"npm run next-start\""
+		"start": "node app.js",
+		"start-local": "concurrently \"cross-env NODE_ENV=production node app.js\" \"npm run next-start\""
 	},
 	"dependencies": {
 		"bcrypt": "^5.0.1",
 		"concurrently": "^6.0.2",
-		"cookie-parser": "^1.4.5",
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
-		"emailjs-com": "^2.6.4",
 		"express": "^4.17.1",
 		"fastest-levenshtein": "^1.0.12",
 		"jsonwebtoken": "^8.5.1",
+		"multer": "^1.4.2",
 		"pg": "^8.6.0",
 		"validator": "^13.6.0"
 	},
 	"devDependencies": {
+		"cross-env": "^7.0.3",
 		"nodemon": "^2.0.7"
 	}
 }

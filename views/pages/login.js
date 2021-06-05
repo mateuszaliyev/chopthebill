@@ -1,5 +1,4 @@
 // React & Next
-import { useContext } from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -71,7 +70,7 @@ function Login() {
 								</IconButton>
 							</Tooltip>
 						</Link>
-						<Logo center size={192} />
+						<Logo background center size={192} />
 						<Typography align="center" variant="h4">
 							ChopTheBill
 						</Typography>
@@ -86,7 +85,7 @@ function Login() {
 								</IconButton>
 							</Tooltip>
 						</Link>
-						<Logo center size={192} />
+						<Logo background center size={192} />
 						<Typography align="center" variant="h4">
 							ChopTheBill
 						</Typography>

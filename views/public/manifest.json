@@ -1,12 +1,12 @@
 {
 	"name": "ChopTheBill",
 	"short_name": "ChopTheBill",
-	"theme_color": "#4ba0a5",
-	"background_color": "#4ba0a5",
+	"theme_color": "#26a26c",
+	"background_color": "#26a26c",
 	"display": "standalone",
 	"orientation": "portrait",
 	"scope": "/",
-	"start_url": "/",
+	"start_url": "/login",
 	"icons": [
 		{
 			"src": "icons/icon-72x72.png",

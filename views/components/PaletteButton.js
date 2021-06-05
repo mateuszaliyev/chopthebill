@@ -7,7 +7,7 @@ import { IconButton, Tooltip } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 
-// Context
+// Contexts
 import { ThemeContext } from "./Theme";
 
 function PaletteButton({ size }) {

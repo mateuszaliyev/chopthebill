@@ -43,7 +43,7 @@ const colors = [
 	yellow,
 ];
 
-function useTextToColor(text) {
+function useTextToColor(text = "default") {
 	const textArray = text.split("");
 	const value = textArray.reduce(
 		(sum, letter) => sum + letter.charCodeAt(0),

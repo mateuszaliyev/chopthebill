@@ -28,9 +28,10 @@ export async function getServerSideProps({ locale }) {
 function Friends() {
 	const { t } = useTranslation(["common", "friends"]);
 
-	const { accessToken } = useContext(UserContext);
 	const [friends, setFriends] = useState([]);
 	const [loading, setLoading] = useState(true);
+
+	const { accessToken } = useContext(UserContext);
 
 	const getFriends = async () => {
 		const res = await fetch(`${host}/friend`, {
@@ -41,8 +42,8 @@ function Friends() {
 				Authorization: `Bearer ${accessToken}`,
 			},
 		});
-		const { error, friends } = await res.json();
 		if (res.ok) {
+			const friends = await res.json();
 			setLoading(false);
 			setFriends(friends);
 		}
@@ -56,10 +57,11 @@ function Friends() {
 			<Layout title={t("friends:meta-title")}>
 				{loading ? (
 					<Loader size="4rem" />
-				) : friends.length ? (
-					<FriendList friends={friends} setFriends={setFriends} />
 				) : (
-					<Empty />
+					<>
+						{friends.length === 0 && <Empty />}
+						<FriendList friends={friends} setFriends={setFriends} />
+					</>
 				)}
 			</Layout>
 		</Auth>

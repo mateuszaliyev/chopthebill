@@ -19,6 +19,8 @@ import ReceiptIcon from "@material-ui/icons/Receipt";
 
 // Components
 import AvatarButton from "./AvatarButton";
+import Loader from "../Loader";
+import MoreButton from "./MoreButton";
 import NotificationButton from "./NotificationButton";
 import SearchButton from "./SearchButton";
 import SideMenu from "./SideMenu";
@@ -27,10 +29,18 @@ import SwipeMenu from "./SwipeMenu";
 // Contexts
 import { ThemeContext } from "../Theme";
 
+// Hooks
+import useWindowSize from "../hooks/useWindowSize";
+
 // Styles
 const useStyles = makeStyles((theme) => ({
 	appBar: {
 		width: "calc(100% - 16rem)",
+	},
+	appBarMobile: {
+		display: "flex",
+		justifyContent: "center",
+		height: "4rem",
 	},
 	container: {
 		flexGrow: 1,
@@ -39,9 +49,13 @@ const useStyles = makeStyles((theme) => ({
 		display: "flex",
 		flexDirection: "column",
 		height: "calc(100vh - 4rem)",
+		position: "relative",
 	},
-	margin: {
+	marginDesktop: {
 		marginLeft: "16rem",
+	},
+	marginMobile: {
+		marginTop: "4rem",
 	},
 	menuButton: {
 		marginRight: theme.spacing(2),
@@ -90,12 +104,13 @@ const menuItems = [
 function AppBarMobile({ title }) {
 	const { palette } = useContext(ThemeContext);
 	const classes = useStyles();
+	const { width } = useWindowSize();
 
 	return (
 		<header className={classes.root}>
 			<AppBar
+				className={classes.appBarMobile}
 				color={palette === "light" ? "primary" : "inherit"}
-				position="static"
 			>
 				<Toolbar>
 					<SwipeMenu className={classes.menuButton} items={menuItems} />
@@ -106,12 +121,18 @@ function AppBarMobile({ title }) {
 					>
 						{title}
 					</Typography>
-					<SearchButton />
-					<NotificationButton
-						amount={1}
-						color={palette === "light" ? "secondary" : "primary"}
-					/>
-					<AvatarButton />
+					{width >= 360 ? (
+						<>
+							<SearchButton />
+							<NotificationButton
+								amount={1}
+								color={palette === "light" ? "error" : "primary"}
+							/>
+							<AvatarButton />
+						</>
+					) : (
+						<MoreButton color="inherit" />
+					)}
 				</Toolbar>
 			</AppBar>
 		</header>
@@ -125,7 +146,7 @@ function AppBarDesktop({ title }) {
 	return (
 		<header className={classes.root}>
 			<AppBar
-				className={`${classes.appBar} ${classes.margin}`}
+				className={`${classes.appBar} ${classes.marginDesktop}`}
 				color="transparent"
 				elevation={0}
 				position="static"
@@ -143,7 +164,7 @@ function AppBarDesktop({ title }) {
 	);
 }
 
-function Layout({ children, title }) {
+function Layout({ children = null, title }) {
 	const classes = useStyles();
 	const theme = useTheme();
 
@@ -155,17 +176,19 @@ function Layout({ children, title }) {
 				<>
 					<AppBarDesktop title={title} />
 					<SideMenu items={menuItems} />
-					<main className={`${classes.main} ${classes.margin}`}>
+					<main className={`${classes.main} ${classes.marginDesktop}`}>
 						<Divider variant="middle" />
 						<Container className={classes.container} maxWidth="xl">
-							{children}
+							{children || <Loader size="4rem" />}
 						</Container>
 					</main>
 				</>
 			) : (
 				<>
 					<AppBarMobile title={title} />
-					<main className={classes.main}>{children}</main>
+					<main className={`${classes.main} ${classes.marginMobile}`}>
+						{children || <Loader />}
+					</main>
 				</>
 			)}
 		</>

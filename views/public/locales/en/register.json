@@ -7,6 +7,7 @@
 	"internal-server-error": "Internal Server Error",
 	"meta-title": "Register",
 	"password-invalid": "Password must contain a lowercase letter, an uppercase letter, a digit and be at least 6 characters long",
+	"passwords-do-not-match": "Passwords do not match",
 	"register": "Register",
 	"username-invalid": "Username must contain only letters and numbers",
 	"username-length-invalid": "Username must be between 3 and 63 characters long",

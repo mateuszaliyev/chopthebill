@@ -1,24 +1,29 @@
 // Material UI
-import { useMediaQuery } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+
+// Hooks
+import useWindowSize from "./hooks/useWindowSize";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-	logo: ({ bpsm }) => ({
+	logo: ({ height, width }) => ({
 		background: 'url("/icons/icon-no-bg.svg")',
 		backgroundPosition: "50% 50%",
 		backgroundRepeat: "no-repeat",
-		backgroundSize: bpsm ? "48rem" : "24rem",
+		backgroundSize: height > width ? `${width - 64}px` : `${height - 64}px`,
 		filter: `invert(1)`,
 		height: "100%",
+		left: "0",
 		opacity: "0.05",
+		position: "absolute",
+		top: "0",
+		width: "100%",
 	}),
 }));
 
 function Empty() {
-	const theme = useTheme();
-	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
-	const classes = useStyles({ bpsm });
+	const { height, width } = useWindowSize();
+	const classes = useStyles({ height, width });
 
 	return <div className={classes.logo} />;
 }

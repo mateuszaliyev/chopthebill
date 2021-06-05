@@ -46,7 +46,9 @@ CREATE DATABASE chopthebill
     CONNECTION LIMIT = -1;
 ```
 
-Import danych z pliku `data/backup/plain.sql` odbywa się poprzez polecenie `psql`. Po wykonaniu komendy może być konieczne wprowadzenie hasła dla podanego użytkownika.
+Tabele mogą zostać utworzone za pomocą skryptu SQL znajdującego się w pliku `data/db.sql` (z pominięciem pierwszeo polecenia, tworzącego samą bazę danych). Innym sposobem jest import danych z pliku `data/backup/plain.sql` odbywający się poprzez polecenie `psql`. Po wykonaniu komendy może być konieczne wprowadzenie hasła dla podanego użytkownika.
+
+> **Uwaga:** plik `data/baclup/plain.sql` nie jest aktualny, dlatego należy użyć skryptu z pliku `data/db.sql`.
 
 ```
 psql -U <nazwa_uzytkownika> -d <nazwa_bazy_danych> < <sciezka_do_pliku>
@@ -93,7 +95,9 @@ PGPORT=5432
 ```
 
 ### Adres serwera
-W pliku `views/config/index.js` znajdują się adresy URL serwera dla trybu *"development"* oraz *"production"*. Domyślnym adresem dla obu opcji jest `http://localhost:5000`. Aplikacja powinna działać prawidłowo, jeżeli korzysta się z niej na tym samym urządzeniu, na którym została uruchomiona. Aby móc korzystać z aplikacji używajac innego urządzenia (np. smartfonu) należy ustawić powyższe adresy na adres IP hosta tak, jak w poniższym przykładzie.
+W pliku `views/config/index.js` znajdują się adresy URL serwera dla trybu *"development"* oraz *"production"*. Domyślnym adresem jest [`http://localhost:5000`](http://localhost:5000/) dla trybu *"development"* oraz [`https://chopthebill.herokuapp.com`](https://chopthebill.herokuapp.com/) dla trybu *"production"*. Aplikacja powinna działać prawidłowo, jeżeli korzysta się z niej na tym samym urządzeniu, na którym została uruchomiona. Aby móc korzystać z aplikacji używajac innego urządzenia (np. smartfonu) należy ustawić powyższe adresy na adres IP hosta tak, jak w poniższym przykładzie.
+
+> **Uwaga:** Wsparcie dla PWA (Progressive Web App) jest wyłączone w trybie *"development"*.
 
 ```js
 const dev = process.env.NODE_ENV !== "production";
@@ -111,14 +115,14 @@ Uruchomienie aplikacji w trybie *"development"*, zoptymalizowanym do edycji kodu
 npm run dev
 ```
 
-Tworzenie zoptymalizowanej wersji aplikacji do trybu *"production"*.
+Tworzenie zoptymalizowanej wersji aplikacji Next.js do trybu *"production"*.
 
 ```
-npm run build
+npm run next-build
 ```
 
-Uruchomienie aplikacji w trybie *"production"*. Aplikacja powinna być najpierw zoptymalizowana za pomocą polecenia `npm run build`.
+Uruchomienie aplikacji lokalnie w trybie *"production"*. Aplikacja powinna być najpierw zoptymalizowana za pomocą polecenia `npm run build`.
 
 ```
-npm run start
+npm run start-local
 ```
