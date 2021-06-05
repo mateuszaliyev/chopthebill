@@ -112,8 +112,8 @@ const MemberList = ({members, getMembers}) => {
 		<AddMemberDialog onClose={handleClose} open={open} title={"TODO: add user"} addMember={addMember}/>
 		<List className={classes.root}>
 			{members.map((row) => (
-				<>
-					<ListItem key={row.id_user} button>
+				<div key={row.id_user}>
+					<ListItem button>
 						<ListItemText 
 							primary={ row.username }
 							secondary={ row.email }
@@ -127,7 +127,7 @@ const MemberList = ({members, getMembers}) => {
 						</ListItemSecondaryAction>
 					</ListItem>
 					<Divider variant="middle" component="li" light/>
-				</>
+				</div>
 			))}
 		</List>
 		</>

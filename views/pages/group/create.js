@@ -59,8 +59,9 @@ function GroupCreate() {
     const router = useRouter();
 	const classes = useStyles();
 	const { t } = useTranslation(["common", "groups"]);
-
+	
 	const { user, accessToken } = useContext(UserContext);
+	const [result, setResult] = useState("");
 	const [groupInfo, setGroupInfo] = useState({
 		name: "",
 		description: ""
@@ -93,6 +94,9 @@ function GroupCreate() {
 		if (res.ok)
 		{
 			const data = await res.json();
+			console.log("Data ", data);
+			setResult(data.result);
+			console.log("Result ", result);
 		}
 	};
 
@@ -153,6 +157,12 @@ function GroupCreate() {
 		setGroupMembers([...newMembers]);
 	}, [user]);
 
+	useEffect(() => {
+		if (result == "created") {
+			window.location = "/groups";
+		}
+	}, [result]);
+
 	return (
 		<Auth>
 			<Meta title={`${t("groups:meta-title")} | ChopTheBill`} />
@@ -184,12 +194,10 @@ function GroupCreate() {
 					<SearchUserDialog onClose={handleClose} open={open} title={"TODO: add user"} addMember={addMember}/>
 					<List>
 						{groupMembers.map((member, index) => (
-							<>
+							<div key={index}>
 								<ListItem
-									key={index}
 									className={classes.input}
 									label={`Member ${index}`}
-									fullWidth
 								>
 									<ListItemAvatar>
 										<Avatar
@@ -199,6 +207,12 @@ function GroupCreate() {
 									<ListItemText 
 										primary={member.name}
 									/>
+									<Tooltip title={`${t("groups:group-owner")}`}>
+										<Checkbox 
+											checked={member.owner ? true : false}
+											onChange={changeOwnership(index)}
+										/>
+									</Tooltip>
 									<ListItemSecondaryAction>
 										<Tooltip title={`${t("groups:delete-button")}`}>
 											<IconButton
@@ -210,12 +224,8 @@ function GroupCreate() {
 											</IconButton>
 										</Tooltip>
 									</ListItemSecondaryAction>
-									<Checkbox 
-										checked={member.owner ? "checked" : ""}
-										onChange={changeOwnership(index)}
-									/>
 								</ListItem>
-							</>
+							</div>
 						))}
 					</List>
 					<Button
@@ -225,8 +235,6 @@ function GroupCreate() {
 					>
 						{`${t("groups:create-group")}`}
 					</Button>
-				{console.log("dodaj ", groupMembers)}
-				{console.log("dodaj ", user)}
 				</form>
 			</Layout>
 		</Auth>

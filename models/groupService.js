@@ -72,6 +72,11 @@ async function createGroupService(name, description, members, authHeader) {
 	if (!token) {
 		return { error: "unauthorized", result: [] };
 	}
+	
+	if (!name && !description && !Array.isArray(members) && !members.length) {
+		return { error: "bad-request", result: [] }
+	}
+
 	const decoded = verifyToken(token, process.env.ACCESS_TOKEN_SECRET);
 	if (decoded) {
 		// get group id
@@ -91,8 +96,7 @@ async function createGroupService(name, description, members, authHeader) {
 			VALUES ${members.map(() => `(${groupId}, $${i++}, $${i++}, true)`).join(',')}`,
 			members.reduce((params, m) => params.concat([m.id_user, m.owner]), [])
 		);
-
-		return {error: "", result: []};
+		return {error: "", result: "created"};
 	}
 	return { error: "forbidden", result: [] };
 }
@@ -123,7 +127,7 @@ async function deleteGroupService(groupId, userId, authHeader) {
 				SET deleted = true
 				WHERE id_group = $1;`,
 				[groupId]);
-			return { error: "", result: []};
+			return { error: "", result: "deleted"};
 		}
 		return { error: "unauthorized", result: [] };
 	}

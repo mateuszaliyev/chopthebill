@@ -51,11 +51,10 @@ const GroupList = ({groups, refreshGroupList}) => {
 	return (
 		<>
 		<List className={classes.root}>
-			{groups.map((row) => (
-				<>
+			{groups.map((row, index) => (
+				<div key={row.id_group}>
 					<ListItem 
 						button
-						key={row.id_group}
 						underline="none"
 						color="inherit"
 						component={Link}
@@ -89,10 +88,16 @@ const GroupList = ({groups, refreshGroupList}) => {
 						</ListItemSecondaryAction>
 					</ListItem>
 					<Divider variant="middle" component="li" light/>
-				</>
+				</div>
 			))}
 		</List>
-		<GroupDeletionDialog onClose={handleClose} open={open} title={`Delete Group: ${groupName}`} groupId={groupId} refreshGroupList={refreshGroupList}/>
+		<GroupDeletionDialog 
+			onClose={handleClose}
+			open={open} 
+			setOpen={setOpen} 
+			title={`${t("groups:delete-group")}: ${groupName}`}
+			groupId={groupId} 
+			refreshGroupList={refreshGroupList}/>
 		</>
 	);
 }

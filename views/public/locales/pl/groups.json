@@ -10,5 +10,7 @@
 	"add-user": "Dodaj użytkownika",
 	"create-group": "Utwórz grupę",
 	"group-settings": "Ustawienia grupy",
-	"member-list": "Lista czlonków"
+	"member-list": "Lista czlonków",
+	"delete-group": "Usuń grupę",
+	"group-owner": "Właściciel grupy"
 }

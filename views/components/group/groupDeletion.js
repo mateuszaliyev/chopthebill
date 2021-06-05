@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function GroupDeletionDialog({ onClose, open, title, groupId, refreshGroupList }) {
+function GroupDeletionDialog({ onClose, open, setOpen, title, groupId, refreshGroupList }) {
 	const { t } = useTranslation("common", "group");
 	const classes = useStyles();
 
@@ -38,6 +38,9 @@ function GroupDeletionDialog({ onClose, open, title, groupId, refreshGroupList }
 		});
 		if (res.ok) {
 			const data = await res.json();
+			if (data.result == "deleted") {
+				setOpen(false);
+			}
 			refreshGroupList();
 		}
 	};
@@ -49,7 +52,7 @@ function GroupDeletionDialog({ onClose, open, title, groupId, refreshGroupList }
 					<Tooltip title={`Config`}>
                         <DeleteIcon />
 					</Tooltip>
-                    Delete
+                    {`${t("groups:delete-button")}`}
                 </Button>
 		</Dialog>
 	);
