@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
 		flexDirection: "column",
-		maxWidth: "24rem",
+		// maxWidth: "24rem",
 		minWidth: ({ width }) => (width >= 416 ? "24rem" : "100%"),
 	},
 	smallAvatar: {

@@ -178,7 +178,7 @@ function Layout({ children = null, title }) {
 					<SideMenu items={menuItems} />
 					<main className={`${classes.main} ${classes.marginDesktop}`}>
 						<Divider variant="middle" />
-						<Container className={classes.container} maxWidth="xl">
+						<Container className={classes.container} maxWidth="false">
 							{children || <Loader size="4rem" />}
 						</Container>
 					</main>
