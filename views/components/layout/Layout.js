@@ -13,7 +13,7 @@ import {
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import FolderSharedIcon from "@material-ui/icons/FolderShared";
-import HomeIcon from "@material-ui/icons/Home";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 const menuItems = [
 	{
 		href: "/dashboard",
-		icon: <HomeIcon />,
+		icon: <DashboardIcon />,
 		text: "dashboard",
 	},
 	{
@@ -178,7 +178,7 @@ function Layout({ children = null, title }) {
 					<SideMenu items={menuItems} />
 					<main className={`${classes.main} ${classes.marginDesktop}`}>
 						<Divider variant="middle" />
-						<Container className={classes.container} maxWidth="xl">
+						<Container className={classes.container} maxWidth={false}>
 							{children || <Loader size="4rem" />}
 						</Container>
 					</main>

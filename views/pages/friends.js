@@ -38,8 +38,8 @@ function Friends() {
 			method: "GET",
 			headers: {
 				Accept: "application/json",
-				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
 			},
 		});
 		if (res.ok) {

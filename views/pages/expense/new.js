@@ -51,9 +51,16 @@ function NewExpense() {
 			currency: "XXX",
 			date: new Date(),
 			description: "",
-			idGroup: null,
-			user: null,
+			group: {
+				id: null,
+				name: null,
+			},
 			title: "",
+			user: {
+				id: null,
+				username: null,
+				avatar: false,
+			},
 		},
 		obligations: [],
 		users: [],
@@ -71,7 +78,11 @@ function NewExpense() {
 				expense: {
 					...prevData.expense,
 					currency: user.language === "en" ? "GBP" : "PLN",
-					user,
+					user: {
+						avatar: user.avatar,
+						id: user.id,
+						username: user.username,
+					},
 				},
 			}));
 		}

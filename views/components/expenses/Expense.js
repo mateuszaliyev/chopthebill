@@ -7,10 +7,8 @@ import { useTranslation } from "next-i18next";
 import {
 	Badge,
 	Card,
-	CardActions,
 	CardContent,
 	CardHeader,
-	CardMedia,
 	Collapse,
 	Divider,
 	IconButton,
@@ -22,6 +20,7 @@ import {
 	Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import EditIcon from "@material-ui/icons/Edit";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 // Components
@@ -41,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: "auto",
 	},
 	expand: {
-		marginLeft: "auto",
 		transform: "rotate(0deg)",
 		transition: theme.transitions.create("transform", {
 			duration: theme.transitions.duration.shortest,
@@ -51,7 +49,8 @@ const useStyles = makeStyles((theme) => ({
 		transform: "rotate(180deg)",
 	},
 	root: {
-		maxWidth: "24rem",
+		display: "flex",
+		flexDirection: "column",
 		minWidth: ({ width }) => (width >= 416 ? "24rem" : "100%"),
 	},
 	smallAvatar: {
@@ -60,9 +59,14 @@ const useStyles = makeStyles((theme) => ({
 		height: "1.5rem",
 		width: "1.5rem",
 	},
+	total: {
+		display: "flex",
+		justifyContent: "space-between",
+		width: "100%",
+	},
 }));
 
-function Expense({ className, data }) {
+function Expense({ className, data, onEdit = null }) {
 	const { t } = useTranslation("common");
 
 	const [expanded, setExpanded] = useState(false);
@@ -75,6 +79,15 @@ function Expense({ className, data }) {
 	return (
 		<Card className={`${className} ${classes.root}`}>
 			<CardHeader
+				action={
+					onEdit && (
+						<Tooltip title={t("edit")}>
+							<IconButton onClick={onEdit}>
+								<EditIcon />
+							</IconButton>
+						</Tooltip>
+					)
+				}
 				avatar={<Avatar user={data.expense.user} />}
 				subheader={`${data.expense.date.toLocaleDateString(
 					router.locale
@@ -100,11 +113,16 @@ function Expense({ className, data }) {
 						: t("description")}
 				</Typography>
 			</CardContent>
-			{/* <CardMedia
-				image="https://madameedith.com/wp-content/uploads/2020/07/20200705_143623-1.jpg"
-				style={{ height: "13.5rem" }}
-			/> */}
-			<CardContent>
+			<CardContent className={classes.total}>
+				<Tooltip title={t("obligations")}>
+					<IconButton
+						className={`${classes.expand} ${expanded && classes.expanded}`}
+						edge="start"
+						onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
+					>
+						<ExpandMoreIcon />
+					</IconButton>
+				</Tooltip>
 				<Typography align="right" variant="h4">
 					<Currency
 						amount={data.expense.amount / 100}
@@ -112,17 +130,7 @@ function Expense({ className, data }) {
 					/>
 				</Typography>
 			</CardContent>
-			<CardActions>
-				<Tooltip title={t("obligations")}>
-					<IconButton
-						className={`${classes.expand} ${expanded && classes.expanded}`}
-						onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
-					>
-						<ExpandMoreIcon />
-					</IconButton>
-				</Tooltip>
-			</CardActions>
-			<Collapse in={expanded} timeout="auto" unmountOnExit>
+			<Collapse in={expanded} timeout="auto">
 				<List>
 					{data.obligations.map((obligation, index) => (
 						<ListItem key={index}>
@@ -133,7 +141,11 @@ function Expense({ className, data }) {
 										horizontal: "right",
 									}}
 									badgeContent={
-										<Link href={`/user/${obligation.creditor.id}`}>
+										<Link
+											color="inherit"
+											href={`/user/${obligation.creditor.id}`}
+											underline="none"
+										>
 											<Avatar
 												className={classes.smallAvatar}
 												user={obligation.creditor}
@@ -148,8 +160,24 @@ function Expense({ className, data }) {
 								</Badge>
 							</ListItemAvatar>
 							<ListItemText
-								primary={obligation.debtor.username}
-								secondary={`${obligation.creditor.username}`}
+								primary={
+									<Link
+										color="inherit"
+										href={`/user/${obligation.debtor.id}`}
+										underline="none"
+									>
+										{obligation.debtor.username}
+									</Link>
+								}
+								secondary={
+									<Link
+										color="inherit"
+										href={`/user/${obligation.creditor.id}`}
+										underline="none"
+									>
+										{obligation.creditor.username}
+									</Link>
+								}
 							/>
 							<div className={classes.amount}>
 								<Typography align="right" color="textSecondary" variant="body2">

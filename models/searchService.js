@@ -5,15 +5,57 @@ const { db } = require("../config/db");
 const { closest, distance } = require("fastest-levenshtein");
 
 async function searchService(query) {
-	const searchQuery = await db.query(
+	const expenseQuery = await db.query(
+		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name FROM public.expense e LEFT JOIN public.group g ON e.id_group = g.id_group`,
+		[]
+	);
+
+	const userQuery = await db.query(
 		`SELECT id_user, email, username, avatar, hide_email, last_seen FROM public."user" WHERE deleted = FALSE`,
 		[]
 	);
 
-	let results = [];
+	const results = {};
 
-	if (searchQuery.rows[0]) {
-		const users = searchQuery.rows.map((user) => {
+	if (expenseQuery.rows[0]) {
+		const expenses = expenseQuery.rows.map((expense) => {
+			const includes =
+				expense.title.toLowerCase().includes(query.toLowerCase()) ||
+				expense.description.toLowerCase().includes(query.toLowerCase());
+			let match = distance(
+				query.toLowerCase(),
+				closest(query.toLowerCase(), [
+					expense.title.toLowerCase,
+					expense.description.toLowerCase(),
+				])
+			);
+
+			if (includes && match > 1) {
+				match = 1;
+			}
+
+			return {
+				amount: expense.amount,
+				currency: expense.currency,
+				date: expense.date,
+				group: {
+					name: expense.name,
+				},
+				id: expense.id_expense,
+				match,
+				title: expense.title,
+			};
+		});
+
+		results.expenses = expenses
+			.filter((expense) => expense.match <= 3)
+			.sort((a, b) => {
+				return a.match - b.match;
+			});
+	}
+
+	if (userQuery.rows[0]) {
+		const users = userQuery.rows.map((user) => {
 			const includes =
 				(user.hide_email
 					? false
@@ -49,13 +91,11 @@ async function searchService(query) {
 			};
 		});
 
-		results = {
-			users: users
-				.filter((user) => user.match <= 3)
-				.sort((a, b) => {
-					return a.match - b.match;
-				}),
-		};
+		results.users = users
+			.filter((user) => user.match <= 3)
+			.sort((a, b) => {
+				return a.match - b.match;
+			});
 	}
 
 	return results;
