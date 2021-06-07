@@ -51,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
 		flexDirection: "column",
-		// maxWidth: "24rem",
 		minWidth: ({ width }) => (width >= 416 ? "24rem" : "100%"),
 	},
 	smallAvatar: {
@@ -131,7 +130,7 @@ function Expense({ className, data, onEdit = null }) {
 					/>
 				</Typography>
 			</CardContent>
-			<Collapse in={expanded} timeout="auto" unmountOnExit>
+			<Collapse in={expanded} timeout="auto">
 				<List>
 					{data.obligations.map((obligation, index) => (
 						<ListItem key={index}>

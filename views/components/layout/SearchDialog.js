@@ -1,9 +1,11 @@
 // React & Next
 import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 // Material UI
 import {
+	Avatar as MuiAvatar,
 	Box,
 	Dialog,
 	DialogContent,
@@ -21,11 +23,14 @@ import {
 	useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import CloseIcon from "@material-ui/icons/Close";
+import DoneIcon from "@material-ui/icons/Done";
 import SearchIcon from "@material-ui/icons/Search";
 
 // Components
 import Avatar from "../Avatar";
+import Currency from "../expenses/Currency";
 import Link from "../Link";
 
 // Config
@@ -52,7 +57,64 @@ const useStyles = makeStyles((theme) => ({
 	paper: {
 		display: "flex",
 	},
+	settled: {
+		backgroundColor: theme.palette.primary.main,
+	},
+	unsettled: {
+		backgroundColor: theme.palette.error.main,
+	},
 }));
+
+function ListItemExpense({ expense, onClose }) {
+	const classes = useStyles();
+	const router = useRouter();
+
+	return (
+		<ListItem
+			button
+			className={expense.description ? classes.padding : ""}
+			onClick={onClose}
+		>
+			<ListItemAvatar>
+				<MuiAvatar
+					className={expense.settled ? classes.settled : classes.unsettled}
+				>
+					{expense.settled ? <DoneIcon /> : <AttachMoneyIcon />}
+				</MuiAvatar>
+			</ListItemAvatar>
+			<ListItemText
+				primary={expense.title}
+				secondary={
+					<span>
+						{new Date(expense.date).toLocaleDateString(router.locale)}{" "}
+						{new Date(expense.date).toLocaleTimeString(router.locale, {
+							hour: "2-digit",
+							minute: "2-digit",
+						})}{" "}
+						- <Currency amount={expense.amount / 100} code={expense.currency} />
+					</span>
+				}
+			/>
+		</ListItem>
+	);
+}
+
+function ListItemUser({ onClose, user }) {
+	const classes = useStyles();
+
+	return (
+		<ListItem
+			button
+			className={user.email ? "" : classes.padding}
+			onClick={onClose}
+		>
+			<ListItemAvatar>
+				<Avatar user={user} />
+			</ListItemAvatar>
+			<ListItemText primary={user.username} secondary={user.email} />
+		</ListItem>
+	);
+}
 
 function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 	const { t } = useTranslation("common");
@@ -152,47 +214,60 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 						</Typography>
 					</Box>
 				)}
-				{results && results.users && results.users.length > 0 ? (
+				{results?.expenses?.length > 0 || results?.users?.length > 0 ? (
 					<List>
-						<ListSubheader>{t("users")}</ListSubheader>
-						{results.users.map((user) =>
-							redirect ? (
-								<Link
-									color="inherit"
-									href={`/user/${user.id}`}
-									key={user.id}
-									onClick={() => handleClose(null)}
-									underline="none"
-								>
-									<ListItem
-										button
-										className={user.email ? "" : classes.padding}
-									>
-										<ListItemAvatar>
-											<Avatar user={user} />
-										</ListItemAvatar>
-										<ListItemText
-											primary={user.username}
-											secondary={user.email}
+						{results?.users?.length > 0 && (
+							<>
+								<ListSubheader>{t("users")}</ListSubheader>
+								{results.users.map((user) =>
+									redirect ? (
+										<Link
+											color="inherit"
+											href={`/user/${user.id}`}
+											key={user.id}
+											onClick={() => handleClose(null)}
+											underline="none"
+										>
+											<ListItemUser
+												onClose={() => handleClose(null)}
+												user={user}
+											/>
+										</Link>
+									) : (
+										<ListItemUser
+											key={user.id}
+											onClose={() => handleClose(user)}
+											user={user}
 										/>
-									</ListItem>
-								</Link>
-							) : (
-								<ListItem
-									button
-									className={user.email ? "" : classes.padding}
-									key={user.id}
-									onClick={() => handleClose(user)}
-								>
-									<ListItemAvatar>
-										<Avatar user={user} />
-									</ListItemAvatar>
-									<ListItemText
-										primary={user.username}
-										secondary={user.email}
-									/>
-								</ListItem>
-							)
+									)
+								)}
+							</>
+						)}
+						{results?.expenses?.length > 0 && (
+							<>
+								<ListSubheader>{t("expenses")}</ListSubheader>
+								{results.expenses.map((expense) =>
+									redirect ? (
+										<Link
+											color="inherit"
+											href={`/expense/${expense.id}`}
+											key={expense.id}
+											onClick={() => handleClose(null)}
+											underline="none"
+										>
+											<ListItemExpense
+												expense={expense}
+												onClose={() => handleClose(null)}
+											/>
+										</Link>
+									) : (
+										<ListItemExpense
+											expense={expense}
+											onClose={() => handleClose(expense)}
+										/>
+									)
+								)}
+							</>
 						)}
 					</List>
 				) : (

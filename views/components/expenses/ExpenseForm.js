@@ -259,7 +259,6 @@ function ExpenseForm({ className, data, setData }) {
 					label={t("description")}
 					multiline
 					onChange={handleDescription}
-					required
 				/>
 				<MuiPickersUtilsProvider
 					locale={locales[router.locale]}

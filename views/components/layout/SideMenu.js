@@ -9,17 +9,13 @@ import {
 	ListItem,
 	ListItemIcon,
 	ListItemText,
-	ListSubheader,
 	Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 // Components
-import Language from "../Language";
 import Link from "../Link";
 import Logo from "../Logo";
-import PaletteButton from "../PaletteButton";
-import PaletteList from "../PaletteList";
 
 // Styles
 const useStyles = makeStyles((theme) => ({

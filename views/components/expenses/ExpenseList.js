@@ -42,11 +42,6 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	root: {
-		// alignItems: "start",
-		// display: "grid",
-		// gap: "1rem",
-		// gridTemplateColumns: "repeat(auto-fill, minmax(0, 24rem))",
-		// flexWrap: "wrap",
 		marginBottom: ({ bpmd }) => (bpmd ? "0" : "1rem"),
 		padding: ({ bpmd }) => (bpmd ? "1rem 0 0" : "1rem 1rem 0"),
 		width: "100%",
