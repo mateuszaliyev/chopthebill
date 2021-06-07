@@ -7,16 +7,18 @@ const authRoutes = require("./authRoutes");
 const avatarRoutes = require("./avatarRoutes");
 const expenseRoutes = require("./expenseRoutes");
 const friendRoutes = require("./friendRoutes");
+const groupRoutes = require("./groupRoutes");
+const obligationRoutes = require("./obligationRoutes");
 const searchRoutes = require("./searchRoutes");
 const userRoutes = require("./userRoutes");
-const obligationRoutes = require("./obligationRoutes");
 
 router.use("/", authRoutes);
 router.use("/avatars", avatarRoutes);
 router.use("/expenses", expenseRoutes);
 router.use("/friend", friendRoutes);
+router.use("/groups", groupRoutes);
+router.use("/obligations", obligationRoutes);
 router.use("/search", searchRoutes);
 router.use("/", userRoutes);
-router.use("/obligations", obligationRoutes);
 
 module.exports = router;
