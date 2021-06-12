@@ -18,7 +18,7 @@ function AddFriendButton({ color = "inherit", edge = false, id, onAddFriend }) {
 	const { accessToken } = useContext(UserContext);
 
 	const addFriend = async () => {
-		const res = await fetch(`${host}/friend`, {
+		const res = await fetch(`${host}/friends`, {
 			method: "POST",
 			headers: {
 				Accept: "application/json",

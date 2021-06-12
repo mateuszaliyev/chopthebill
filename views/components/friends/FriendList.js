@@ -92,7 +92,7 @@ function FriendList({ friends, setFriends }) {
 	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
 
 	const addFriend = async (user) => {
-		const res = await fetch(`${host}/friend`, {
+		const res = await fetch(`${host}/friends`, {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
@@ -195,10 +195,12 @@ function FriendList({ friends, setFriends }) {
 				<ListItemText>{t("friends:add-friend")}</ListItemText>
 			</ListItem>
 			<SearchDialog
+				closeButtonTooltip={t("cancel")}
 				onClose={handleSearchDialogClose}
 				open={searchDialogOpen}
 				placeholder={t("search-users")}
 				title={t("friends:add-friend")}
+				users
 			/>
 		</List>
 	);

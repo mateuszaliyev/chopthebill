@@ -15,7 +15,7 @@ const userRoutes = require("./userRoutes");
 router.use("/", authRoutes);
 router.use("/avatars", avatarRoutes);
 router.use("/expenses", expenseRoutes);
-router.use("/friend", friendRoutes);
+router.use("/friends", friendRoutes);
 router.use("/groups", groupRoutes);
 router.use("/obligations", obligationRoutes);
 router.use("/search", searchRoutes);

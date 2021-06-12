@@ -34,7 +34,7 @@ function Friends() {
 	const { accessToken } = useContext(UserContext);
 
 	const getFriends = async () => {
-		const res = await fetch(`${host}/friend`, {
+		const res = await fetch(`${host}/friends`, {
 			method: "GET",
 			headers: {
 				Accept: "application/json",
@@ -49,7 +49,11 @@ function Friends() {
 		}
 	};
 
-	useEffect(() => getFriends(), [accessToken]);
+	useEffect(() => {
+		if (accessToken) {
+			getFriends();
+		}
+	}, [accessToken]);
 
 	return (
 		<Auth>

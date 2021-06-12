@@ -54,7 +54,7 @@ function UnfriendButton({
 		setOpen(false);
 
 		if (id) {
-			const res = await fetch(`${host}/friend`, {
+			const res = await fetch(`${host}/friends`, {
 				method: "DELETE",
 				headers: {
 					Accept: "application/json",
@@ -82,7 +82,7 @@ function UnfriendButton({
 				<DialogTitle>{t("friends:unfriend-title", { username })}</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						{t("friends:unfriend-text", { username })}
+						{t("friends:unfriend-details", { username })}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
