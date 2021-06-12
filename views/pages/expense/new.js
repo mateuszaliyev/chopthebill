@@ -1,5 +1,6 @@
 // React & Next
 import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -12,7 +13,11 @@ import Auth from "../../components/auth/Auth";
 import Expense from "../../components/expenses/Expense";
 import ExpenseForm from "../../components/expenses/ExpenseForm";
 import Layout from "../../components/layout/Layout";
+import Loader from "../../components/Loader";
 import Meta from "../../components/Meta";
+
+// Config
+import { host } from "../../config";
 
 // Contexts
 import { UserContext } from "../../components/auth/User";
@@ -20,7 +25,11 @@ import { UserContext } from "../../components/auth/User";
 export async function getServerSideProps({ locale }) {
 	return {
 		props: {
-			...(await serverSideTranslations(locale, ["common", "expenses"])),
+			...(await serverSideTranslations(locale, [
+				"common",
+				"expenses",
+				"groups",
+			])),
 		},
 	};
 }
@@ -42,9 +51,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NewExpense() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation(["common", "expenses"]);
 
-	const { user } = useContext(UserContext);
+	const { accessToken, user } = useContext(UserContext);
 	const [data, setData] = useState({
 		expense: {
 			amount: 0,
@@ -65,14 +74,55 @@ function NewExpense() {
 		obligations: [],
 		users: [],
 	});
+	const [loading, setLoading] = useState(true);
+
+	const router = useRouter();
+	const { g } = router.query;
 
 	const theme = useTheme();
 	const bplg = useMediaQuery(theme.breakpoints.up("lg"));
 	const bpmd = useMediaQuery(theme.breakpoints.up("md"));
 	const classes = useStyles({ bpmd, bplg });
 
+	const authorize = async () => {
+		const res = await fetch(`${host}/groups/auth/${g}`, {
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
+			},
+		});
+		if (res.ok) {
+			const { id, name } = await res.json();
+			setData((prevData) => ({
+				...prevData,
+				expense: {
+					...prevData.expense,
+					group: {
+						id,
+						name,
+					},
+				},
+			}));
+			setLoading(false);
+		} else {
+			router.replace("/groups");
+		}
+	};
+
 	useEffect(() => {
-		if (user) {
+		if (g) {
+			if (accessToken) {
+				authorize();
+			}
+		} else {
+			setLoading(false);
+		}
+	}, [accessToken]);
+
+	useEffect(() => {
+		if (data.users.length === 0 && user.username) {
 			setData((prevData) => ({
 				...prevData,
 				expense: {
@@ -84,19 +134,45 @@ function NewExpense() {
 						username: user.username,
 					},
 				},
+				users: [
+					...prevData.users,
+					{
+						avatar: user.avatar,
+						amount: 0,
+						creditor: true,
+						id: user.id,
+						percentage: 0,
+						selected: false,
+						share: 0,
+						textField: {
+							amount: (0).toFixed(2),
+							percentage: (0).toFixed(2),
+							share: 0,
+						},
+						username: user.username,
+					},
+				],
 			}));
 		}
 	}, [user]);
 
 	return (
 		<Auth>
-			<Meta title={`${t("new-expense")} | ChopTheBill`}></Meta>
-			<Layout title={t("new-expense")}>
-				<div className={classes.root}>
-					<ExpenseForm className={classes.item} data={data} setData={setData} />
-					{bpmd && <Divider flexItem orientation="vertical" />}
-					{user && <Expense data={data} />}
-				</div>
+			<Meta title={`${t("expenses:new-expense")} | ChopTheBill`}></Meta>
+			<Layout title={t("expenses:new-expense")}>
+				{loading ? (
+					<Loader size="4rem" />
+				) : (
+					<div className={classes.root}>
+						<ExpenseForm
+							className={classes.item}
+							data={data}
+							setData={setData}
+						/>
+						{bpmd && <Divider flexItem orientation="vertical" />}
+						{user && <Expense data={data} />}
+					</div>
+				)}
 			</Layout>
 		</Auth>
 	);

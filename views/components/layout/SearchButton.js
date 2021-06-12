@@ -30,11 +30,13 @@ function SearchButton() {
 				</IconButton>
 			</Tooltip>
 			<SearchDialog
+				expenses
 				onClose={handleClose}
 				open={open}
 				placeholder={t("search-anything")}
 				redirect
 				title={t("search")}
+				users
 			/>
 		</>
 	);

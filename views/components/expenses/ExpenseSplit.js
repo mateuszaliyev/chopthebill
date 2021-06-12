@@ -1,5 +1,6 @@
 // React & Next
 import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 // Material UI
@@ -19,6 +20,7 @@ import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 
 // Components
 import ExpenseSplitList from "./ExpenseSplitList";
+import FriendDialog from "../friends/FriendDialog";
 import SearchDialog from "../layout/SearchDialog";
 
 // Contexts
@@ -50,16 +52,20 @@ function TabPanel({ children, index, value }) {
 function ExpenseSplit({ creditors = false, data, methods, setData }) {
 	const { t } = useTranslation(["common", "expenses"]);
 
+	const [friendDialogOpen, setFriendDialogOpen] = useState(false);
+	const [memberDialogOpen, setMemberDialogOpen] = useState(false);
 	const [searchDialogOpen, setSearchDialogOpen] = useState(false);
 	const [selectedAll, setSelectedAll] = useState(false);
 	const [value, setValue] = useState(0);
+
+	const { palette } = useContext(ThemeContext);
+	const router = useRouter();
+	const { g } = router.query;
 
 	const { width } = useWindowSize();
 	const bpxl = width >= 480;
 	const bpsm = width >= 600;
 	const classes = useStyles({ bpsm });
-
-	const { palette } = useContext(ThemeContext);
 
 	const handleChange = (e, newValue) => {
 		setValue(newValue);
@@ -97,7 +103,7 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 		}));
 	};
 
-	const handleSearchDialogClose = (user) => {
+	const handleDialogClose = (user) => {
 		if (user) {
 			let exists = false;
 
@@ -132,6 +138,8 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 				}));
 			}
 		}
+		setFriendDialogOpen(false);
+		setMemberDialogOpen(false);
 		setSearchDialogOpen(false);
 	};
 
@@ -194,6 +202,8 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 						creditors={creditors}
 						data={data}
 						method={method}
+						onFriendAdd={() => setFriendDialogOpen(true)}
+						onMemberAdd={() => setMemberDialogOpen(true)}
 						onUserAdd={() => setSearchDialogOpen(true)}
 						selectedAll={selectedAll}
 						setData={setData}
@@ -201,11 +211,14 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 					/>
 				</TabPanel>
 			))}
+			<FriendDialog onClose={handleDialogClose} open={friendDialogOpen} />
 			<SearchDialog
-				onClose={handleSearchDialogClose}
+				closeButtonTooltip={t("cancel")}
+				onClose={handleDialogClose}
 				open={searchDialogOpen}
 				placeholder={t("search-users")}
 				title={t("add-user")}
+				users
 			/>
 		</Paper>
 	);

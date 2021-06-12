@@ -1,5 +1,5 @@
 // React & Next
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
@@ -26,10 +26,13 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 // Components
 import Avatar from "../Avatar";
 import Currency from "./Currency";
+import Link from "../Link";
+
+// Contexts
+import { UserContext } from "../auth/User";
 
 // Hooks
 import useWindowSize from "../hooks/useWindowSize";
-import Link from "../Link";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -51,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
 		flexDirection: "column",
+		maxWidth: "24rem",
 		minWidth: ({ width }) => (width >= 416 ? "24rem" : "100%"),
 	},
 	smallAvatar: {
@@ -67,9 +71,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Expense({ className, data, onEdit = null }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation(["common", "expenses"]);
 
 	const [expanded, setExpanded] = useState(false);
+
+	const { user } = useContext(UserContext);
 
 	const router = useRouter();
 
@@ -88,19 +94,43 @@ function Expense({ className, data, onEdit = null }) {
 						</Tooltip>
 					)
 				}
-				avatar={<Avatar user={data.expense.user} />}
+				avatar={
+					<Link
+						color="inherit"
+						href={`/user/${data.expense.user.id}`}
+						underline="none"
+					>
+						<Avatar user={data.expense.user} />
+					</Link>
+				}
 				subheader={`${data.expense.date.toLocaleDateString(
 					router.locale
 				)} ${data.expense.date.toLocaleTimeString(router.locale, {
 					hour: "2-digit",
 					minute: "2-digit",
 				})}`}
-				title={data.expense.user.username}
+				title={
+					data.expense.group.id !== null ? (
+						<>
+							<Link color="inherit" href={`/group/${data.expense.group.id}`}>
+								{data.expense.group.name}
+							</Link>
+							{" / "}
+							<Link color="inherit" href={`/user/${data.expense.group.id}`}>
+								{data.expense.user.username}
+							</Link>
+						</>
+					) : (
+						<Link color="inherit" href={`/group/${data.expense.group.id}`}>
+							{data.expense.user.username}
+						</Link>
+					)
+				}
 			/>
 			<Divider variant="middle" />
 			<CardContent>
 				<Typography gutterBottom variant="h5">
-					{data.expense.title || t("new-expense")}
+					{data.expense.title || t("expenses:new-expense")}
 				</Typography>
 				<Typography color="textSecondary">
 					{data.expense.description
@@ -133,7 +163,7 @@ function Expense({ className, data, onEdit = null }) {
 			<Collapse in={expanded} timeout="auto">
 				<List>
 					{data.obligations.map((obligation, index) => (
-						<ListItem key={index}>
+						<ListItem button={obligation.creditor.id === user.id} key={index}>
 							<ListItemAvatar>
 								<Badge
 									anchorOrigin={{
@@ -154,7 +184,11 @@ function Expense({ className, data, onEdit = null }) {
 									}
 									overlap="circle"
 								>
-									<Link href={`/user/${obligation.debtor.id}`}>
+									<Link
+										color="inherit"
+										href={`/user/${obligation.debtor.id}`}
+										underline="none"
+									>
 										<Avatar user={obligation.debtor} />
 									</Link>
 								</Badge>

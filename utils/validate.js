@@ -115,9 +115,24 @@ function settingsValidate({ email, username, hideEmail, language, theme }) {
 	return issues;
 }
 
+function expenseValidate(title, description) {
+	const issues = [];
+
+	if (!validator.isLength(title, { min: 3, max: 63 })) {
+		issues.push("title-length-invalid");
+	}
+
+	if (!validator.isLength(description, { max: 255 })) {
+		issues.push("description-length-invalid");
+	}
+
+	return issues;
+}
+
 module.exports = {
 	registerValidate,
 	loginValidate,
 	passwordValidate,
 	settingsValidate,
+	expenseValidate,
 };

@@ -6,6 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 // Components
 import Auth from "../components/auth/Auth";
 import Empty from "../components/Empty";
+import ExpenseAddButton from "../components/expenses/ExpenseAddButton";
 import ExpenseList from "../components/expenses/ExpenseList";
 import Layout from "../components/layout/Layout";
 import Loader from "../components/Loader";
@@ -57,7 +58,11 @@ function Expenses() {
 		setLoading(false);
 	};
 
-	useEffect(() => getExpenses(), [accessToken]);
+	useEffect(() => {
+		if (accessToken) {
+			getExpenses();
+		}
+	}, [accessToken]);
 
 	return (
 		<Auth>
@@ -69,6 +74,7 @@ function Expenses() {
 					<>
 						{expenses.length === 0 && <Empty />}
 						<ExpenseList expenses={expenses} setExpenses={setExpenses} />
+						<ExpenseAddButton />
 					</>
 				)}
 			</Layout>

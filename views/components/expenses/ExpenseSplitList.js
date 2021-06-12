@@ -1,4 +1,5 @@
 // React & Next
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 // Material UI
@@ -23,6 +24,8 @@ import AddIcon from "@material-ui/icons/Add";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import RemoveIcon from "@material-ui/icons/Remove";
 
 // Components
@@ -34,6 +37,13 @@ import useWindowSize from "../hooks/useWindowSize";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
+	addItem: {
+		paddingBottom: "1rem",
+		paddingTop: "1rem",
+	},
+	addItemAvatar: {
+		marginLeft: ({ bpxl }) => (bpxl ? "3.5rem" : "0"),
+	},
 	expand: {
 		transform: "rotate(0deg)",
 		transition: theme.transitions.create("transform", {
@@ -66,6 +76,8 @@ function ExpenseSplitList({
 	creditors,
 	data,
 	method,
+	onFriendAdd,
+	onMemberAdd,
 	onUserAdd,
 	selectedAll,
 	setData,
@@ -76,31 +88,12 @@ function ExpenseSplitList({
 	const { width } = useWindowSize();
 	const bpxl = width >= 480;
 	const bpsm = width >= 600;
-	const classes = useStyles({ bpsm });
+	const classes = useStyles({ bpsm, bpxl });
+
+	const router = useRouter();
+	const { g } = router.query;
 
 	const differenceAmount = () => data.expense.amount - totalAmount();
-
-	const handleDelete = () => {
-		const newUsers = data.users.filter(
-			(user) =>
-				(creditors === user.creditor && !user.selected) ||
-				creditors !== user.creditor
-		);
-		setSelectedAll(false);
-		setData((prevData) => ({
-			...prevData,
-			users: newUsers,
-		}));
-	};
-
-	const handleDeleteIndex = (userIndex) => {
-		const newUsers = data.users.filter((user, index) => userIndex !== index);
-		setSelectedAll(false);
-		setData((prevData) => ({
-			...prevData,
-			users: newUsers,
-		}));
-	};
 
 	const handleInputAmount = (id, amountField) => {
 		const amount = parseInt(100 * parseFloat(amountField || 0));
@@ -109,11 +102,17 @@ function ExpenseSplitList({
 				return {
 					...user,
 					amount,
-					percentage: (100 * amount) / data.expense.amount,
+					percentage:
+						data.expense.amount === 0
+							? 0
+							: (100 * amount) / data.expense.amount,
 					textField: {
 						...user.textField,
 						amount: amount / 100,
-						percentage: (100 * amount) / data.expense.amount,
+						percentage:
+							data.expense.amount === 0
+								? 0
+								: (100 * amount) / data.expense.amount,
 					},
 				};
 			}
@@ -137,7 +136,10 @@ function ExpenseSplitList({
 					textField: {
 						...user.textField,
 						amount: amount / 100,
-						percentage: (100 * amount) / data.expense.amount,
+						percentage:
+							data.expense.amount === 0
+								? 0
+								: (100 * amount) / data.expense.amount,
 					},
 				};
 			}
@@ -171,11 +173,17 @@ function ExpenseSplitList({
 				const newUser = {
 					...user,
 					amount,
-					percentage: (100 * amount) / data.expense.amount,
+					percentage:
+						data.expense.amount === 0
+							? 0
+							: (100 * amount) / data.expense.amount,
 					share,
 					textField: {
 						amount: amount / 100,
-						percentage: (100 * amount) / data.expense.amount,
+						percentage:
+							data.expense.amount === 0
+								? 0
+								: (100 * amount) / data.expense.amount,
 						share,
 					},
 				};
@@ -211,6 +219,28 @@ function ExpenseSplitList({
 				? { ...user, creditor: !creditors, selected: false }
 				: user
 		);
+		setSelectedAll(false);
+		setData((prevData) => ({
+			...prevData,
+			users: newUsers,
+		}));
+	};
+
+	const handleRemove = () => {
+		const newUsers = data.users.filter(
+			(user) =>
+				(creditors === user.creditor && !user.selected) ||
+				creditors !== user.creditor
+		);
+		setSelectedAll(false);
+		setData((prevData) => ({
+			...prevData,
+			users: newUsers,
+		}));
+	};
+
+	const handleRemoveIndex = (userIndex) => {
+		const newUsers = data.users.filter((user, index) => userIndex !== index);
 		setSelectedAll(false);
 		setData((prevData) => ({
 			...prevData,
@@ -266,7 +296,7 @@ function ExpenseSplitList({
 				data.users.filter((user) => creditors === user.creditor).length > 0 && (
 					<ListItem divider>
 						<ListItemIcon>
-							<Tooltip title="Select all">
+							<Tooltip title={t("select-all")}>
 								<Checkbox
 									checked={selectedAll}
 									color="primary"
@@ -294,7 +324,7 @@ function ExpenseSplitList({
 							)}
 							<Button
 								className={classes.red}
-								onClick={handleDelete}
+								onClick={handleRemove}
 								startIcon={<RemoveIcon />}
 							>
 								{t("remove")}
@@ -312,7 +342,7 @@ function ExpenseSplitList({
 							>
 								{bpxl && (
 									<ListItemIcon>
-										<Tooltip title="Select">
+										<Tooltip title={t("select")}>
 											<Checkbox
 												checked={user.selected}
 												color="primary"
@@ -419,7 +449,7 @@ function ExpenseSplitList({
 											<Tooltip title={t("remove")}>
 												<IconButton
 													className={classes.red}
-													onClick={() => handleDeleteIndex(index)}
+													onClick={() => handleRemoveIndex(index)}
 												>
 													<RemoveIcon />
 												</IconButton>
@@ -480,18 +510,35 @@ function ExpenseSplitList({
 						</div>
 					)
 			)}
-			<ListItem
-				button
-				onClick={onUserAdd}
-				style={{ paddingBottom: "1rem", paddingTop: "1rem" }}
-			>
-				<ListItemAvatar style={{ marginLeft: bpxl ? "3.5rem" : "0" }}>
-					<MuiAvatar>
-						<AddIcon />
-					</MuiAvatar>
-				</ListItemAvatar>
-				<ListItemText>{t("add")}</ListItemText>
-			</ListItem>
+			{g ? (
+				<ListItem button className={classes.addItem} onClick={onMemberAdd}>
+					<ListItemAvatar className={classes.addItemAvatar}>
+						<MuiAvatar>
+							<GroupAddIcon />
+						</MuiAvatar>
+					</ListItemAvatar>
+					<ListItemText>{t("groups:add-member")}</ListItemText>
+				</ListItem>
+			) : (
+				<>
+					<ListItem button className={classes.addItem} onClick={onUserAdd}>
+						<ListItemAvatar className={classes.addItemAvatar}>
+							<MuiAvatar>
+								<AddIcon />
+							</MuiAvatar>
+						</ListItemAvatar>
+						<ListItemText>{t("add-user")}</ListItemText>
+					</ListItem>
+					<ListItem button className={classes.addItem} onClick={onFriendAdd}>
+						<ListItemAvatar className={classes.addItemAvatar}>
+							<MuiAvatar>
+								<PersonAddIcon />
+							</MuiAvatar>
+						</ListItemAvatar>
+						<ListItemText>{t("add-friend")}</ListItemText>
+					</ListItem>
+				</>
+			)}
 			{data.users.filter((user) => creditors === user.creditor).length > 0 && (
 				<>
 					<Divider />

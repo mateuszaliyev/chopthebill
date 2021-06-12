@@ -102,6 +102,10 @@ function ExpenseForm({ className, data, setData }) {
 	const { t } = useTranslation("common");
 
 	const [discardOpen, setDiscardOpen] = useState(false);
+	const [helperText, setHelperText] = useState({
+		title: null,
+		description: null,
+	});
 	const [snackbarSeverity, setSnackbarSeverity] = useState("error");
 	const [snackbarText, setSnackbarText] = useState(null);
 
@@ -198,8 +202,19 @@ function ExpenseForm({ className, data, setData }) {
 			if (res.ok) {
 				router.push("/expenses");
 			} else {
-				setSnackbarSeverity("error");
-				setSnackbarText(`${t("something-went-wrong")}. ${t("try-again")}.`);
+				if (res.status >= 500) {
+					setSnackbarSeverity("error");
+					setSnackbarText(`${t("something-went-wrong")}. ${t("try-again")}.`);
+				} else {
+					const error = await res.json();
+					error.forEach((err) => {
+						const key = err.split("-")[0];
+						setHelperText((prevHelperText) => ({
+							...prevHelperText,
+							[key]: t(`expenses:${err}`),
+						}));
+					});
+				}
 			}
 		}
 	};
@@ -254,8 +269,16 @@ function ExpenseForm({ className, data, setData }) {
 				className={`${className} ${classes.root}`}
 				onSubmit={(e) => e.preventDefault()}
 			>
-				<TextField label={t("title")} onChange={handleTitle} required />
 				<TextField
+					error={Boolean(helperText.title)}
+					helperText={helperText.title}
+					label={t("title")}
+					onChange={handleTitle}
+					required
+				/>
+				<TextField
+					error={Boolean(helperText.description)}
+					helperText={helperText.description}
 					label={t("description")}
 					multiline
 					onChange={handleDescription}
@@ -299,13 +322,17 @@ function ExpenseForm({ className, data, setData }) {
 						</Select>
 					</FormControl>
 				</div>
-				<ExpenseSplit
-					creditors
-					data={data}
-					methods={methods}
-					setData={setData}
-				/>
-				<ExpenseSplit data={data} methods={methods} setData={setData} />
+				{data.expense.amount > 0 && (
+					<>
+						<ExpenseSplit
+							creditors
+							data={data}
+							methods={methods}
+							setData={setData}
+						/>
+						<ExpenseSplit data={data} methods={methods} setData={setData} />
+					</>
+				)}
 				<div className={classes.buttons}>
 					<Button
 						className={classes.red}

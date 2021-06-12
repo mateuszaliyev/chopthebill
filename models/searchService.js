@@ -4,10 +4,10 @@ const { db } = require("../config/db");
 // Utils
 const { closest, distance } = require("fastest-levenshtein");
 
-async function searchService(query) {
+async function searchService(decoded, query) {
 	const expenseQuery = await db.query(
-		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name FROM public.expense e LEFT JOIN public.group g ON e.id_group = g.id_group`,
-		[]
+		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name FROM public.expense e LEFT JOIN public.group g ON e.id_group = g.id_group JOIN public.obligation o ON e.id_expense = o.id_expense WHERE o.id_user_creditor = $1 OR o.id_user_debtor = $1 GROUP BY e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name`,
+		[decoded.id]
 	);
 
 	const userQuery = await db.query(
@@ -22,10 +22,11 @@ async function searchService(query) {
 			const includes =
 				expense.title.toLowerCase().includes(query.toLowerCase()) ||
 				expense.description.toLowerCase().includes(query.toLowerCase());
+
 			let match = distance(
 				query.toLowerCase(),
 				closest(query.toLowerCase(), [
-					expense.title.toLowerCase,
+					expense.title.toLowerCase(),
 					expense.description.toLowerCase(),
 				])
 			);

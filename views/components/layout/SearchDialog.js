@@ -84,16 +84,14 @@ function ListItemExpense({ expense, onClose }) {
 			</ListItemAvatar>
 			<ListItemText
 				primary={expense.title}
+				primaryTypographyProps={{ noWrap: true }}
 				secondary={
 					<span>
-						{new Date(expense.date).toLocaleDateString(router.locale)}{" "}
-						{new Date(expense.date).toLocaleTimeString(router.locale, {
-							hour: "2-digit",
-							minute: "2-digit",
-						})}{" "}
-						- <Currency amount={expense.amount / 100} code={expense.currency} />
+						{new Date(expense.date).toLocaleDateString(router.locale)} -{" "}
+						<Currency amount={expense.amount / 100} code={expense.currency} />
 					</span>
 				}
+				secondaryTypographyProps={{ noWrap: true }}
 			/>
 		</ListItem>
 	);
@@ -111,12 +109,26 @@ function ListItemUser({ onClose, user }) {
 			<ListItemAvatar>
 				<Avatar user={user} />
 			</ListItemAvatar>
-			<ListItemText primary={user.username} secondary={user.email} />
+			<ListItemText
+				primary={user.username}
+				primaryTypographyProps={{ noWrap: true }}
+				secondary={user.email}
+				secondaryTypographyProps={{ noWrap: true }}
+			/>
 		</ListItem>
 	);
 }
 
-function SearchDialog({ onClose, open, placeholder, redirect, title }) {
+function SearchDialog({
+	closeButtonTooltip = null,
+	expenses = false,
+	onClose,
+	open,
+	placeholder,
+	redirect,
+	title,
+	users = false,
+}) {
 	const { t } = useTranslation("common");
 
 	const { accessToken } = useContext(UserContext);
@@ -150,8 +162,8 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 			method: "POST",
 			headers: {
 				Accept: "application/json",
-				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
 				query: input,
@@ -159,6 +171,15 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 		});
 		if (res.ok) {
 			const data = await res.json();
+
+			if (!expenses) {
+				delete data.expenses;
+			}
+
+			if (!users) {
+				delete data.users;
+			}
+
 			setResults(data);
 			setSubmitted(true);
 		}
@@ -180,7 +201,7 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 		>
 			<DialogTitle>
 				{title}
-				<Tooltip title={t("close")}>
+				<Tooltip title={closeButtonTooltip || t("close")}>
 					<IconButton
 						className={classes.closeButton}
 						onClick={() => handleClose(null)}
@@ -216,7 +237,7 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 				)}
 				{results?.expenses?.length > 0 || results?.users?.length > 0 ? (
 					<List>
-						{results?.users?.length > 0 && (
+						{users && results?.users?.length > 0 && (
 							<>
 								<ListSubheader>{t("users")}</ListSubheader>
 								{results.users.map((user) =>
@@ -243,7 +264,7 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 								)}
 							</>
 						)}
-						{results?.expenses?.length > 0 && (
+						{expenses && results?.expenses?.length > 0 && (
 							<>
 								<ListSubheader>{t("expenses")}</ListSubheader>
 								{results.expenses.map((expense) =>
@@ -263,6 +284,7 @@ function SearchDialog({ onClose, open, placeholder, redirect, title }) {
 									) : (
 										<ListItemExpense
 											expense={expense}
+											key={expense.id}
 											onClose={() => handleClose(expense)}
 										/>
 									)

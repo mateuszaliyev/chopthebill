@@ -1,11 +1,17 @@
 {
 	"creditors": "Wierzyciele",
 	"debtors": "Dłużnicy",
+	"description-length-invalid": "Opis wydatku nie może być dłuższy niż 255 znaków",
 	"equal-split": "Równy podział",
+	"new-expense": "Nowy wydatek",
+	"notify": "Powiadom",
 	"paid": "Zapłacono",
+	"settle": "Ureguluj",
+	"settled": "Uregulowane",
 	"split-amount": "Kwota",
 	"split-percentage": "Procent",
 	"split-share": "Część",
+	"title-length-invalid": "Nazwa wydatku musi zawierać od 3 do 63 znaków",
 	"to-pay": "Do zapłaty",
 	"toggle-credtor": "Przełącz wierzyciel/dłużnik"
 }

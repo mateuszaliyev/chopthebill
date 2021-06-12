@@ -1,11 +1,17 @@
 {
 	"creditors": "Creditors",
 	"debtors": "Debtors",
+	"description-length-invalid": "Expense description must not exceed length of 255 characters",
 	"equal-split": "Equal split",
+	"new-expense": "New expense",
+	"notify": "Notify",
 	"paid": "Paid",
+	"settle": "Settle",
+	"settled": "Settled",
 	"split-amount": "Amount",
 	"split-percentage": "Percentage",
 	"split-share": "Share",
+	"title-length-invalid": "Expense title must be between 3 and 63 characters long",
 	"to-pay": "To pay",
 	"toggle-creditor": "Toggle creditor/debtor"
 }

@@ -104,11 +104,13 @@ function MoreButton({ ...props }) {
 				)}
 			</Menu>
 			<SearchDialog
+				expenses
 				onClose={handleSearchDialog}
 				open={openDialog.search}
 				placeholder={t("search-anything")}
 				redirect
 				title={t("search")}
+				users
 			/>
 			<NotificationDialog
 				onClose={handleNotificationDialog}

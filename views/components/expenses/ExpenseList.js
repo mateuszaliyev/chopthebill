@@ -8,7 +8,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // Components
 import Expense from "./Expense";
-import ExpenseAddButton from "./ExpenseAddButton";
 
 // Contexts
 import { UserContext } from "../auth/User";
@@ -17,6 +16,8 @@ import { UserContext } from "../auth/User";
 import Masonry from "react-masonry-css";
 
 const breakpoints = {
+	816: 1,
+	960: 2,
 	1088: 1,
 	1488: 2,
 	1888: 3,
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function ExpenseList({ expenses, setExpenses }) {
+function ExpenseList({ expenses }) {
 	const { user } = useContext(UserContext);
 	const router = useRouter();
 
@@ -75,7 +76,6 @@ function ExpenseList({ expenses, setExpenses }) {
 							}
 						/>
 					))}
-				<ExpenseAddButton />
 			</Masonry>
 		</div>
 	);

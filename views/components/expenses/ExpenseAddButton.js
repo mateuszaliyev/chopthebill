@@ -18,14 +18,18 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function ExpenseAddButton() {
+function ExpenseAddButton({ groupId = null }) {
 	const { t } = useTranslation("common");
 
 	const classes = useStyles();
 
 	return (
-		<Link color="inherit" href="/expense/new" underline="none">
-			<Tooltip title={t("add")}>
+		<Link
+			color="inherit"
+			href={`/expense/new${groupId !== null ? `?g=${groupId}` : ""}`}
+			underline="none"
+		>
+			<Tooltip title={t("expenses:new-expense")}>
 				<Fab className={classes.fab} color="primary">
 					<AddIcon />
 				</Fab>
