@@ -5,10 +5,10 @@ import { useRouter } from "next/router";
 
 // Material UI
 import {
-	Paper,
 	IconButton,
 	Menu,
 	MenuItem,
+	Paper,
 	Typography,
 } from "@material-ui/core/";
 import { makeStyles } from "@material-ui/core/styles";
@@ -56,15 +56,14 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile({ setUser, user }) {
 	const { t } = useTranslation("common");
-	const router = useRouter();
+
+	const [avatarAnchor, setAvatarAnchor] = useState(null);
 
 	const { user: loggedUser, accessToken } = useContext(UserContext);
 
 	const classes = useStyles();
-
 	const lastSeen = useDateComparison(new Date(user.lastSeen), new Date());
-
-	const [avatarAnchor, setAvatarAnchor] = useState(null);
+	const router = useRouter();
 
 	const handleClick = (e) => {
 		setAvatarAnchor(e.currentTarget);

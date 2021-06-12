@@ -172,25 +172,22 @@ function Layout({ children = null, title }) {
 
 	return (
 		<>
-			{bpmd ? (
-				<>
-					<AppBarDesktop title={title} />
-					<SideMenu items={menuItems} />
-					<main className={`${classes.main} ${classes.marginDesktop}`}>
-						<Divider variant="middle" />
-						<Container className={classes.container} maxWidth={false}>
-							{children || <Loader size="4rem" />}
-						</Container>
-					</main>
-				</>
-			) : (
-				<>
-					<AppBarMobile title={title} />
-					<main className={`${classes.main} ${classes.marginMobile}`}>
-						{children || <Loader />}
-					</main>
-				</>
-			)}
+			{bpmd ? <AppBarDesktop title={title} /> : <AppBarMobile title={title} />}
+			{bpmd && <SideMenu items={menuItems} />}
+			<main
+				className={`${classes.main} ${
+					bpmd ? classes.marginDesktop : classes.marginMobile
+				}`}
+			>
+				{bpmd && <Divider variant="middle" />}
+				<Container
+					className={classes.container}
+					disableGutters={!bpmd}
+					maxWidth={false}
+				>
+					{children || <Loader size={bpmd ? "4rem" : "2.5rem"} />}
+				</Container>
+			</main>
 		</>
 	);
 }

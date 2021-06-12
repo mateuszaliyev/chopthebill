@@ -1,5 +1,5 @@
 // React & Next
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
@@ -94,10 +94,6 @@ function DeleteAccountButton() {
 		setOpen((prevOpen) => !prevOpen);
 	};
 
-	const handleVisibility = () => {
-		setVisibility((prevVisibility) => !prevVisibility);
-	};
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const res = await fetch(`${host}/delete`, {
@@ -121,6 +117,10 @@ function DeleteAccountButton() {
 		}
 	};
 
+	const handleVisibility = () => {
+		setVisibility((prevVisibility) => !prevVisibility);
+	};
+
 	return (
 		<>
 			<Button
@@ -135,7 +135,7 @@ function DeleteAccountButton() {
 				<form onSubmit={handleSubmit}>
 					<DialogTitle className={classes.title}>
 						{t("user:delete-account-title")}
-						<Tooltip title={t("close")}>
+						<Tooltip title={t("cancel")}>
 							<IconButton
 								color="inherit"
 								className={classes.closeButton}

@@ -1,6 +1,6 @@
 {
 	"email-invalid": "Podany adres email jest nieprawidłowy",
-	"email-taken": "Konto z podanym adresem email już istnieje",
+	"email-taken": "Konto o podanym adresie email już istnieje",
 	"exclusion": "To ustawienie nie może być zaznaczone bez wprowadzenia nazwy użytkownika",
 	"internal-server-error": "Wewnętrzny Błąd Serwera",
 	"have-an-account": "Masz już konto? Zaloguj się",
@@ -11,5 +11,5 @@
 	"register": "Zarejestruj się",
 	"username-invalid": "Nazwa użytkownika może składać się tylko z liter i cyfr",
 	"username-length-invalid": "Nazwa użytkownika musi zawierać od 3 do 63 znaków",
-	"username-taken": "Konto z podaną nazwą użytkownika już istnieje"
+	"username-taken": "Konto o podanej nazwie użytkownika już istnieje"
 }

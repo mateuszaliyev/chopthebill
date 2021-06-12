@@ -181,7 +181,7 @@ function ChangePasswordButton() {
 				<form onSubmit={handleSubmit}>
 					<DialogTitle>
 						{t("change-password")}
-						<Tooltip title={t("close")}>
+						<Tooltip title={t("cancel")}>
 							<IconButton className={classes.closeButton} onClick={handleClose}>
 								<CloseIcon />
 							</IconButton>
@@ -197,7 +197,10 @@ function ChangePasswordButton() {
 								InputProps={{
 									endAdornment: (
 										<InputAdornment position="end">
-											<IconButton onClick={() => handleVisibility(el.name)}>
+											<IconButton
+												onClick={() => handleVisibility(el.name)}
+												tabIndex="-1"
+											>
 												{visibility[el.name] ? (
 													<VisibilityOffIcon />
 												) : (

@@ -23,7 +23,7 @@ function Avatar({ alt, className, src, user = null, ...props }) {
 	const [color, setColor] = useState(useTextToColor(alt));
 	const classes = useStyles({ color });
 
-	const avatarAlt = user.username
+	const avatarAlt = user?.username
 		? user.username.toUpperCase()[0]
 		: alt
 		? alt.toUpperCase()[0]
@@ -38,8 +38,8 @@ function Avatar({ alt, className, src, user = null, ...props }) {
 		: null;
 
 	useEffect(() => {
-		user.username && setColor(useTextToColor(user.username));
-	}, [user.username]);
+		user?.username && setColor(useTextToColor(user?.username));
+	}, [user?.username]);
 
 	return (
 		<MuiAvatar

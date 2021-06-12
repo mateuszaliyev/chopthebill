@@ -37,12 +37,12 @@ export async function getServerSideProps({ locale }) {
 function Account() {
 	const { t } = useTranslation("common");
 
-	const router = useRouter();
-	const { id } = router.query;
+	const [user, setUser] = useState({});
 
 	const { user: loggedUser, accessToken } = useContext(UserContext);
 
-	const [user, setUser] = useState({});
+	const router = useRouter();
+	const { id } = router.query;
 
 	const getUser = async () => {
 		if (id !== loggedUser.id) {
@@ -57,13 +57,19 @@ function Account() {
 			if (res.ok) {
 				const user = await res.json();
 				setUser(user);
+			} else {
+				router.replace("/dashboard");
 			}
 		} else {
 			setUser(loggedUser);
 		}
 	};
 
-	useEffect(getUser, [accessToken, id]);
+	useEffect(() => {
+		if (accessToken) {
+			getUser();
+		}
+	}, [accessToken, id]);
 
 	return (
 		<Auth>

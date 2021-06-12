@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
 		width: "calc(100% - 100vh * 0.267 / 2)",
 	},
 	nav: {
+		alignItems: "center",
 		display: "flex",
 	},
 	root: {

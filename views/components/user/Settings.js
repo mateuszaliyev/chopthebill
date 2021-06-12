@@ -22,7 +22,6 @@ import {
 	Select,
 	Switch,
 	TextField,
-	useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
@@ -47,13 +46,14 @@ const useStyles = makeStyles((theme) => ({
 	button: {
 		display: "flex",
 		justifyContent: "center",
-		margin: theme.spacing(1),
+		margin: "0.5rem",
 	},
 	buttons: {
 		display: "flex",
+		flexWrap: "wrap",
 		justifyContent: "center",
-		margin: theme.spacing(2),
-		gap: theme.spacing(3),
+		margin: "1rem 0",
+		gap: "1rem",
 	},
 	item: {
 		alignItems: "flex-end",
@@ -66,9 +66,6 @@ const useStyles = makeStyles((theme) => ({
 	inputField: {
 		flexGrow: "1",
 	},
-	switch: {
-		// marginLeft: "0",
-	},
 }));
 
 function Settings() {
@@ -79,8 +76,6 @@ function Settings() {
 
 	const router = useRouter();
 	const classes = useStyles();
-	const theme = useTheme();
-	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
 
 	const [fieldsHelper, setFieldsHelper] = useState({
 		email: "",
