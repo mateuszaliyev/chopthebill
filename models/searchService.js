@@ -10,6 +10,11 @@ async function searchService(decoded, query) {
 		[decoded.id]
 	);
 
+	const groupQuery = await db.query(
+		`SELECT g.id_group, g.name, g.description FROM public.group g JOIN public.affiliation a ON a.id_group = g.id_group WHERE a.id_user = $1 AND a.valid = TRUE AND g.deleted = FALSE`,
+		[decoded.id]
+	);
+
 	const userQuery = await db.query(
 		`SELECT id_user, email, username, avatar, hide_email, last_seen FROM public."user" WHERE deleted = FALSE`,
 		[]
@@ -50,6 +55,41 @@ async function searchService(decoded, query) {
 
 		results.expenses = expenses
 			.filter((expense) => expense.match <= 3)
+			.sort((a, b) => {
+				return a.match - b.match;
+			});
+	}
+
+	if (groupQuery.rows[0]) {
+		const groups = groupQuery.rows.map((group) => {
+			const includes =
+				group.name.toLowerCase().includes(query.toLowerCase()) ||
+				group.description.toLowerCase().includes(query.toLowerCase());
+
+			let match = distance(
+				query.toLowerCase(),
+				closest(query.toLowerCase(), [
+					group.name.toLowerCase(),
+					group.description.toLowerCase(),
+				])
+			);
+
+			if (includes && match > 1) {
+				match = 1;
+			}
+
+			return {
+				description: group.description,
+				id: group.id_group,
+				match,
+				name: group.name,
+			};
+		});
+
+		console.log(groups);
+
+		results.groups = groups
+			.filter((group) => group.match <= 3)
 			.sort((a, b) => {
 				return a.match - b.match;
 			});

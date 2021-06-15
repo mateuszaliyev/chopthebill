@@ -129,10 +129,25 @@ function expenseValidate(title, description) {
 	return issues;
 }
 
+function groupValidate(name, description) {
+	const issues = [];
+
+	if (!validator.isLength(name, { min: 3, max: 63 })) {
+		issues.push("name-length-invalid");
+	}
+
+	if (!validator.isLength(description, { max: 255 })) {
+		issues.push("description-length-invalid");
+	}
+
+	return issues;
+}
+
 module.exports = {
 	registerValidate,
 	loginValidate,
 	passwordValidate,
 	settingsValidate,
 	expenseValidate,
+	groupValidate,
 };

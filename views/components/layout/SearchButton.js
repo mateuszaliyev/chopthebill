@@ -31,6 +31,7 @@ function SearchButton() {
 			</Tooltip>
 			<SearchDialog
 				expenses
+				groups
 				onClose={handleClose}
 				open={open}
 				placeholder={t("search-anything")}

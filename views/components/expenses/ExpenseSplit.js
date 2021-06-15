@@ -21,6 +21,7 @@ import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 // Components
 import ExpenseSplitList from "./ExpenseSplitList";
 import FriendDialog from "../friends/FriendDialog";
+import MemberDialog from "../groups/MemberDialog";
 import SearchDialog from "../layout/SearchDialog";
 
 // Contexts
@@ -212,6 +213,11 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 				</TabPanel>
 			))}
 			<FriendDialog onClose={handleDialogClose} open={friendDialogOpen} />
+			<MemberDialog
+				groupId={g}
+				onClose={handleDialogClose}
+				open={memberDialogOpen}
+			/>
 			<SearchDialog
 				closeButtonTooltip={t("cancel")}
 				onClose={handleDialogClose}

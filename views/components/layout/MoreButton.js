@@ -105,6 +105,7 @@ function MoreButton({ ...props }) {
 			</Menu>
 			<SearchDialog
 				expenses
+				groups
 				onClose={handleSearchDialog}
 				open={openDialog.search}
 				placeholder={t("search-anything")}

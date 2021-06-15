@@ -5,25 +5,16 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 // Components
 import Auth from "../components/auth/Auth";
+import GroupList from "../components/groups/GroupList";
 import Layout from "../components/layout/Layout";
+import Loader from "../components/Loader";
 import Meta from "../components/Meta";
-import Link from "../components/Link";
-import GroupList from "../components/group/groupList";
 
 // Config
 import { host } from "../config";
 
 // Contexts
 import { UserContext } from "../components/auth/User";
-
-// Material UI
-import { makeStyles } from '@material-ui/core/styles';
-import {
-	IconButton,
-	Fab,
-	Tooltip
-} from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
 
 export async function getServerSideProps({ locale }) {
 	return {
@@ -33,63 +24,47 @@ export async function getServerSideProps({ locale }) {
 	};
 }
 
-const useStyles = makeStyles((theme) => ({
-	absolute: {
-		position: 'absolute',
-		bottom: theme.spacing(2),
-		right: theme.spacing(3),
-	},
-}));
-
 function Groups() {
 	const { t } = useTranslation(["common", "groups"]);
-	const classes = useStyles();
 
-	const { user, accessToken } = useContext(UserContext);
+	const [groups, setGroups] = useState([]);
+	const [loading, setLoading] = useState(true);
 
-	const [results, setResults] = useState([]);
-	const [refreshGroups, setRefreshGroups] = useState(true);
-
-	const refreshGroupList = () => {
-		setRefreshGroups((prev) => !prev);
-	}
+	const { accessToken } = useContext(UserContext);
 
 	const getGroups = async () => {
 		const res = await fetch(`${host}/groups`, {
-			method: "POST",
+			method: "GET",
 			credentials: "include",
 			headers: {
 				Accept: "application/json",
-				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
+				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(user),
 		});
-		
-		if (res.ok)
-		{
-			const data = await res.json();
-			setResults(data.result);
-		}
-	}
 
-	useEffect(() => {getGroups()}, [refreshGroups]);
+		if (res.ok) {
+			const groups = await res.json();
+			setGroups(groups);
+		}
+		setLoading(false);
+	};
+
 	useEffect(() => {
-		getGroups();
-	}, [user]);
-	
+		if (accessToken) {
+			getGroups();
+		}
+	}, [accessToken]);
+
 	return (
 		<Auth>
 			<Meta title={`${t("groups:meta-title")} | ChopTheBill`} />
 			<Layout title={`${t("groups:meta-title")}`}>
-				<GroupList groups={results} refreshGroupList={refreshGroupList}/>
-					<Tooltip title={`${t("groups:create-button")}`}>
-						<Fab className={classes.absolute} color="secondary" 
-						component={Link} href="/group/create" as="/group/create"
-						>
-							<AddIcon fontSize="large" variant="contained" color="primary"/>
-						</Fab>
-					</Tooltip>
+				{loading ? (
+					<Loader size="4rem" />
+				) : (
+					<GroupList groups={groups} setGroups={setGroups} />
+				)}
 			</Layout>
 		</Auth>
 	);

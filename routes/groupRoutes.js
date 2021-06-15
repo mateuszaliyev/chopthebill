@@ -4,24 +4,23 @@ const router = express.Router();
 
 // Controllers
 const {
-	getMembersController,
-	getGroupsController,
+	authGroupController,
 	createGroupController,
 	deleteGroupController,
-	groupNameController,
-	groupDescriptionController,
-	deleteMemberController,
-	addMemberController
+	groupController,
+	groupsController,
+	updateGroupController,
 } = require("../controllers/groupController");
 
+// Middleware
+const { authenticate } = require("../middlewares/authenticate");
+
 // Routes
-router.post("/", getGroupsController);
-router.post("/create", createGroupController);
-router.delete("/delete", deleteGroupController);
-router.put("/name", groupNameController);
-router.put("/description", groupDescriptionController);
-router.post("/members", getMembersController);
-router.post("/member/delete", deleteMemberController);
-router.post("/member/add", addMemberController);
+router.get("/auth/:id", authenticate, authGroupController);
+router.post("/", authenticate, createGroupController);
+router.delete("/:id", authenticate, deleteGroupController);
+router.get("/:id", authenticate, groupController);
+router.get("/", authenticate, groupsController);
+router.put("/", authenticate, updateGroupController);
 
 module.exports = router;

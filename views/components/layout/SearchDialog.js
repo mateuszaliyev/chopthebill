@@ -97,6 +97,28 @@ function ListItemExpense({ expense, onClose }) {
 	);
 }
 
+function ListItemGroup({ group, onClose }) {
+	const classes = useStyles();
+
+	return (
+		<ListItem
+			button
+			className={group.description ? "" : classes.padding}
+			onClick={onClose}
+		>
+			<ListItemAvatar>
+				<Avatar alt={group.name} />
+			</ListItemAvatar>
+			<ListItemText
+				primary={group.name}
+				primaryTypographyProps={{ noWrap: true }}
+				secondary={group.description}
+				secondaryTypographyProps={{ noWrap: true }}
+			/>
+		</ListItem>
+	);
+}
+
 function ListItemUser({ onClose, user }) {
 	const classes = useStyles();
 
@@ -122,6 +144,7 @@ function ListItemUser({ onClose, user }) {
 function SearchDialog({
 	closeButtonTooltip = null,
 	expenses = false,
+	groups = false,
 	onClose,
 	open,
 	placeholder,
@@ -174,6 +197,10 @@ function SearchDialog({
 
 			if (!expenses) {
 				delete data.expenses;
+			}
+
+			if (!groups) {
+				delete data.groups;
 			}
 
 			if (!users) {
@@ -235,7 +262,9 @@ function SearchDialog({
 						</Typography>
 					</Box>
 				)}
-				{results?.expenses?.length > 0 || results?.users?.length > 0 ? (
+				{results?.expenses?.length > 0 ||
+				results?.groups?.length > 0 ||
+				results?.users?.length > 0 ? (
 					<List>
 						{users && results?.users?.length > 0 && (
 							<>
@@ -259,6 +288,33 @@ function SearchDialog({
 											key={user.id}
 											onClose={() => handleClose(user)}
 											user={user}
+										/>
+									)
+								)}
+							</>
+						)}
+						{groups && results?.groups?.length > 0 && (
+							<>
+								<ListSubheader>{t("groups")}</ListSubheader>
+								{results.groups.map((group) =>
+									redirect ? (
+										<Link
+											color="inherit"
+											href={`/group/${group.id}`}
+											key={group.id}
+											onClick={() => handleClose(null)}
+											underline="none"
+										>
+											<ListItemGroup
+												group={group}
+												onClose={() => handleClose(null)}
+											/>
+										</Link>
+									) : (
+										<ListItemGroup
+											group={group}
+											key={group.id}
+											onClose={() => handleClose(group)}
 										/>
 									)
 								)}
