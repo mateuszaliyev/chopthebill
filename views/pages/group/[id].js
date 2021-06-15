@@ -166,8 +166,8 @@ function Group() {
 
 	return (
 		<Auth>
-			<Meta title={`${t("groups")} | ChopTheBill`} />
-			<Layout title={`${t("groups")}`}>
+			{group?.name && <Meta title={`${group.name} | ChopTheBill`} />}
+			<Layout title={`${t("group")}`}>
 				{loading ? (
 					<Loader size="4rem" />
 				) : (

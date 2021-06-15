@@ -40,7 +40,11 @@ function SideMenu({ items }) {
 		<Drawer anchor="left" variant="permanent">
 			<div className={classes.logo}>
 				<Logo background size={48} />
-				<Typography className={classes.logoText} variant="h5">
+				<Typography
+					className={classes.logoText}
+					style={{ cursor: "default" }}
+					variant="h5"
+				>
 					ChopTheBill
 				</Typography>
 			</div>

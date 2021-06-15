@@ -106,7 +106,11 @@ function HomeDesktop() {
 						<nav className={classes.nav}>
 							<div className={classes.logoSmall}>
 								<Logo background size={48} />
-								<Typography className={classes.wordmark} variant="h5">
+								<Typography
+									className={classes.wordmark}
+									style={{ cursor: "default" }}
+									variant="h5"
+								>
 									ChopTheBill
 								</Typography>
 							</div>

@@ -19,7 +19,14 @@ const useStyles = makeStyles((theme) => ({
 	}),
 }));
 
-function Avatar({ alt, className, src, user = null, ...props }) {
+function Avatar({
+	alt,
+	children = null,
+	className,
+	src,
+	user = null,
+	...props
+}) {
 	const [color, setColor] = useState(useTextToColor(alt));
 	const classes = useStyles({ color });
 
@@ -48,7 +55,7 @@ function Avatar({ alt, className, src, user = null, ...props }) {
 			src={avatarSrc}
 			{...props}
 		>
-			{avatarAlt}
+			{children ? children : avatarAlt}
 		</MuiAvatar>
 	);
 }

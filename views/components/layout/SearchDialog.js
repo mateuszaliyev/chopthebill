@@ -5,7 +5,6 @@ import { useTranslation } from "next-i18next";
 
 // Material UI
 import {
-	Avatar as MuiAvatar,
 	Box,
 	Dialog,
 	DialogContent,
@@ -57,12 +56,6 @@ const useStyles = makeStyles((theme) => ({
 	paper: {
 		display: "flex",
 	},
-	settled: {
-		backgroundColor: theme.palette.primary.main,
-	},
-	unsettled: {
-		backgroundColor: theme.palette.error.main,
-	},
 }));
 
 function ListItemExpense({ expense, onClose }) {
@@ -76,11 +69,9 @@ function ListItemExpense({ expense, onClose }) {
 			onClick={onClose}
 		>
 			<ListItemAvatar>
-				<MuiAvatar
-					className={expense.settled ? classes.settled : classes.unsettled}
-				>
+				<Avatar alt={expense.title}>
 					{expense.settled ? <DoneIcon /> : <AttachMoneyIcon />}
-				</MuiAvatar>
+				</Avatar>
 			</ListItemAvatar>
 			<ListItemText
 				primary={expense.title}
