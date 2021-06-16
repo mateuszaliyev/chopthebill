@@ -28,11 +28,10 @@ async function authGroupService(decoded, id) {
 /**
  * Create a group
  * @param {*} group new group
- * @returns 
+ * @returns
  */
 async function createGroupService(group) {
 	const issues = groupValidate(group.name, group.description);
-
 
 	if (issues.length > 0) {
 		return issues;
@@ -69,9 +68,9 @@ async function createGroupService(group) {
 
 /**
  * Delete a group
- * @param {*} decoded 
+ * @param {*} decoded
  * @param {*} id id of a group to delete
- * @returns 
+ * @returns
  */
 async function deleteGroupService(decoded, id) {
 	const authorizationQuery = await db.query(
@@ -127,7 +126,7 @@ async function groupService(decoded, id) {
 	const expenseQuery = await db.query(
 		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, u.id_user, u.username, u.avatar 
 		FROM public.expense e JOIN public.user u ON e.id_user = u.id_user 
-		WHERE e.id_group = $1`,
+		WHERE e.id_group = $1 AND e.deleted = FALSE`,
 		[id]
 	);
 
@@ -139,7 +138,7 @@ async function groupService(decoded, id) {
 			(prev, curr, index) =>
 				`${prev}${index === 0 ? "" : ", "}${curr.id_expense}`,
 			""
-		)})`;
+		)}) AND deleted = FALSE`;
 
 		const obligationQuery = await db.query(obligationQueryString);
 
@@ -210,8 +209,8 @@ async function groupService(decoded, id) {
 }
 
 /**
- * 
- * @param {*} decoded 
+ *
+ * @param {*} decoded
  * @returns groups with members of a decoded user
  */
 async function groupsService(decoded) {
@@ -268,9 +267,9 @@ async function groupsService(decoded) {
 
 /**
  * Updates group name, description and members
- * @param {*} decoded 
+ * @param {*} decoded
  * @param {*} group updated group
- * @returns 
+ * @returns
  */
 async function updateGroupService(decoded, group) {
 	const issues = groupValidate(group.name, group.description);
@@ -342,9 +341,9 @@ async function updateGroupService(decoded, group) {
 	const affiliationUpdateQuery = `
 		UPDATE public.affiliation 
 		SET owner = CASE id_user ${affiliationUpdateData.reduce(
-		(prev, curr) => `${prev}WHEN ${curr.id} THEN ${curr.owner} `,
-		""
-	)}END, valid = CASE id_user ${affiliationUpdateData.reduce(
+			(prev, curr) => `${prev}WHEN ${curr.id} THEN ${curr.owner} `,
+			""
+		)}END, valid = CASE id_user ${affiliationUpdateData.reduce(
 		(prev, curr) => `${prev}WHEN ${curr.id} THEN ${curr.valid} `,
 		""
 	)}END WHERE id_user IN(${affiliationUpdateData.reduce(
@@ -370,15 +369,20 @@ async function updateGroupService(decoded, group) {
 	// Insert new members
 	let i = 2;
 	const affiliationInsertQuery = `INSERT INTO public.affiliation VALUES ${affiliationInsertData.reduce(
-		(prev, curr, index) => 
-		`${prev}${index === 0 ? "" : ", "}(DEFAULT, $${i++}, TRUE, $${i++}, $1)`,
+		(prev, curr, index) =>
+			`${prev}${index === 0 ? "" : ", "}(DEFAULT, $${i++}, TRUE, $${i++}, $1)`,
 		""
 	)}`;
 
-	await db.query(affiliationInsertQuery, [group.id].concat(affiliationInsertData.reduce(
-		(params, member) => params.concat(member.id, member.owner),
-		[]
-	)));
+	await db.query(
+		affiliationInsertQuery,
+		[group.id].concat(
+			affiliationInsertData.reduce(
+				(params, member) => params.concat(member.id, member.owner),
+				[]
+			)
+		)
+	);
 
 	return null;
 }

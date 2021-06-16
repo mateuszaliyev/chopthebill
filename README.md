@@ -48,8 +48,6 @@ CREATE DATABASE chopthebill
 
 Tabele mogą zostać utworzone za pomocą skryptu SQL znajdującego się w pliku `data/db.sql` (z pominięciem pierwszeo polecenia, tworzącego samą bazę danych). Innym sposobem jest import danych z pliku `data/backup/plain.sql` odbywający się poprzez polecenie `psql`. Po wykonaniu komendy może być konieczne wprowadzenie hasła dla podanego użytkownika.
 
-> **Uwaga:** plik `data/baclup/plain.sql` nie jest aktualny, dlatego należy użyć skryptu z pliku `data/db.sql`.
-
 ```
 psql -U <nazwa_uzytkownika> -d <nazwa_bazy_danych> < <sciezka_do_pliku>
 ```

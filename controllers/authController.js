@@ -26,7 +26,7 @@ async function registerController(req, res) {
 		}
 		res.status(201).json([]);
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		res.status(500).json(["internal-server-error"]);
 	}
 }
@@ -72,7 +72,7 @@ async function refreshController(req, res) {
 		}
 		return res.status(200).json({ accessToken: result });
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		res.sendStatus(500);
 	}
 }
@@ -95,7 +95,7 @@ async function forgotPasswordController(req, res) {
 		}
 		return res.status(200).json({ link, error });
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		res.status(500);
 	}
 }
@@ -111,7 +111,7 @@ async function validateLinkController(req, res) {
 		}
 		return res.status(200).json({ error: "" });
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		res.status(500);
 	}
 }
@@ -131,7 +131,7 @@ async function resetPasswordController(req, res) {
 		}
 		return res.status(200).json({ error: "" });
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 		res.status(500);
 	}
 }

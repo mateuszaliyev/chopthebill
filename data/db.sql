@@ -53,6 +53,7 @@ CREATE TABLE public.expense
 	amount bigint NOT NULL,
 	currency character varying(3) NOT NULL,
 	settled boolean NOT NULL,
+	deleted boolean NOT NULL,
 	id_user bigint NOT NULL REFERENCES public.user (id_user),
 	id_group bigint REFERENCES public.group (id_group),
 	PRIMARY KEY (id_expense)
@@ -83,6 +84,7 @@ CREATE TABLE public.obligation
     id_obligation bigserial NOT NULL,
     amount bigint NOT NULL,
     settled boolean NOT NULL,
+	deleted boolean NOT NULL,
     id_user_debtor bigint NOT NULL REFERENCES public.user (id_user),
     id_user_creditor bigint NOT NULL REFERENCES public.user (id_user),
     id_expense bigint NOT NULL REFERENCES public.expense (id_expense),

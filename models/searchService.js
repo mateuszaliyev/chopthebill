@@ -6,7 +6,7 @@ const { closest, distance } = require("fastest-levenshtein");
 
 async function searchService(decoded, query) {
 	const expenseQuery = await db.query(
-		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name FROM public.expense e LEFT JOIN public.group g ON e.id_group = g.id_group JOIN public.obligation o ON e.id_expense = o.id_expense WHERE o.id_user_creditor = $1 OR o.id_user_debtor = $1 GROUP BY e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name`,
+		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name FROM public.expense e LEFT JOIN public.group g ON e.id_group = g.id_group JOIN public.obligation o ON e.id_expense = o.id_expense WHERE (o.id_user_creditor = $1 OR o.id_user_debtor = $1) AND e.deleted = FALSE AND o.deleted = FALSE GROUP BY e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name`,
 		[decoded.id]
 	);
 
@@ -85,8 +85,6 @@ async function searchService(decoded, query) {
 				name: group.name,
 			};
 		});
-
-		console.log(groups);
 
 		results.groups = groups
 			.filter((group) => group.match <= 3)

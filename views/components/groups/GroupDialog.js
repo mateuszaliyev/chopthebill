@@ -265,7 +265,6 @@ function GroupDialog({ edit = null, onClose, open }) {
 				});
 			} else {
 				const error = await res.json();
-				console.log(error);
 				error.forEach((err) => {
 					const key = err.split("-")[0];
 					setHelperText((prevHelperText) => ({
