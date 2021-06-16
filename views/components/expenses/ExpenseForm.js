@@ -25,6 +25,7 @@ import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import AddIcon from "@material-ui/icons/Add";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import SaveIcon from "@material-ui/icons/Save";
 
 // Components
 import DiscardChanges from "../DiscardChanges";
@@ -50,11 +51,12 @@ const methods = ["split-amount", "split-percentage", "split-share"];
 
 // Styles
 const useStyles = makeStyles((theme) => ({
-	buttons: {
+	buttons: ({ bpsm }) => ({
 		display: "flex",
+		flexDirection: bpsm ? "row" : "column",
 		gap: "1rem",
 		justifyContent: "flex-end",
-	},
+	}),
 	currency: {
 		display: "flex",
 		gap: "1rem",
@@ -98,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function ExpenseForm({ className, data, setData }) {
+function ExpenseForm({ className, data, edit = false, setData }) {
 	const { t } = useTranslation("common");
 
 	const [discardOpen, setDiscardOpen] = useState(false);
@@ -111,6 +113,7 @@ function ExpenseForm({ className, data, setData }) {
 
 	const { accessToken } = useContext(UserContext);
 	const router = useRouter();
+	const { id } = router.query;
 
 	const theme = useTheme();
 	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
@@ -164,6 +167,11 @@ function ExpenseForm({ className, data, setData }) {
 		}
 	};
 
+	const handleErrorSnackbar = () => {
+		setSnackbarSeverity("error");
+		setSnackbarText(`${t("something-went-wrong")}. ${t("try-again")}.`);
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (
@@ -174,11 +182,11 @@ function ExpenseForm({ className, data, setData }) {
 			return;
 		}
 
-		const sum = data.users.reduce((prev, curr) => prev + curr.amount, 0);
-		if (data.users.length >= 2 && 2 * data.expense.amount === sum) {
+		if (isSubmittable()) {
 			const submittedData = {
 				expense: {
 					...data.expense,
+					...(id && { id }),
 					group: data.expense.group.id,
 					user: data.expense.user.id,
 				},
@@ -189,24 +197,24 @@ function ExpenseForm({ className, data, setData }) {
 				})),
 			};
 
-			const res = await fetch(`${host}/expenses`, {
-				method: "POST",
-				headers: {
-					Accept: "application/json",
-					Authorization: `Bearer ${accessToken}`,
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(submittedData),
-			});
+			const res = await fetch(
+				edit ? `${host}/expenses/${id}` : `${host}/expenses`,
+				{
+					method: edit ? "PUT" : "POST",
+					headers: {
+						Accept: "application/json",
+						Authorization: `Bearer ${accessToken}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(submittedData),
+				}
+			);
 
 			if (res.ok) {
 				router.push("/expenses");
-			} else {
-				if (res.status >= 500) {
-					setSnackbarSeverity("error");
-					setSnackbarText(`${t("something-went-wrong")}. ${t("try-again")}.`);
-				} else {
-					const error = await res.json();
+			} else if (res.status < 500) {
+				const error = await res.json();
+				if (error.length > 0) {
 					error.forEach((err) => {
 						const key = err.split("-")[0];
 						setHelperText((prevHelperText) => ({
@@ -214,7 +222,11 @@ function ExpenseForm({ className, data, setData }) {
 							[key]: t(`expenses:${err}`),
 						}));
 					});
+				} else {
+					handleErrorSnackbar();
 				}
+			} else {
+				handleErrorSnackbar();
 			}
 		}
 	};
@@ -227,6 +239,14 @@ function ExpenseForm({ className, data, setData }) {
 				title: e.target.value,
 			},
 		}));
+	};
+
+	const isSubmittable = () => {
+		return Boolean(
+			data.users.length >= 2 &&
+				2 * data.expense.amount ===
+					data.users.reduce((prev, curr) => prev + curr.amount, 0)
+		);
 	};
 
 	useEffect(() => {
@@ -275,6 +295,7 @@ function ExpenseForm({ className, data, setData }) {
 					label={t("title")}
 					onChange={handleTitle}
 					required
+					value={data.expense.title}
 				/>
 				<TextField
 					error={Boolean(helperText.description)}
@@ -282,6 +303,7 @@ function ExpenseForm({ className, data, setData }) {
 					label={t("description")}
 					multiline
 					onChange={handleDescription}
+					value={data.expense.description}
 				/>
 				<MuiPickersUtilsProvider
 					locale={locales[router.locale]}
@@ -310,6 +332,7 @@ function ExpenseForm({ className, data, setData }) {
 						onChange={handleAmount}
 						required
 						type="number"
+						value={data.expense.amount / 100 || ""}
 					/>
 					<FormControl className={classes.currencyItem} required>
 						<InputLabel>{t("currency")}</InputLabel>
@@ -347,15 +370,16 @@ function ExpenseForm({ className, data, setData }) {
 						startIcon={<AddAPhotoIcon />}
 						variant="outlined"
 					>
-						{t("upload")}
+						{t("upload-photo")}
 					</Button>
 					<Button
 						color="primary"
+						disabled={(() => !isSubmittable())()}
 						onClick={handleSubmit}
-						startIcon={<AddIcon />}
+						startIcon={edit ? <SaveIcon /> : <AddIcon />}
 						variant="contained"
 					>
-						{t("add")}
+						{t(edit ? "expenses:save-expense" : "expenses:create-expense")}
 					</Button>
 					<DiscardChanges
 						onClose={handleDiscard}

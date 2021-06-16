@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
 				.padStart(2, "0")}`,
 		},
 	},
+	redText: {
+		color: theme.palette.error.main,
+	},
 	textField: {
 		maxWidth: "7rem",
 		minWidth: "7rem",
@@ -510,7 +513,7 @@ function ExpenseSplitList({
 						</div>
 					)
 			)}
-			{g ? (
+			{g || data.expense.group.id ? (
 				<ListItem button className={classes.addItem} onClick={onMemberAdd}>
 					<ListItemAvatar className={classes.addItemAvatar}>
 						<MuiAvatar>
@@ -550,7 +553,7 @@ function ExpenseSplitList({
 							primary={
 								<Typography
 									className={
-										differenceAmount() === 0 ? classes.primary : classes.red
+										differenceAmount() === 0 ? classes.primary : classes.redText
 									}
 								>
 									<Currency

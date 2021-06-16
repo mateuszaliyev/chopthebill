@@ -20,7 +20,7 @@ import Meta from "../../components/Meta";
 import { host } from "../../config";
 
 // Contexts
-import { UserContext } from "../../components/auth/User";
+import User, { UserContext } from "../../components/auth/User";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
@@ -50,43 +50,26 @@ export async function getServerSideProps({ locale }) {
 	};
 }
 
-function NewExpense() {
+function EditExpense() {
 	const { t } = useTranslation(["common", "expenses"]);
 
-	const { accessToken, user } = useContext(UserContext);
-	const [data, setData] = useState({
-		expense: {
-			amount: 0,
-			currency: "XXX",
-			date: new Date(),
-			description: "",
-			group: {
-				id: null,
-				name: null,
-			},
-			title: "",
-			user: {
-				id: null,
-				username: null,
-				avatar: false,
-			},
-		},
-		obligations: [],
-		users: [],
-	});
+	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(true);
 
+	const { accessToken } = useContext(UserContext);
+
 	const router = useRouter();
-	const { g } = router.query;
+	const { id } = router.query;
 
 	const theme = useTheme();
 	const bplg = useMediaQuery(theme.breakpoints.up("lg"));
 	const bpmd = useMediaQuery(theme.breakpoints.up("md"));
 	const classes = useStyles({ bpmd, bplg });
 
-	const authorize = async () => {
-		const res = await fetch(`${host}/groups/auth/${g}`, {
+	const getExpense = async () => {
+		const res = await fetch(`${host}/expenses/${id}`, {
 			method: "GET",
+			credentials: "include",
 			headers: {
 				Accept: "application/json",
 				Authorization: `Bearer ${accessToken}`,
@@ -94,72 +77,30 @@ function NewExpense() {
 			},
 		});
 		if (res.ok) {
-			const { id, name } = await res.json();
-			setData((prevData) => ({
-				...prevData,
+			const data = await res.json();
+			setData({
+				...data,
 				expense: {
-					...prevData.expense,
-					group: {
-						id,
-						name,
-					},
+					...data.expense,
+					date: new Date(data.expense.date),
 				},
-			}));
+			});
 			setLoading(false);
 		} else {
-			router.replace("/groups");
+			router.replace("/expenses");
 		}
 	};
 
 	useEffect(() => {
-		if (g) {
-			if (accessToken) {
-				authorize();
-			}
-		} else {
-			setLoading(false);
+		if (accessToken) {
+			getExpense();
 		}
 	}, [accessToken]);
 
-	useEffect(() => {
-		if (data.users.length === 0 && user.username) {
-			setData((prevData) => ({
-				...prevData,
-				expense: {
-					...prevData.expense,
-					currency: user.language === "en" ? "GBP" : "PLN",
-					user: {
-						avatar: user.avatar,
-						id: user.id,
-						username: user.username,
-					},
-				},
-				users: [
-					...prevData.users,
-					{
-						avatar: user.avatar,
-						amount: 0,
-						creditor: true,
-						id: user.id,
-						percentage: 0,
-						selected: false,
-						share: 0,
-						textField: {
-							amount: (0).toFixed(2),
-							percentage: (0).toFixed(2),
-							share: 0,
-						},
-						username: user.username,
-					},
-				],
-			}));
-		}
-	}, [user]);
-
 	return (
 		<Auth>
-			<Meta title={`${t("expenses:new-expense")} | ChopTheBill`}></Meta>
-			<Layout title={t("expenses:new-expense")}>
+			<Meta title={`${t("expenses:edit-expense")} | ChopTheBill`} />
+			<Layout title={`${t("expenses:edit-expense")}`}>
 				{loading ? (
 					<Loader size="4rem" />
 				) : (
@@ -167,10 +108,11 @@ function NewExpense() {
 						<ExpenseForm
 							className={classes.item}
 							data={data}
+							edit
 							setData={setData}
 						/>
 						{bpmd && <Divider flexItem orientation="vertical" />}
-						{user && <Expense data={data} />}
+						<Expense data={data} />
 					</div>
 				)}
 			</Layout>
@@ -178,4 +120,4 @@ function NewExpense() {
 	);
 }
 
-export default NewExpense;
+export default EditExpense;

@@ -214,7 +214,7 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 			))}
 			<FriendDialog onClose={handleDialogClose} open={friendDialogOpen} />
 			<MemberDialog
-				groupId={g}
+				groupId={g || data.expense.group.id}
 				onClose={handleDialogClose}
 				open={memberDialogOpen}
 			/>

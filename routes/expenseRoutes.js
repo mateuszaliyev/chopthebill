@@ -5,14 +5,18 @@ const router = express.Router();
 // Controllers
 const {
 	addExpenseController,
+	expenseController,
 	expensesController,
+	updateExpenseController,
 } = require("../controllers/expenseController");
 
 // Middlewares
 const { authenticate } = require("../middlewares/authenticate");
 
 // Routes
-router.get("/", authenticate, expensesController);
 router.post("/", authenticate, addExpenseController);
+router.get("/:id", authenticate, expenseController);
+router.get("/", authenticate, expensesController);
+router.put("/:id", authenticate, updateExpenseController);
 
 module.exports = router;
