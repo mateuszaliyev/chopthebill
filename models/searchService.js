@@ -6,17 +6,30 @@ const { closest, distance } = require("fastest-levenshtein");
 
 async function searchService(decoded, query) {
 	const expenseQuery = await db.query(
-		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name FROM public.expense e LEFT JOIN public.group g ON e.id_group = g.id_group JOIN public.obligation o ON e.id_expense = o.id_expense WHERE (o.id_user_creditor = $1 OR o.id_user_debtor = $1) AND e.deleted = FALSE AND o.deleted = FALSE GROUP BY e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name`,
+		`
+		SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name
+		FROM public.expense e
+		LEFT JOIN public.group g ON e.id_group = g.id_group
+		JOIN public.obligation o ON e.id_expense = o.id_expense
+		WHERE (o.id_user_creditor = $1 OR o.id_user_debtor = $1) AND e.deleted = FALSE AND o.deleted = FALSE
+		GROUP BY e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_group, g.name`,
 		[decoded.id]
 	);
 
 	const groupQuery = await db.query(
-		`SELECT g.id_group, g.name, g.description FROM public.group g JOIN public.affiliation a ON a.id_group = g.id_group WHERE a.id_user = $1 AND a.valid = TRUE AND g.deleted = FALSE`,
+		`
+		SELECT g.id_group, g.name, g.description
+		FROM public.group g
+		JOIN public.affiliation a ON a.id_group = g.id_group
+		WHERE a.id_user = $1 AND a.valid = TRUE AND g.deleted = FALSE`,
 		[decoded.id]
 	);
 
 	const userQuery = await db.query(
-		`SELECT id_user, email, username, avatar, hide_email, last_seen FROM public."user" WHERE deleted = FALSE`,
+		`
+		SELECT id_user, email, username, avatar, hide_email, last_seen
+		FROM public.user
+		WHERE deleted = FALSE`,
 		[]
 	);
 

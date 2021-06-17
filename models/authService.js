@@ -26,7 +26,7 @@ async function registerService(user) {
 	const issues = registerValidate(user);
 
 	const emailQuery = await db.query(
-		`SELECT email FROM public."user" WHERE email = $1`,
+		`SELECT email FROM public.user WHERE email = $1`,
 		[user.email]
 	);
 
@@ -35,7 +35,7 @@ async function registerService(user) {
 	}
 
 	const usernameQuery = await db.query(
-		`SELECT username FROM public."user" WHERE username = $1`,
+		`SELECT username FROM public.user WHERE username = $1`,
 		[user.username]
 	);
 
@@ -50,8 +50,9 @@ async function registerService(user) {
 	const hashedPassword = await bcrypt.hash(user.password, 10);
 
 	await db.query(
-		`INSERT INTO public."user"(id_user, email, password, username, language, theme, avatar, hide_email, last_seen, deleted) 
-			VALUES (default, $1, $2, $3, $4, $5, FALSE, $6, NOW(), FALSE)`,
+		`
+		INSERT INTO public.user(id_user, email, password, username, language, theme, avatar, hide_email, last_seen, deleted) 	
+		VALUES (default, $1, $2, $3, $4, $5, FALSE, $6, NOW(), FALSE)`,
 		[
 			user.email,
 			hashedPassword,
@@ -70,7 +71,10 @@ async function loginService(email, password) {
 	}
 
 	const userQuery = await db.query(
-		`SELECT id_user, email, password, username, language, theme, avatar, hide_email, last_seen FROM public."user" WHERE email = $1 AND deleted = FALSE`,
+		`
+		SELECT id_user, email, password, username, language, theme, avatar, hide_email, last_seen
+		FROM public.user
+		WHERE email = $1 AND deleted = FALSE`,
 		[email]
 	);
 	if (
@@ -104,7 +108,10 @@ async function loginService(email, password) {
 	};
 
 	await db.query(
-		`UPDATE public."user" SET last_seen = NOW(), refresh_token = $1 WHERE email = $2`,
+		`
+		UPDATE public.user
+		SET last_seen = NOW(), refresh_token = $1
+		WHERE email = $2`,
 		[refreshToken, email]
 	);
 	return { accessToken, refreshToken, user, error: "" };
@@ -112,7 +119,10 @@ async function loginService(email, password) {
 
 async function accessService(decoded) {
 	const userQuery = await db.query(
-		`SELECT id_user, email, username, language, theme, avatar, hide_email, last_seen FROM public."user" WHERE id_user = $1 AND deleted = FALSE`,
+		`
+		SELECT id_user, email, username, language, theme, avatar, hide_email, last_seen
+		FROM public.user
+		WHERE id_user = $1 AND deleted = FALSE`,
 		[decoded.id]
 	);
 	if (userQuery.rows[0]) {
@@ -127,7 +137,10 @@ async function accessService(decoded) {
 			lastSeen: userQuery.rows[0].last_seen,
 		};
 		await db.query(
-			`UPDATE public."user" SET last_seen = NOW() WHERE id_user = $1`,
+			`
+			UPDATE public.user
+			SET last_seen = NOW()
+			WHERE id_user = $1`,
 			[decoded.id]
 		);
 		return user;
@@ -142,7 +155,10 @@ async function refreshService(authHeader) {
 	}
 	if (verifyToken(token, process.env.REFRESH_TOKEN_SECRET)) {
 		const refreshQuery = await db.query(
-			`SELECT username, id_user FROM public."user" WHERE refresh_token = $1 AND deleted = FALSE`,
+			`
+			SELECT username, id_user
+			FROM public.user
+			WHERE refresh_token = $1 AND deleted = FALSE`,
 			[token]
 		);
 		if (refreshQuery.rows[0]) {
@@ -157,14 +173,20 @@ async function refreshService(authHeader) {
 
 async function logoutService(decoded) {
 	await db.query(
-		`UPDATE public."user" SET refresh_token = NULL WHERE id_user = $1`,
+		`
+		UPDATE public.user
+		SET refresh_token = NULL
+		WHERE id_user = $1`,
 		[decoded.id]
 	);
 }
 
 async function forgotPasswordService(email) {
 	const emailPasswordIdLanguageQuery = await db.query(
-		`SELECT password, id_user, language FROM public."user" WHERE email = $1`,
+		`
+		SELECT password, id_user, language
+		FROM public.user
+		WHERE email = $1`,
 		[email]
 	);
 
@@ -193,7 +215,10 @@ async function forgotPasswordService(email) {
 
 async function validateLinkService(id, token) {
 	const idPasswordQuery = await db.query(
-		`SELECT id_user, password FROM public."user" WHERE id_user = $1`,
+		`
+		SELECT id_user, password
+		FROM public.user
+		WHERE id_user = $1`,
 		[id]
 	);
 
@@ -213,7 +238,10 @@ async function validateLinkService(id, token) {
 
 async function resetPasswordService(id, token, password) {
 	const idPasswordQuery = await db.query(
-		`SELECT id_user, password FROM public."user" WHERE id_user = $1`,
+		`
+		SELECT id_user, password
+		FROM public.user
+		WHERE id_user = $1`,
 		[id]
 	);
 
@@ -234,10 +262,13 @@ async function resetPasswordService(id, token, password) {
 
 	const hashedPassword = await bcrypt.hash(password, 10);
 
-	await db.query(`UPDATE public."user" SET password = $1 WHERE id_user = $2`, [
-		hashedPassword,
-		id,
-	]);
+	await db.query(
+		`
+		UPDATE public.user
+		SET password = $1
+		WHERE id_user = $2`,
+		[hashedPassword, id]
+	);
 
 	return "";
 }

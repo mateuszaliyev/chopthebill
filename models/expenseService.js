@@ -7,7 +7,12 @@ const { expenseValidate } = require("../utils/validate");
 async function addExpenseService(decoded, { expense, obligations }) {
 	if (expense.group) {
 		const authQuery = await db.query(
-			`SELECT a.id_affiliation FROM public.affiliation a JOIN public.group g ON a.id_group = g.id_group JOIN public.user u ON a.id_user = u.id_user WHERE g.id_group = $1 AND u.id_user = $2 AND a.valid = TRUE AND g.deleted = FALSE AND u.deleted = FALSE`,
+			`
+			SELECT a.id_affiliation
+			FROM public.affiliation a
+			JOIN public.group g ON a.id_group = g.id_group
+			JOIN public.user u ON a.id_user = u.id_user
+			WHERE g.id_group = $1 AND u.id_user = $2 AND a.valid = TRUE AND g.deleted = FALSE AND u.deleted = FALSE`,
 			[expense.group, decoded.id]
 		);
 
@@ -29,7 +34,10 @@ async function addExpenseService(decoded, { expense, obligations }) {
 	}
 
 	const expenseQuery = await db.query(
-		`INSERT INTO public.expense VALUES (DEFAULT, $1, $2, $3, $4, $5, FALSE, FALSE, $6, $7) RETURNING id_expense`,
+		`
+		INSERT INTO public.expense
+		VALUES (DEFAULT, $1, $2, $3, $4, $5, FALSE, FALSE, $6, $7)
+		RETURNING id_expense`,
 		[
 			expense.title,
 			expense.description,
@@ -74,7 +82,15 @@ async function expenseService(decoded, id) {
 	}
 
 	const obligationQuery = await db.query(
-		`SELECT o.id_obligation, o.amount, o.settled, c.id_user AS creditor_id, c.username AS creditor_username, c.avatar AS creditor_avatar, d.id_user AS debtor_id, d.username AS debtor_username, d.avatar AS debtor_avatar FROM public.obligation o JOIN public.user c ON c.id_user = o.id_user_creditor JOIN public.user d ON d.id_user = o.id_user_debtor WHERE o.id_expense = $1 AND o.deleted = FALSE`,
+		`
+		SELECT
+			o.id_obligation, o.amount, o.settled,
+			c.id_user AS creditor_id, c.username AS creditor_username, c.avatar AS creditor_avatar,
+			d.id_user AS debtor_id, d.username AS debtor_username, d.avatar AS debtor_avatar
+		FROM public.obligation o
+		JOIN public.user c ON c.id_user = o.id_user_creditor
+		JOIN public.user d ON d.id_user = o.id_user_debtor
+		WHERE o.id_expense = $1 AND o.deleted = FALSE`,
 		[id]
 	);
 
@@ -162,7 +178,14 @@ async function expenseService(decoded, id) {
 
 async function expensesService(decoded) {
 	const obligationQuery = await db.query(
-		`SELECT * FROM public.obligation WHERE id_expense IN (SELECT id_expense FROM public.obligation WHERE id_user_creditor = $1 OR id_user_debtor = $1 AND deleted = FALSE) AND deleted = FALSE`,
+		`
+		SELECT *
+		FROM public.obligation
+		WHERE id_expense IN (
+			SELECT id_expense
+			FROM public.obligation
+			WHERE id_user_creditor = $1 OR id_user_debtor = $1 AND deleted = FALSE
+		) AND deleted = FALSE`,
 		[decoded.id]
 	);
 
@@ -176,14 +199,18 @@ async function expensesService(decoded) {
 			obligationQuery.rows.map((obligation) => parseInt(obligation.id_expense))
 		);
 
-	const expenseQueryText = `SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_user, g.id_group, g.name FROM public.expense e LEFT JOIN public.group g ON e.id_group = g.id_group WHERE (id_user = $1 ${
-		expenseIds
-			? `OR id_expense IN (${[...expenseIds].reduce(
-					(prev, curr, index) => `${prev}${index !== 0 ? ", " : ""}${curr}`,
-					""
-			  )})) AND e.deleted = FALSE`
-			: ""
-	}`;
+	const expenseQueryText = `
+		SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, e.id_user, g.id_group, g.name
+		FROM public.expense e
+		LEFT JOIN public.group g ON e.id_group = g.id_group
+		WHERE (id_user = $1 ${
+			expenseIds
+				? `OR id_expense IN (${[...expenseIds].reduce(
+						(prev, curr, index) => `${prev}${index !== 0 ? ", " : ""}${curr}`,
+						""
+				  )})) AND e.deleted = FALSE`
+				: ""
+		}`;
 
 	const expenseQuery = await db.query(expenseQueryText, [decoded.id]);
 
@@ -273,7 +300,12 @@ async function expensesService(decoded) {
 async function updateExpenseService(decoded, { expense, obligations }) {
 	if (expense.group) {
 		const authQuery = await db.query(
-			`SELECT a.id_affiliation FROM public.affiliation a JOIN public.group g ON a.id_group = g.id_group JOIN public.user u ON a.id_user = u.id_user WHERE g.id_group = $1 AND u.id_user = $2 AND a.valid = TRUE AND g.deleted = FALSE AND u.deleted = FALSE`,
+			`
+			SELECT a.id_affiliation
+			FROM public.affiliation a
+			JOIN public.group g ON a.id_group = g.id_group
+			JOIN public.user u ON a.id_user = u.id_user
+			WHERE g.id_group = $1 AND u.id_user = $2 AND a.valid = TRUE AND g.deleted = FALSE AND u.deleted = FALSE`,
 			[expense.group, decoded.id]
 		);
 
@@ -295,7 +327,11 @@ async function updateExpenseService(decoded, { expense, obligations }) {
 	}
 
 	const expenseQuery = await db.query(
-		`UPDATE public.expense SET title = $1, description = $2, date = $3, amount = $4, currency = $5, settled = FALSE WHERE id_expense = $6 AND deleted = FALSE AND settled = FALSE RETURNING id_expense`,
+		`
+		UPDATE public.expense
+		SET title = $1, description = $2, date = $3, amount = $4, currency = $5, settled = FALSE
+		WHERE id_expense = $6 AND deleted = FALSE AND settled = FALSE
+		RETURNING id_expense`,
 		[
 			expense.title,
 			expense.description,
@@ -311,7 +347,10 @@ async function updateExpenseService(decoded, { expense, obligations }) {
 	}
 
 	const obligationQuery = await db.query(
-		`SELECT id_obligation, amount, settled, deleted, id_user_creditor, id_user_debtor FROM public.obligation WHERE id_expense = $1`,
+		`
+		SELECT id_obligation, amount, settled, deleted, id_user_creditor, id_user_debtor
+		FROM public.obligation
+		WHERE id_expense = $1`,
 		[expense.id]
 	);
 

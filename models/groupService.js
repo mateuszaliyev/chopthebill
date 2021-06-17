@@ -38,7 +38,10 @@ async function createGroupService(group) {
 	}
 
 	const existsQuery = await db.query(
-		`SELECT id_group FROM public.group WHERE name = $1`,
+		`
+		SELECT id_group
+		FROM public.group
+		WHERE name = $1`,
 		[group.name]
 	);
 
@@ -47,7 +50,10 @@ async function createGroupService(group) {
 	}
 
 	const groupQuery = await db.query(
-		`INSERT INTO public.group VALUES (DEFAULT, $1, $2, FALSE) RETURNING id_group`,
+		`
+		INSERT INTO public.group
+		VALUES (DEFAULT, $1, $2, FALSE)
+		RETURNING id_group`,
 		[group.name, group.description]
 	);
 
@@ -74,7 +80,8 @@ async function createGroupService(group) {
  */
 async function deleteGroupService(decoded, id) {
 	const authorizationQuery = await db.query(
-		`SELECT id_affiliation 
+		`
+		SELECT id_affiliation 
 		FROM public.affiliation a JOIN public.group g ON a.id_group = g.id_group 
 		WHERE a.id_user = $1 AND a.owner = TRUE AND a.valid = TRUE AND g.id_group = $2 AND g.deleted = FALSE`,
 		[decoded.id, id]
@@ -84,9 +91,13 @@ async function deleteGroupService(decoded, id) {
 		return true;
 	}
 
-	await db.query(`UPDATE public.group SET deleted = TRUE WHERE id_group = $1`, [
-		id,
-	]);
+	await db.query(
+		`
+		UPDATE public.group
+		SET deleted = TRUE
+		WHERE id_group = $1`,
+		[id]
+	);
 
 	return false;
 }
@@ -94,7 +105,8 @@ async function deleteGroupService(decoded, id) {
 async function groupService(decoded, id) {
 	// Get group members
 	const affiliationQuery = await db.query(
-		`SELECT a.owner, u.id_user, u.email, u.username, u.avatar, u.hide_email 
+		`
+		SELECT a.owner, u.id_user, u.email, u.username, u.avatar, u.hide_email 
 		FROM public.affiliation a JOIN public.user u ON a.id_user = u.id_user 
 		WHERE a.id_group = $1 AND a.valid = TRUE AND u.deleted = FALSE`,
 		[id]
@@ -114,7 +126,10 @@ async function groupService(decoded, id) {
 
 	// Get group info
 	const groupQuery = await db.query(
-		`SELECT id_group, name, description FROM public.group WHERE id_group = $1 AND deleted = FALSE`,
+		`
+		SELECT id_group, name, description
+		FROM public.group
+		WHERE id_group = $1 AND deleted = FALSE`,
 		[id]
 	);
 
@@ -124,7 +139,8 @@ async function groupService(decoded, id) {
 
 	// Get group expenses
 	const expenseQuery = await db.query(
-		`SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, u.id_user, u.username, u.avatar 
+		`
+		SELECT e.id_expense, e.title, e.description, e.date, e.amount, e.currency, e.settled, u.id_user, u.username, u.avatar 
 		FROM public.expense e JOIN public.user u ON e.id_user = u.id_user 
 		WHERE e.id_group = $1 AND e.deleted = FALSE`,
 		[id]
@@ -216,7 +232,8 @@ async function groupService(decoded, id) {
 async function groupsService(decoded) {
 	// Get user's groups
 	const groupQuery = await db.query(
-		`SELECT g.id_group, g.name, g.description
+		`
+		SELECT g.id_group, g.name, g.description
 		FROM public.affiliation a JOIN public.group g ON a.id_group = g.id_group 
 		WHERE a.id_user = $1 AND a.valid = TRUE AND g.deleted = FALSE`,
 		[decoded.id]
@@ -234,7 +251,8 @@ async function groupsService(decoded) {
 
 	// Get members of user's groups
 	const affiliationQuery = await db.query(
-		`SELECT a.owner, a.id_group, u.id_user, u.email, u.username, u.avatar, u.hide_email 
+		`
+		SELECT a.owner, a.id_group, u.id_user, u.email, u.username, u.avatar, u.hide_email 
 		FROM public.affiliation a JOIN public.user u ON a.id_user = u.id_user 
 		WHERE a.id_group IN (${groupIdsString}) AND a.valid = TRUE AND u.deleted = FALSE`,
 		[]
@@ -280,7 +298,8 @@ async function updateGroupService(decoded, group) {
 
 	// Check if group with a given group.name exists
 	const existsQuery = await db.query(
-		`SELECT id_group 
+		`
+		SELECT id_group 
 		FROM public.group 
 		WHERE id_group != $1 AND name = $2`,
 		[group.id, group.name]
@@ -292,7 +311,8 @@ async function updateGroupService(decoded, group) {
 
 	// Get all affiliations
 	const affiliationQuery = await db.query(
-		`SELECT a.id_affiliation, a.owner, a.valid, a.id_user
+		`
+		SELECT a.id_affiliation, a.owner, a.valid, a.id_user
 		FROM public.affiliation a 
 		JOIN public.group g ON a.id_group = g.id_group 
 		WHERE g.id_group = $1 AND g.deleted = FALSE`,
@@ -317,7 +337,8 @@ async function updateGroupService(decoded, group) {
 
 	// Update group name and description
 	await db.query(
-		`UPDATE public.group 
+		`
+		UPDATE public.group 
 		SET name = $1, description = $2 
 		WHERE id_group = $3`,
 		[group.name, group.description, group.id]

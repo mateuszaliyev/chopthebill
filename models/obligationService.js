@@ -3,7 +3,8 @@ const { db } = require("../config/db");
 
 async function obligationsService(decoded) {
 	const obligationQuery = await db.query(
-		`SELECT o.id_obligation, o.amount, o.settled,
+		`
+		SELECT o.id_obligation, o.amount, o.settled,
         d.id_user AS debtor_id, d.username AS debtor_username, d.avatar AS debtor_avatar,
         c.id_user AS creditor_id, c.username AS creditor_username, c.avatar AS creditor_avatar,
         o.id_expense, e.title AS title, e.currency AS currency

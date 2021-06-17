@@ -9,12 +9,18 @@ const { settingsValidate, passwordValidate } = require("../utils/validate");
 
 async function profileService(decoded, id) {
 	const profileQuery = await db.query(
-		`SELECT id_user, email, username, language, theme, avatar, hide_email, last_seen, deleted FROM public."user" WHERE id_user = $1 AND deleted = FALSE`,
+		`
+		SELECT id_user, email, username, language, theme, avatar, hide_email, last_seen, deleted
+		FROM public.user
+		WHERE id_user = $1 AND deleted = FALSE`,
 		[id]
 	);
 	if (profileQuery.rows[0]) {
 		const checkQuery = await db.query(
-			`SELECT * FROM public."friendship" WHERE id_user_1 = $1 AND id_user_2 = $2`,
+			`
+			SELECT *
+			FROM public.friendship
+			WHERE id_user_1 = $1 AND id_user_2 = $2`,
 			[decoded.id, id]
 		);
 		const friend = checkQuery.rows[0] && checkQuery.rows[0].valid;
@@ -38,7 +44,10 @@ async function settingsService(decoded, settings) {
 	const issues = settingsValidate(settings);
 
 	const emailQuery = await db.query(
-		`SELECT email, username FROM public."user" WHERE email = $1 AND deleted = FALSE`,
+		`
+		SELECT email, username
+		FROM public.user
+		WHERE email = $1 AND deleted = FALSE`,
 		[settings.email]
 	);
 
@@ -47,7 +56,10 @@ async function settingsService(decoded, settings) {
 	}
 
 	const usernameQuery = await db.query(
-		`SELECT username FROM public."user" WHERE username = $1 AND deleted = FALSE`,
+		`
+		SELECT username
+		FROM public.user
+		WHERE username = $1 AND deleted = FALSE`,
 		[settings.username]
 	);
 
@@ -63,7 +75,10 @@ async function settingsService(decoded, settings) {
 	}
 
 	await db.query(
-		`UPDATE public."user" SET email=$1, username=$2, language=$3, theme=$4, hide_email=$5, last_seen=NOW() WHERE id_user = $6`,
+		`
+		UPDATE public.user
+		SET email = $1, username = $2, language = $3, theme = $4, hide_email = $5, last_seen = NOW()
+		WHERE id_user = $6`,
 		[
 			settings.email,
 			settings.username || settings.email,
@@ -86,7 +101,10 @@ async function passwordService(decoded, data) {
 	}
 
 	const passwordQuery = await db.query(
-		`SELECT password FROM public."user" WHERE id_user = $1 AND deleted = FALSE`,
+		`
+		SELECT password
+		FROM public.user
+		WHERE id_user = $1 AND deleted = FALSE`,
 		[decoded.id]
 	);
 
@@ -100,17 +118,23 @@ async function passwordService(decoded, data) {
 		return issues;
 	}
 
-	await db.query(`UPDATE public."user" SET password=$1 WHERE id_user = $2`, [
-		await bcrypt.hash(data.newPassword, 10),
-		decoded.id,
-	]);
+	await db.query(
+		`
+		UPDATE public.user
+		SET password=$1
+		WHERE id_user = $2`,
+		[await bcrypt.hash(data.newPassword, 10), decoded.id]
+	);
 
 	return issues;
 }
 
 async function deleteService(decoded, password) {
 	const passwordQuery = await db.query(
-		`SELECT password FROM public."user" WHERE id_user = $1 AND deleted = FALSE`,
+		`
+		SELECT password
+		FROM public.user
+		WHERE id_user = $1 AND deleted = FALSE`,
 		[decoded.id]
 	);
 
@@ -120,9 +144,13 @@ async function deleteService(decoded, password) {
 	)
 		return "wrong-password";
 
-	await db.query(`UPDATE public."user" SET deleted = TRUE WHERE id_user = $1`, [
-		decoded.id,
-	]);
+	await db.query(
+		`
+		UPDATE public.user
+		SET deleted = TRUE
+		WHERE id_user = $1`,
+		[decoded.id]
+	);
 
 	return null;
 }
