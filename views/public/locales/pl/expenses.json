@@ -1,4 +1,5 @@
 {
+	"completed": "Ukończone",
 	"create-expense": "Utwórz wydatek",
 	"creditors": "Wierzyciele",
 	"debtors": "Dłużnicy",
@@ -8,6 +9,9 @@
 	"new-expense": "Nowy wydatek",
 	"notify": "Powiadom",
 	"paid": "Zapłacono",
+	"pending": "W trakcie",
+	"received": "Otrzymano",
+	"revoke": "Unieważnij",
 	"save-expense": "Zapisz wydatek",
 	"settle": "Ureguluj",
 	"settled": "Uregulowane",
@@ -16,5 +20,6 @@
 	"split-share": "Część",
 	"title-length-invalid": "Nazwa wydatku musi zawierać od 3 do 63 znaków",
 	"to-pay": "Do zapłaty",
+	"to-receive": "Do otrzymania",
 	"toggle-credtor": "Przełącz wierzyciel/dłużnik"
 }

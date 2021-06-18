@@ -11,6 +11,7 @@ import Auth from "../components/auth/Auth";
 import Empty from "../components/Empty";
 import Layout from "../components/layout/Layout";
 import Meta from "../components/Meta";
+import Loader from "../components/Loader";
 
 export async function getServerSideProps({ locale }) {
 	return {
@@ -25,6 +26,7 @@ function Obligations() {
 
 	const { accessToken } = useContext(UserContext);
 	const [obligations, setObligations] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const getObligations = async () => {
 		const res = await fetch(`${host}/obligations`, {
 			method: "GET",
@@ -38,13 +40,27 @@ function Obligations() {
 			const obligations = await res.json();
 			setObligations(obligations);
 		}
+		setLoading(false);
 	};
-	useEffect(getObligations, [accessToken]);
+	useEffect(() => {
+		if (accessToken) {
+			getObligations();
+		}
+	}, [accessToken]);
 	return (
 		<Auth>
 			<Meta title={`${t("obligations")} | ChopTheBill`} />
 			<Layout title={`${t("obligations")}`}>
-				<ObligationList obligations={obligations} />
+				{loading ? (
+					<Loader size="4rem" />
+				) : obligations.length > 0 ? (
+					<ObligationList
+						obligations={obligations}
+						setObligations={setObligations}
+					/>
+				) : (
+					<Empty />
+				)}
 			</Layout>
 		</Auth>
 	);

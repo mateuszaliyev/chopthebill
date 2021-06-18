@@ -1,4 +1,5 @@
 {
+	"completed": "Completed",
 	"create-expense": "Create expense",
 	"creditors": "Creditors",
 	"debtors": "Debtors",
@@ -8,6 +9,9 @@
 	"new-expense": "New expense",
 	"notify": "Notify",
 	"paid": "Paid",
+	"pending": "Pending",
+	"received": "Received",
+	"revoke": "Revoke",
 	"save-expense": "Save expense",
 	"settle": "Settle",
 	"settled": "Settled",
@@ -16,5 +20,6 @@
 	"split-share": "Share",
 	"title-length-invalid": "Expense title must be between 3 and 63 characters long",
 	"to-pay": "To pay",
+	"to-receive": "To receive",
 	"toggle-creditor": "Toggle creditor/debtor"
 }
