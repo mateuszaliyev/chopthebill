@@ -1,5 +1,5 @@
 // React & Next
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
@@ -44,13 +44,14 @@ function LoginForm() {
 	const [visibility, setVisibility] = useState(false);
 
 	const { setPalette, setTheme } = useContext(ThemeContext);
-	const { setAccessToken, setUser } = useContext(UserContext);
+	const { setAccessToken, user, setUser } = useContext(UserContext);
 
 	const router = useRouter();
 	const classes = useStyles();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		const res = await fetch(`${host}/login`, {
 			method: "POST",
 			credentials: "include",
@@ -63,12 +64,13 @@ function LoginForm() {
 				password,
 			}),
 		});
+
 		const data = await res.json();
+
 		if (res.ok) {
 			const { accessToken, refreshToken, user } = data;
 
 			setAccessToken(accessToken);
-			localStorage.setItem("refresh-token", refreshToken);
 			await set("refresh-token", `${refreshToken}`);
 
 			setPalette(user.theme.split("-")[1] || "light");
@@ -78,8 +80,6 @@ function LoginForm() {
 			router.push(`${user.language}/dashboard`);
 		} else if (data.error) {
 			setFieldsHelper(t(`login:${data.error}`));
-		} else {
-			router.push("/"); // TODO: Internal Server Error
 		}
 	};
 

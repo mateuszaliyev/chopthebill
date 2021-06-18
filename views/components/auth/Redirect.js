@@ -1,6 +1,6 @@
 // React & Next
 import { useContext, useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 // IndexedDB
 import { get } from "idb-keyval";
@@ -50,9 +50,18 @@ function Redirect({ children }) {
 		}
 	};
 
-	useEffect(() => {
-		authenticate();
-	}, [accessToken]);
+	const handleAuthentication = async () => {
+		const refreshToken = await get("refresh-token");
+		if (accessToken) {
+			authenticate();
+		} else if (refreshToken) {
+			getAccessToken();
+		} else {
+			setLoading(false);
+		}
+	};
+
+	useEffect(handleAuthentication, [accessToken]);
 
 	return loading ? (
 		<main

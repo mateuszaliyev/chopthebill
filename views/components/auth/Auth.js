@@ -31,6 +31,7 @@ function Auth(props) {
 				Authorization: `Bearer ${accessToken}`,
 			},
 		});
+
 		if (res.ok) {
 			const user = await res.json();
 			setPalette(user.theme.split("-")[1] || "light");
@@ -44,12 +45,14 @@ function Auth(props) {
 
 	const getAccessToken = async () => {
 		const refreshToken = await get("refresh-token");
+
 		const res = await fetch(`${host}/refresh`, {
 			method: "GET",
 			headers: {
 				Authorization: `Bearer ${refreshToken}`,
 			},
 		});
+
 		if (res.ok) {
 			const data = await res.json();
 			setAccessToken(data.accessToken);
@@ -58,7 +61,21 @@ function Auth(props) {
 		}
 	};
 
-	useEffect(authenticate, [accessToken]);
+	const handleAuthentication = async () => {
+		const refreshToken = await get("refresh-token");
+
+		if (accessToken) {
+			authenticate();
+		} else if (refreshToken) {
+			getAccessToken();
+		} else {
+			router.push("/login");
+		}
+	};
+
+	useEffect(() => {
+		handleAuthentication();
+	}, [accessToken]);
 
 	useEffect(() => {
 		const interval = setInterval(() => {

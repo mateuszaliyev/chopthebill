@@ -61,6 +61,7 @@ function RegisterForm() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		const res = await fetch(`${host}/register`, {
 			method: "POST",
 			headers: {
@@ -77,6 +78,7 @@ function RegisterForm() {
 				theme: `${theme}-${palette}`,
 			}),
 		});
+
 		const issues = await res.json();
 
 		if (issues.length > 0) {
@@ -87,6 +89,7 @@ function RegisterForm() {
 				passwordConfirm: "",
 				hideEmail: "",
 			};
+
 			issues.forEach((issue) => {
 				if (issue.indexOf("email") !== -1) {
 					newFieldsHelper.email += t(`register:${issue}`) + ". ";
@@ -106,6 +109,7 @@ function RegisterForm() {
 					newFieldsHelper.hideEmail += t(`register:${issue}`) + ". ";
 				}
 			});
+
 			setFieldsHelper(newFieldsHelper);
 		} else {
 			router.push("/login");
