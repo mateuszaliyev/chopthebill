@@ -18,6 +18,7 @@
 	"default": "Domyślny",
 	"delete": "Usuń",
 	"delete-account": "Usuń konto",
+	"deleted-user": "[usunięty użytkownik]",
 	"description": "Opis",
 	"discard": "Odrzuć",
 	"discard-changes": "Odrzucić zmiany?",

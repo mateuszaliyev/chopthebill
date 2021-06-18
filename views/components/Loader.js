@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 
 // Material UI
-import { CircularProgress, useMediaQuery } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { CircularProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 // Styles
 const useStyles = makeStyles((theme) => ({

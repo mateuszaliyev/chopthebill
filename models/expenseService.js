@@ -237,7 +237,7 @@ async function expensesService(decoded) {
 	].reduce(
 		(prev, curr, index) => `${prev}${index !== 0 ? ", " : ""}${curr}`,
 		""
-	)})`;
+	)}) AND deleted = FALSE`;
 
 	const userQuery = await db.query(userQueryText);
 
@@ -254,16 +254,20 @@ async function expensesService(decoded) {
 				);
 				obligations.push({
 					amount: obligation.amount,
-					creditor: {
-						avatar: creditor.avatar,
-						id: creditor.id_user,
-						username: creditor.username,
-					},
-					debtor: {
-						avatar: debtor.avatar,
-						id: debtor.id_user,
-						username: debtor.username,
-					},
+					creditor: creditor
+						? {
+								avatar: creditor.avatar,
+								id: creditor.id_user,
+								username: creditor.username,
+						  }
+						: null,
+					debtor: debtor
+						? {
+								avatar: debtor.avatar,
+								id: debtor.id_user,
+								username: debtor.username,
+						  }
+						: null,
 				});
 			}
 		});
@@ -285,11 +289,13 @@ async function expensesService(decoded) {
 				id: expense.id_expense,
 				settled: expense.settled,
 				title: expense.title,
-				user: {
-					avatar: user.avatar,
-					id: user.id_user,
-					username: user.username,
-				},
+				user: user
+					? {
+							avatar: user.avatar,
+							id: user.id_user,
+							username: user.username,
+					  }
+					: null,
 			},
 			obligations,
 		};

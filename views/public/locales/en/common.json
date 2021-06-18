@@ -19,6 +19,7 @@
 	"default": "Default",
 	"delete": "Delete",
 	"delete-account": "Delete account",
+	"deleted-user": "[deleted user]",
 	"discard": "Discard",
 	"discard-changes": "Discard changes?",
 	"discard-changes-details": "You have unsaved changes that will be discarded.",

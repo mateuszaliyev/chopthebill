@@ -95,13 +95,17 @@ function Expense({ className, data, onEdit = null }) {
 					)
 				}
 				avatar={
-					<Link
-						color="inherit"
-						href={`/user/${data.expense.user.id}`}
-						underline="none"
-					>
-						<Avatar user={data.expense.user} />
-					</Link>
+					data.expense.user ? (
+						<Link
+							color="inherit"
+							href={`/user/${data.expense.user.id}`}
+							underline="none"
+						>
+							<Avatar user={data.expense.user} />
+						</Link>
+					) : (
+						<Avatar />
+					)
 				}
 				subheader={`${data.expense.date.toLocaleDateString(
 					router.locale
@@ -110,21 +114,23 @@ function Expense({ className, data, onEdit = null }) {
 					minute: "2-digit",
 				})}`}
 				title={
-					data.expense.group.id !== null ? (
-						<>
-							<Link color="inherit" href={`/group/${data.expense.group.id}`}>
-								{data.expense.group.name}
-							</Link>
-							{" / "}
-							<Link color="inherit" href={`/user/${data.expense.group.id}`}>
+					<>
+						{data.expense.group.id !== null && (
+							<>
+								<Link color="inherit" href={`/group/${data.expense.group.id}`}>
+									{data.expense.group.name}
+								</Link>
+								{" / "}
+							</>
+						)}
+						{data.expense.user ? (
+							<Link color="inherit" href={`/user/${data.expense.user.id}`}>
 								{data.expense.user.username}
 							</Link>
-						</>
-					) : (
-						<Link color="inherit" href={`/group/${data.expense.group.id}`}>
-							{data.expense.user.username}
-						</Link>
-					)
+						) : (
+							t("deleted-user")
+						)}
+					</>
 				}
 			/>
 			<Divider variant="middle" />
@@ -163,7 +169,7 @@ function Expense({ className, data, onEdit = null }) {
 			<Collapse in={expanded} timeout="auto">
 				<List>
 					{data.obligations.map((obligation, index) => (
-						<ListItem button={obligation.creditor.id === user.id} key={index}>
+						<ListItem button={obligation.creditor?.id === user.id} key={index}>
 							<ListItemAvatar>
 								<Badge
 									anchorOrigin={{
@@ -171,46 +177,62 @@ function Expense({ className, data, onEdit = null }) {
 										horizontal: "right",
 									}}
 									badgeContent={
-										<Link
-											color="inherit"
-											href={`/user/${obligation.creditor.id}`}
-											underline="none"
-										>
-											<Avatar
-												className={classes.smallAvatar}
-												user={obligation.creditor}
-											/>
-										</Link>
+										obligation.creditor ? (
+											<Link
+												color="inherit"
+												href={`/user/${obligation.creditor.id}`}
+												underline="none"
+											>
+												<Avatar
+													className={classes.smallAvatar}
+													user={obligation.creditor}
+												/>
+											</Link>
+										) : (
+											<Avatar className={classes.smallAvatar} />
+										)
 									}
 									overlap="circle"
 								>
-									<Link
-										color="inherit"
-										href={`/user/${obligation.debtor.id}`}
-										underline="none"
-									>
-										<Avatar user={obligation.debtor} />
-									</Link>
+									{obligation.debtor ? (
+										<Link
+											color="inherit"
+											href={`/user/${obligation.debtor.id}`}
+											underline="none"
+										>
+											<Avatar user={obligation.debtor} />
+										</Link>
+									) : (
+										<Avatar />
+									)}
 								</Badge>
 							</ListItemAvatar>
 							<ListItemText
 								primary={
-									<Link
-										color="inherit"
-										href={`/user/${obligation.debtor.id}`}
-										underline="none"
-									>
-										{obligation.debtor.username}
-									</Link>
+									obligation.debtor ? (
+										<Link
+											color="inherit"
+											href={`/user/${obligation.debtor.id}`}
+											underline="none"
+										>
+											{obligation.debtor.username}
+										</Link>
+									) : (
+										t("deleted-user")
+									)
 								}
 								secondary={
-									<Link
-										color="inherit"
-										href={`/user/${obligation.creditor.id}`}
-										underline="none"
-									>
-										{obligation.creditor.username}
-									</Link>
+									obligation.creditor ? (
+										<Link
+											color="inherit"
+											href={`/user/${obligation.creditor?.id}`}
+											underline="none"
+										>
+											{obligation.creditor?.username}
+										</Link>
+									) : (
+										t("deleted-user")
+									)
 								}
 							/>
 							<div className={classes.amount}>

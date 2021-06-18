@@ -70,7 +70,7 @@ function ExpenseList({ expenses }) {
 							data={data}
 							key={index}
 							onEdit={
-								user.id === data.expense.user.id
+								user.id === data.expense.user?.id
 									? () => router.push(`/expense/${data.expense.id}`)
 									: null
 							}

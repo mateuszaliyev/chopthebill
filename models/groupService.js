@@ -106,9 +106,9 @@ async function groupService(decoded, id) {
 	// Get group members
 	const affiliationQuery = await db.query(
 		`
-		SELECT a.owner, u.id_user, u.email, u.username, u.avatar, u.hide_email 
+		SELECT a.owner, a.valid, u.id_user, u.email, u.username, u.avatar, u.hide_email 
 		FROM public.affiliation a JOIN public.user u ON a.id_user = u.id_user 
-		WHERE a.id_group = $1 AND a.valid = TRUE AND u.deleted = FALSE`,
+		WHERE a.id_group = $1 AND u.deleted = FALSE`,
 		[id]
 	);
 
@@ -190,16 +190,20 @@ async function groupService(decoded, id) {
 						);
 						return {
 							amount: obligation.amount,
-							creditor: {
-								avatar: creditor.avatar,
-								id: creditor.id_user,
-								username: creditor.username,
-							},
-							debtor: {
-								avatar: debtor.avatar,
-								id: debtor.id_user,
-								username: debtor.username,
-							},
+							creditor: creditor
+								? {
+										avatar: creditor.avatar,
+										id: creditor.id_user,
+										username: creditor.username,
+								  }
+								: null,
+							debtor: debtor
+								? {
+										avatar: debtor.avatar,
+										id: debtor.id_user,
+										username: debtor.username,
+								  }
+								: null,
 						};
 					}),
 			}));
@@ -211,13 +215,15 @@ async function groupService(decoded, id) {
 		description: groupQuery.rows[0].description,
 		expenses,
 		id: groupQuery.rows[0].id_group,
-		members: affiliationQuery.rows.map((member) => ({
-			avatar: member.avatar,
-			email: member.hide_email ? "" : member.email,
-			id: member.id_user,
-			owner: member.owner,
-			username: member.username,
-		})),
+		members: affiliationQuery.rows
+			.filter((member) => member.valid)
+			.map((member) => ({
+				avatar: member.avatar,
+				email: member.hide_email ? "" : member.email,
+				id: member.id_user,
+				owner: member.owner,
+				username: member.username,
+			})),
 		name: groupQuery.rows[0].name,
 	};
 
