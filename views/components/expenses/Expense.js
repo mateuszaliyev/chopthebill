@@ -6,7 +6,9 @@ import { useTranslation } from "next-i18next";
 // Material UI
 import {
 	Badge,
+	Button,
 	Card,
+	CardActions,
 	CardContent,
 	CardHeader,
 	Collapse,
@@ -16,10 +18,11 @@ import {
 	ListItem,
 	ListItemAvatar,
 	ListItemText,
+	makeStyles,
 	Tooltip,
 	Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import DoneAllIcon from "@material-ui/icons/DoneAll";
 import EditIcon from "@material-ui/icons/Edit";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
@@ -36,11 +39,18 @@ import useWindowSize from "../hooks/useWindowSize";
 
 // Styles
 const useStyles = makeStyles((theme) => ({
+	actions: {
+		color: theme.palette.text.secondary,
+		justifyContent: "flex-end",
+	},
 	amount: {
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
 		marginLeft: "auto",
+	},
+	disabled: {
+		opacity: 0.5,
 	},
 	expand: {
 		transform: "rotate(0deg)",
@@ -70,7 +80,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Expense({ className, data, onEdit = null }) {
+function Expense({
+	className,
+	data,
+	disabled = false,
+	onEdit = null,
+	onSettle = null,
+}) {
 	const { t } = useTranslation();
 
 	const [expanded, setExpanded] = useState(false);
@@ -82,18 +98,25 @@ function Expense({ className, data, onEdit = null }) {
 	const { width } = useWindowSize();
 	const classes = useStyles({ width });
 
+	const editable = Boolean(onEdit);
+	const settleable = Boolean(onSettle);
+
 	return (
-		<Card className={`${className} ${classes.root}`}>
+		<Card
+			className={`${className} ${disabled ? classes.disabled : ""} ${
+				classes.root
+			}`}
+		>
 			<CardHeader
-				action={
-					onEdit && (
-						<Tooltip title={t("edit")}>
-							<IconButton onClick={onEdit}>
-								<EditIcon />
-							</IconButton>
-						</Tooltip>
-					)
-				}
+				// action={
+				// 	onEdit && (
+				// 		<Tooltip title={t("edit")}>
+				// 			<IconButton onClick={onEdit}>
+				// 				<EditIcon />
+				// 			</IconButton>
+				// 		</Tooltip>
+				// 	)
+				// }
 				avatar={
 					data.expense.user ? (
 						<Link
@@ -169,7 +192,10 @@ function Expense({ className, data, onEdit = null }) {
 			<Collapse in={expanded} timeout="auto">
 				<List>
 					{data.obligations.map((obligation, index) => (
-						<ListItem button={obligation.creditor?.id === user.id} key={index}>
+						<ListItem
+							disabled={!data.expense.settled && obligation.settled}
+							key={index}
+						>
 							<ListItemAvatar>
 								<Badge
 									anchorOrigin={{
@@ -237,9 +263,26 @@ function Expense({ className, data, onEdit = null }) {
 							/>
 							<div className={classes.amount}>
 								<Typography align="right" color="textSecondary" variant="body2">
-									{t("expenses:to-pay")}
+									{t(
+										obligation.creditor.id === user.id
+											? obligation.settled
+												? "expenses:received"
+												: "expenses:to-receive"
+											: obligation.settled
+											? "expenses:paid"
+											: "expenses:to-pay"
+									)}
 								</Typography>
-								<Typography align="right">
+								<Typography
+									align="right"
+									color={
+										obligation.creditor.id === user.id
+											? "primary"
+											: obligation.debtor.id === user.id
+											? "error"
+											: "textSecondary"
+									}
+								>
 									<Currency
 										amount={obligation.amount / 100}
 										code={data.expense.currency}
@@ -250,6 +293,26 @@ function Expense({ className, data, onEdit = null }) {
 					))}
 				</List>
 			</Collapse>
+			{(editable || settleable) && (
+				<CardActions className={classes.actions}>
+					<Button
+						color="inherit"
+						disabled={!editable}
+						onClick={onEdit}
+						startIcon={<EditIcon />}
+					>
+						{t("edit")}
+					</Button>
+					<Button
+						color="primary"
+						disabled={!settleable}
+						onClick={onSettle}
+						startIcon={<DoneAllIcon />}
+					>
+						{t("expenses:settle")}
+					</Button>
+				</CardActions>
+			)}
 		</Card>
 	);
 }

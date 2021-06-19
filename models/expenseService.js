@@ -268,6 +268,7 @@ async function expensesService(decoded) {
 								username: debtor.username,
 						  }
 						: null,
+					settled: obligation.settled,
 				});
 			}
 		});
@@ -300,7 +301,38 @@ async function expensesService(decoded) {
 			obligations,
 		};
 	});
-	return data;
+
+	return data.sort(
+		(a, b) => new Date(b.expense.date) - new Date(a.expense.date)
+	);
+}
+
+async function settleExpenseService(decoded, id) {
+	const authQuery = await db.query(
+		`
+		SELECT *
+		FROM public.expense
+		WHERE (
+			SELECT COUNT(*)
+			FROM public.obligation
+			WHERE id_expense = $1 AND settled = FALSE
+		) = 0 AND id_expense = $1 AND id_user = $2`,
+		[id, decoded.id]
+	);
+
+	if (!authQuery.rows[0]) {
+		return true;
+	}
+
+	await db.query(
+		`
+		UPDATE public.expense
+		SET settled = TRUE
+		WHERE id_expense = $1`,
+		[id]
+	);
+
+	return false;
 }
 
 async function updateExpenseService(decoded, { expense, obligations }) {
@@ -446,5 +478,6 @@ module.exports = {
 	addExpenseService,
 	expenseService,
 	expensesService,
+	settleExpenseService,
 	updateExpenseService,
 };

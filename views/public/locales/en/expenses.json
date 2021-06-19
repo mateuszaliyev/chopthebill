@@ -6,6 +6,7 @@
 	"description-length-invalid": "Expense description must not exceed length of 255 characters",
 	"edit-expense": "Edit expense",
 	"equal-split": "Equal split",
+	"expense-settled-successfully": "Expense settled successfully",
 	"new-expense": "New expense",
 	"notify": "Notify",
 	"paid": "Paid",

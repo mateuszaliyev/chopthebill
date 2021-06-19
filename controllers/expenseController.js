@@ -2,6 +2,7 @@ const {
 	addExpenseService,
 	expenseService,
 	expensesService,
+	settleExpenseService,
 	updateExpenseService,
 } = require("../models/expenseService");
 
@@ -44,6 +45,19 @@ async function expensesController(req, res) {
 	}
 }
 
+async function settleExpenseController(req, res) {
+	try {
+		const error = await settleExpenseService(res.locals.decoded, req.params.id);
+		if (error) {
+			return res.sendStatus(400);
+		}
+		return res.sendStatus(200);
+	} catch (err) {
+		console.error(err);
+		return res.sendStatus(500);
+	}
+}
+
 async function updateExpenseController(req, res) {
 	try {
 		const error = await updateExpenseService(res.locals.decoded, req.body);
@@ -61,5 +75,6 @@ module.exports = {
 	addExpenseController,
 	expenseController,
 	expensesController,
+	settleExpenseController,
 	updateExpenseController,
 };

@@ -64,6 +64,7 @@ function NewExpense() {
 				id: null,
 				name: null,
 			},
+			settled: false,
 			title: "",
 			user: {
 				id: null,

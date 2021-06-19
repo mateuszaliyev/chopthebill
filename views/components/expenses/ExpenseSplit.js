@@ -72,38 +72,6 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 		setValue(newValue);
 	};
 
-	const handleEqualSplit = () => {
-		let index = 0,
-			sum = data.expense.amount;
-		const usersOfKind = data.users.filter(
-			(user) => creditors === user.creditor
-		);
-		const newUsers = data.users.map((user) => {
-			if (creditors === user.creditor) {
-				const amount = Math.round(sum / (usersOfKind.length - index));
-				const newUser = {
-					...user,
-					amount,
-					percentage: 100 * (amount / data.expense.amount),
-					share: 1,
-					textField: {
-						amount: (amount / 100).toFixed(2),
-						percentage: (100 * amount) / data.expense.amount,
-						share: 1,
-					},
-				};
-				index++;
-				sum -= newUser.amount;
-				return newUser;
-			}
-			return user;
-		});
-		setData((prevData) => ({
-			...prevData,
-			users: newUsers,
-		}));
-	};
-
 	const handleDialogClose = (user) => {
 		if (user) {
 			let exists = false;
@@ -142,6 +110,38 @@ function ExpenseSplit({ creditors = false, data, methods, setData }) {
 		setFriendDialogOpen(false);
 		setMemberDialogOpen(false);
 		setSearchDialogOpen(false);
+	};
+
+	const handleEqualSplit = () => {
+		let index = 0,
+			sum = data.expense.amount;
+		const usersOfKind = data.users.filter(
+			(user) => creditors === user.creditor
+		);
+		const newUsers = data.users.map((user) => {
+			if (creditors === user.creditor) {
+				const amount = Math.round(sum / (usersOfKind.length - index));
+				const newUser = {
+					...user,
+					amount,
+					percentage: 100 * (amount / data.expense.amount),
+					share: 1,
+					textField: {
+						amount: (amount / 100).toFixed(2),
+						percentage: (100 * amount) / data.expense.amount,
+						share: 1,
+					},
+				};
+				index++;
+				sum -= newUser.amount;
+				return newUser;
+			}
+			return user;
+		});
+		setData((prevData) => ({
+			...prevData,
+			users: newUsers,
+		}));
 	};
 
 	useEffect(() => {

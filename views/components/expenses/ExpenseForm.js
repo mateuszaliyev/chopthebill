@@ -269,6 +269,7 @@ function ExpenseForm({ className, data, edit = false, setData }) {
 							amount,
 							creditor,
 							debtor,
+							settled: false,
 						});
 
 						debtorTotal -= amount;

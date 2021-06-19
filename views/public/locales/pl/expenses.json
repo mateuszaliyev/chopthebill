@@ -6,6 +6,7 @@
 	"description-length-invalid": "Opis wydatku nie może być dłuższy niż 255 znaków",
 	"edit-expense": "Edycja wydatku",
 	"equal-split": "Równy podział",
+	"expense-settled-successfully": "Wydatek został uregulowany pomyślnie",
 	"new-expense": "Nowy wydatek",
 	"notify": "Powiadom",
 	"paid": "Zapłacono",
