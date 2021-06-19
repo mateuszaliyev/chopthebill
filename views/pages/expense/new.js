@@ -51,7 +51,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function NewExpense() {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
 
 	const { accessToken, user } = useContext(UserContext);
 	const [data, setData] = useState({

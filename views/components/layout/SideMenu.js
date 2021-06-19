@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SideMenu({ items }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 	const classes = useStyles();
 
 	return (

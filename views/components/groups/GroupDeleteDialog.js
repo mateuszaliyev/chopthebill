@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function GroupDeleteDialog({ group, onClose, open }) {
-	const { t } = useTranslation(["common", "user", "validation"]);
+	const { t } = useTranslation();
 
 	const { accessToken } = useContext(UserContext);
 

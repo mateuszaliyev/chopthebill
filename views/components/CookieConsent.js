@@ -7,7 +7,7 @@ import { Button, Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 
 function CookieConsent({ vertical = "bottom", horizontal = "center" }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [open, setOpen] = useState(false);
 

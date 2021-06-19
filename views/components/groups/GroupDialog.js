@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function GroupDialog({ edit = null, onClose, open }) {
-	const { t } = useTranslation(["common", "groups"]);
+	const { t } = useTranslation();
 
 	const [changesMade, setChangesMade] = useState(false);
 	const [discardOpen, setDiscardOpen] = useState(false);

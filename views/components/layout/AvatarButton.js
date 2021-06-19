@@ -13,7 +13,7 @@ import Link from "../Link";
 import { UserContext } from "../auth/User";
 
 function AvatarButton() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
 	const { user } = useContext(UserContext);
 

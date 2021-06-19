@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Profile({ setUser, user }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
 

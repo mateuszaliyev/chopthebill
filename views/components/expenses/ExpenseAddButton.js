@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ExpenseAddButton({ groupId = null }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const classes = useStyles();
 

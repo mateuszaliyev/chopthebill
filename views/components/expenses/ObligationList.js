@@ -1,28 +1,37 @@
 // React & Next
+import { useContext, useState } from "react";
 import { useTranslation } from "next-i18next";
+
+// Material UI
 import {
+	IconButton,
 	List,
 	ListItem,
 	ListItemAvatar,
-	ListItemText,
-	Typography,
-	ListSubheader,
 	ListItemSecondaryAction,
-	Tooltip,
-	IconButton,
+	ListItemText,
+	ListSubheader,
+	makeStyles,
 	Snackbar,
+	Tooltip,
+	Typography,
 } from "@material-ui/core";
-import Avatar from "../Avatar";
-import { useContext, useState } from "react";
-import { UserContext } from "../auth/User";
-import Currency from "./Currency";
-import { makeStyles } from "@material-ui/core/styles";
-import Link from "../Link";
+import Alert from "@material-ui/lab/Alert";
 import DoneIcon from "@material-ui/icons/Done";
 import UndoIcon from "@material-ui/icons/Undo";
-import Alert from "@material-ui/lab/Alert";
+
+// Components
+import Avatar from "../Avatar";
+import Currency from "./Currency";
+import Link from "../Link";
+
+// Config
 import { host } from "../../config";
 
+// Contexts
+import { UserContext } from "../auth/User";
+
+// Styles
 const useStyles = makeStyles((theme) => ({
 	amount: {
 		display: "flex",
@@ -32,11 +41,16 @@ const useStyles = makeStyles((theme) => ({
 		marginRight: "1rem",
 	},
 }));
+
 function ObligationListItem({ obligation, onClick = null, settled = false }) {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
+
 	const { user } = useContext(UserContext);
+
 	const classes = useStyles();
+
 	const creditor = obligation.creditor.id === user.id;
+
 	return (
 		<ListItem disabled={settled}>
 			<ListItemAvatar>
@@ -120,21 +134,28 @@ function ObligationListItem({ obligation, onClick = null, settled = false }) {
 	);
 }
 function ObligationList({ obligations, setObligations }) {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
+
 	const [snackbarText, setSnackbarText] = useState(null);
+
 	const { accessToken } = useContext(UserContext);
+
 	const pending = obligations.filter(
 		(obligation) => !obligation.expense.settled && !obligation.settled
 	);
+
 	const settled = obligations.filter(
 		(obligation) => !obligation.expense.settled && obligation.settled
 	);
+
 	const completed = obligations.filter(
 		(obligation) => obligation.expense.settled
 	);
+
 	const handleClick = async (id) => {
 		const index = obligations.findIndex((obligation) => id === obligation.id);
 		const settled = obligations[index].settled;
+
 		const res = await fetch(
 			`${host}/obligations/${settled ? "revoke" : "settle"}/${id}`,
 			{
@@ -146,6 +167,7 @@ function ObligationList({ obligations, setObligations }) {
 				},
 			}
 		);
+
 		if (res.ok) {
 			setObligations((prevObligations) => {
 				const newObligations = [...prevObligations];
@@ -156,6 +178,7 @@ function ObligationList({ obligations, setObligations }) {
 			setSnackbarText(`${t("something-went-wrong")}. ${t("try-again")}.`);
 		}
 	};
+
 	return (
 		<List>
 			{pending.length > 0 && (

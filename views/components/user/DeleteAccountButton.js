@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function DeleteAccountButton() {
-	const { t } = useTranslation(["common", "user", "validation"]);
+	const { t } = useTranslation();
 
 	const [fieldHelper, setFieldHelper] = useState("");
 	const [open, setOpen] = useState(false);

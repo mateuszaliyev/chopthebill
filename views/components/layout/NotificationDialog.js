@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NotificationDialog({ onClose, open, title }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const classes = useStyles();
 	const theme = useTheme();

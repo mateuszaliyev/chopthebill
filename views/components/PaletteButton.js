@@ -11,7 +11,7 @@ import Brightness7Icon from "@material-ui/icons/Brightness7";
 import { ThemeContext } from "./Theme";
 
 function PaletteButton({ size }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 	const { palette, togglePalette } = useContext(ThemeContext);
 
 	return (

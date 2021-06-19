@@ -35,7 +35,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Account() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [user, setUser] = useState({});
 

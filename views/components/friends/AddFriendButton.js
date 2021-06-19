@@ -13,7 +13,7 @@ import { host } from "../../config";
 import { UserContext } from "../auth/User";
 
 function AddFriendButton({ color = "inherit", edge = false, id, onAddFriend }) {
-	const { t } = useTranslation(["common", "friends"]);
+	const { t } = useTranslation();
 
 	const { accessToken } = useContext(UserContext);
 

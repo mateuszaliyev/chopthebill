@@ -51,7 +51,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function EditExpense() {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
 
 	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(true);

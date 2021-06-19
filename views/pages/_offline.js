@@ -54,7 +54,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Offline() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const router = useRouter();
 

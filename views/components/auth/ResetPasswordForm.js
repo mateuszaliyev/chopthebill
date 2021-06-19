@@ -23,7 +23,7 @@ function ResetPasswordForm() {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 
-	const { t } = useTranslation(["common", "login"]);
+	const { t } = useTranslation();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

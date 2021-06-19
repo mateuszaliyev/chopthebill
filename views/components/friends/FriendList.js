@@ -81,7 +81,7 @@ function FriendListLastSeen({ className, friend, listItem = false }) {
 }
 
 function FriendList({ friends, setFriends }) {
-	const { t } = useTranslation(["common", "friends"]);
+	const { t } = useTranslation();
 
 	const [searchDialogOpen, setSearchDialogOpen] = useState(false);
 

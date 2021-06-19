@@ -17,7 +17,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Dashboard() {
-	const { t } = useTranslation(["common", "dashboard"]);
+	const { t } = useTranslation();
 
 	return (
 		<Auth>

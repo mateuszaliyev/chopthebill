@@ -10,7 +10,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import NotificationDialog from "./NotificationDialog";
 
 function NotificationButton({ amount, color }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 	const [open, setOpen] = useState(false);
 
 	const handleClick = () => {

@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FriendDialog({ onClose, open, title = null }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [friends, setFriends] = useState([]);
 

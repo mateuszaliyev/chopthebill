@@ -81,7 +81,7 @@ function Alert(props) {
 }
 
 function ChangePasswordButton() {
-	const { t } = useTranslation(["common", "validation"]);
+	const { t } = useTranslation();
 
 	const [fieldsHelper, setFieldsHelper] = useState({
 		password: "",

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MemberDialog({ groupId, onClose, open, title = null }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [members, setMembers] = useState([]);
 

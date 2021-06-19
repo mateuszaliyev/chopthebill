@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemberList = ({ group }) => {
-	const { t } = useTranslation(["common", "groups"]);
+	const { t } = useTranslation();
 
 	const classes = useStyles();
 	const { width } = useWindowSize();

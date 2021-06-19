@@ -20,13 +20,13 @@ import { UserContext } from "../components/auth/User";
 export async function getServerSideProps({ locale }) {
 	return {
 		props: {
-			...(await serverSideTranslations(locale, ["common", "friends", "date"])),
+			...(await serverSideTranslations(locale, ["common", "date", "friends"])),
 		},
 	};
 }
 
 function Friends() {
-	const { t } = useTranslation(["common", "friends"]);
+	const { t } = useTranslation();
 
 	const [friends, setFriends] = useState([]);
 	const [loading, setLoading] = useState(true);

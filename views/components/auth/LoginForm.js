@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 });
 
 function LoginForm() {
-	const { t } = useTranslation(["common", "login"]);
+	const { t } = useTranslation();
 
 	const [email, setEmail] = useState("");
 	const [fieldsHelper, setFieldsHelper] = useState("");

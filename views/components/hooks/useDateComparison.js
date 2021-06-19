@@ -2,7 +2,7 @@
 import { useTranslation } from "next-i18next";
 
 function useDateComparison(date1, date2) {
-	const { t } = useTranslation("date");
+	const { t } = useTranslation();
 
 	if (
 		typeof date1.getTime !== "function" ||
@@ -20,30 +20,30 @@ function useDateComparison(date1, date2) {
 	if (difference < 1000 * 60 * 60) {
 		return `${t("date:minute", {
 			count: parseInt(difference / 1000 / 60),
-		})} ${t("ago")}`;
+		})} ${t("date:ago")}`;
 	}
 
 	if (difference < 1000 * 60 * 60 * 24) {
 		return `${t("date:hour", {
 			count: parseInt(difference / 1000 / 60 / 60),
-		})} ${t("ago")}`;
+		})} ${t("date:ago")}`;
 	}
 
 	if (difference < 1000 * 60 * 60 * 24 * 30.44) {
 		return `${t("date:day", {
 			count: parseInt(difference / 1000 / 60 / 60 / 24),
-		})} ${t("ago")}`;
+		})} ${t("date:ago")}`;
 	}
 
 	if (difference < 1000 * 60 * 60 * 24 * 365) {
 		return `${t("date:month", {
 			count: parseInt(difference / 1000 / 60 / 60 / 24 / 30.44),
-		})} ${t("ago")}`;
+		})} ${t("date:ago")}`;
 	}
 
 	return `${t("date:year", {
 		count: parseInt(difference / 1000 / 60 / 60 / 24 / 365.25),
-	})} ${t("ago")}`;
+	})} ${t("date:ago")}`;
 }
 
 export default useDateComparison;

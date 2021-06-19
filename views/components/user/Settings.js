@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Settings() {
-	const { t } = useTranslation(["common", "user", "validation"]);
+	const { t } = useTranslation();
 
 	const { setTheme, setPalette } = useContext(ThemeContext);
 	const { user, accessToken } = useContext(UserContext);

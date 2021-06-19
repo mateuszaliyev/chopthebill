@@ -27,7 +27,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Expenses() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [expenses, setExpenses] = useState([]);
 	const [loading, setLoading] = useState(true);

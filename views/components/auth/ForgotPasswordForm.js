@@ -27,7 +27,7 @@ function ForgotPasswordForm({ onSubmit }) {
 	const [open, setOpen] = useState(false);
 
 	const router = useRouter();
-	const { t } = useTranslation(["common", "login"]);
+	const { t } = useTranslation();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

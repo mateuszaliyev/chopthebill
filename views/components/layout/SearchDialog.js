@@ -143,7 +143,7 @@ function SearchDialog({
 	title,
 	users = false,
 }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const { accessToken } = useContext(UserContext);
 

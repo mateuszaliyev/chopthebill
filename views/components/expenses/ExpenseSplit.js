@@ -51,7 +51,7 @@ function TabPanel({ children, index, value }) {
 }
 
 function ExpenseSplit({ creditors = false, data, methods, setData }) {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
 
 	const [friendDialogOpen, setFriendDialogOpen] = useState(false);
 	const [memberDialogOpen, setMemberDialogOpen] = useState(false);

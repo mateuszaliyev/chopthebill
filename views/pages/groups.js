@@ -25,7 +25,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Groups() {
-	const { t } = useTranslation(["common", "groups"]);
+	const { t } = useTranslation();
 
 	const [groups, setGroups] = useState([]);
 	const [loading, setLoading] = useState(true);

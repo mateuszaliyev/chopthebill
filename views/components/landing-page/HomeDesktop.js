@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function HomeDesktop() {
-	const { t } = useTranslation(["common", "landing-page"]);
+	const { t } = useTranslation();
 	const { width } = useWindowSize();
 
 	const theme = useTheme();

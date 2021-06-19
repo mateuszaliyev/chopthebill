@@ -83,7 +83,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Group() {
-	const { t } = useTranslation(["common", "expenses", "groups"]);
+	const { t } = useTranslation();
 
 	const [group, setGroup] = useState(null);
 	const [groupDialogOpen, setGroupDialogOpen] = useState(false);

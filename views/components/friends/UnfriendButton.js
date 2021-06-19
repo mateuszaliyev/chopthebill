@@ -43,7 +43,7 @@ function UnfriendButton({
 	onUnfriend,
 	username,
 }) {
-	const { t } = useTranslation(["common", "friends"]);
+	const { t } = useTranslation();
 
 	const { accessToken } = useContext(UserContext);
 	const [open, setOpen] = useState(false);

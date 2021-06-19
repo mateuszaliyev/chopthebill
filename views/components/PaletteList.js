@@ -11,7 +11,7 @@ import PaletteIcon from "@material-ui/icons/Palette";
 import { ThemeContext } from "./Theme";
 
 function PaletteList({ expand, size }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const { theme, setTheme } = useContext(ThemeContext);
 	const [paletteAnchor, setPaletteAnchor] = useState(null);

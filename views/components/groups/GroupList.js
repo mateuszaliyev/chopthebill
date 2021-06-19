@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const GroupList = ({ groups, setGroups }) => {
-	const { t } = useTranslation(["common", "groups"]);
+	const { t } = useTranslation();
 
 	const [createGroupDialogOpen, setCreateGroupDialogOpen] = useState(false);
 	const [editGroupDialogOpen, setEditGroupDialogOpen] = useState(

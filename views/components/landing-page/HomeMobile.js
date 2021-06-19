@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function HomeMobile() {
-	const { t } = useTranslation(["common", "landing-page"]);
+	const { t } = useTranslation();
 
 	const { height, width } = useWindowSize();
 	const classes = useStyles({ height, width });

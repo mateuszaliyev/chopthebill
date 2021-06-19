@@ -12,7 +12,7 @@ import TranslateIcon from "@material-ui/icons/Translate";
 import Link from "./Link";
 
 function Language({ expand, size }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [languageAnchor, setLanguageAnchor] = useState(null);
 	const router = useRouter();

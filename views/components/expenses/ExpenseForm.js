@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ExpenseForm({ className, data, edit = false, setData }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [discardOpen, setDiscardOpen] = useState(false);
 	const [helperText, setHelperText] = useState({

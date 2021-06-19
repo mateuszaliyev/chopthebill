@@ -10,7 +10,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import SearchDialog from "./SearchDialog";
 
 function SearchButton() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [open, setOpen] = useState(false);
 

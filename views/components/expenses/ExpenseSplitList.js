@@ -86,7 +86,7 @@ function ExpenseSplitList({
 	setData,
 	setSelectedAll,
 }) {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
 
 	const { width } = useWindowSize();
 	const bpxl = width >= 480;

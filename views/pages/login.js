@@ -52,7 +52,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Login() {
-	const { t } = useTranslation(["common", "login"]);
+	const { t } = useTranslation();
 	const theme = useTheme();
 	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
 	const classes = useStyles();

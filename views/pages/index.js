@@ -26,7 +26,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Home() {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [showChild, setShowChild] = useState(false);
 

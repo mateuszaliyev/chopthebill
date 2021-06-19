@@ -53,7 +53,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Register() {
-	const { t } = useTranslation(["common", "register"]);
+	const { t } = useTranslation();
 	const theme = useTheme();
 	const bpsm = useMediaQuery(theme.breakpoints.up("sm"));
 	const classes = useStyles();

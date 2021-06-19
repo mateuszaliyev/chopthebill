@@ -52,9 +52,11 @@ async function settleObligationService(decoded, id, settle) {
 		WHERE id_obligation = $1 AND id_user_creditor = $2 AND deleted = FALSE`,
 		[id, decoded.id]
 	);
+
 	if (!authQuery.rows[0]) {
 		return true;
 	}
+
 	await db.query(
 		`
 		UPDATE public.obligation
@@ -62,6 +64,7 @@ async function settleObligationService(decoded, id, settle) {
 		WHERE id_obligation = $2`,
 		[settle, id]
 	);
+
 	return false;
 }
 

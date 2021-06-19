@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 });
 
 function RegisterForm() {
-	const { t } = useTranslation(["common", "register"]);
+	const { t } = useTranslation();
 
 	const [email, setEmail] = useState("");
 	const [hideEmail, setHideEmail] = useState(false);

@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SwipeMenu({ items }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 	const [open, setOpen] = useState(false);
 	const classes = useStyles();
 

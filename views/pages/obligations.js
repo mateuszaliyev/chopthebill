@@ -1,17 +1,21 @@
 // React & Next
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import ObligationList from "../components/expenses/ObligationList";
-import { host } from "../config";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../components/auth/User";
 
 // Components
 import Auth from "../components/auth/Auth";
 import Empty from "../components/Empty";
 import Layout from "../components/layout/Layout";
-import Meta from "../components/Meta";
 import Loader from "../components/Loader";
+import Meta from "../components/Meta";
+import ObligationList from "../components/expenses/ObligationList";
+
+// Config
+import { host } from "../config";
+
+// Contexts
+import { UserContext } from "../components/auth/User";
 
 export async function getServerSideProps({ locale }) {
 	return {
@@ -22,7 +26,7 @@ export async function getServerSideProps({ locale }) {
 }
 
 function Obligations() {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
 
 	const { accessToken } = useContext(UserContext);
 	const [obligations, setObligations] = useState([]);

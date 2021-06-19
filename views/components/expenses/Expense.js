@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Expense({ className, data, onEdit = null }) {
-	const { t } = useTranslation(["common", "expenses"]);
+	const { t } = useTranslation();
 
 	const [expanded, setExpanded] = useState(false);
 

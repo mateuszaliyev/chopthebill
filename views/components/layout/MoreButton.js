@@ -15,7 +15,7 @@ import SearchDialog from "./SearchDialog";
 import { UserContext } from "../auth/User";
 
 function MoreButton({ ...props }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const [avatarAnchor, setAvatarAnchor] = useState(null);
 	const [openDialog, setOpenDialog] = useState({

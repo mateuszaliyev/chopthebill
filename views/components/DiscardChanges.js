@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function DiscardChanges({ onClose, open }) {
-	const { t } = useTranslation("common");
+	const { t } = useTranslation();
 
 	const classes = useStyles();
 

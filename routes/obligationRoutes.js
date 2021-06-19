@@ -10,10 +10,12 @@ const {
 
 // Middlewares
 const { authenticate } = require("../middlewares/authenticate");
+
 const revoke = (req, res, next) => {
 	res.locals.settle = false;
 	next();
 };
+
 const settle = (req, res, next) => {
 	res.locals.settle = true;
 	next();
