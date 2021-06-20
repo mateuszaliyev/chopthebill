@@ -4,6 +4,7 @@ const {
 	passwordValidate,
 	settingsValidate,
 	expenseValidate,
+	groupValidate,
 } = require("./validate");
 
 test("validates register data", () => {
@@ -235,4 +236,21 @@ test("validates expense", () => {
 		)
 	).toContain("description-length-invalid");
 	expect(expenseValidate("wydatek", "opis")).toStrictEqual([]);
+});
+
+test("validates group", () => {
+	expect(groupValidate("nazwa", "opis")).toStrictEqual([]);
+	expect(groupValidate("Na", "opis")).toContain("name-length-invalid");
+	expect(
+		groupValidate(
+			"nazwanazwanazwanazwanazwanazwanazwanazwanazwanazwanazwanazwanazw",
+			"opis"
+		)
+	).toContain("name-length-invalid");
+	expect(
+		groupValidate(
+			"nazwa",
+			"opisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopisopis"
+		)
+	).toContain("description-length-invalid");
 });
