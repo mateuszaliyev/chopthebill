@@ -29,6 +29,9 @@ import { ThemeContext } from "../Theme";
 
 // Styles
 const useStyles = makeStyles({
+	link: {
+		alignSelf: "flex-start",
+	},
 	margin: {
 		marginTop: "1rem",
 	},
@@ -222,7 +225,7 @@ function RegisterForm() {
 					{t("register:register")}
 				</Button>
 
-				<Link className={classes.margin} href="/login">
+				<Link className={`${classes.link} ${classes.margin}`} href="/login">
 					{t("register:have-an-account")}
 				</Link>
 			</FormControl>

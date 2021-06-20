@@ -224,6 +224,7 @@ function ObligationListItem({
 		</>
 	);
 }
+
 function ObligationList({ obligations, setObligations }) {
 	const { t } = useTranslation();
 

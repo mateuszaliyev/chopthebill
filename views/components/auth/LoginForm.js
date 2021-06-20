@@ -30,6 +30,9 @@ import { UserContext } from "./User";
 
 // Styles
 const useStyles = makeStyles({
+	link: {
+		alignSelf: "flex-start",
+	},
 	margin: {
 		marginTop: "1rem",
 	},
@@ -124,10 +127,13 @@ function LoginForm() {
 				>
 					{t("login:login")}
 				</Button>
-				<Link className={classes.margin} href="/forgot-password">
+				<Link
+					className={`${classes.link} ${classes.margin}`}
+					href="/forgot-password"
+				>
 					{t("login:forgot-password")}
 				</Link>
-				<Link className={classes.margin} href="/register">
+				<Link className={`${classes.link} ${classes.margin}`} href="/register">
 					{t("login:have-no-account")}
 				</Link>
 			</FormControl>

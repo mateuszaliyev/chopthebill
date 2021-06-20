@@ -61,7 +61,7 @@ function loginValidate(email, password) {
 	if (
 		!validator.isEmail(email) ||
 		!validator.isLength(email, { min: 3, max: 63 }) ||
-		!validator.isLength(password, { min: 3, max: 63 })
+		!validator.isLength(password, { min: 6, max: 63 })
 	) {
 		return false;
 	}

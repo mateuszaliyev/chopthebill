@@ -24,7 +24,8 @@
 		"next-start": "cd views && npm run start",
 		"postinstall": "cd views && npm install",
 		"start": "node app.js",
-		"start-local": "concurrently \"cross-env NODE_ENV=production node app.js\" \"npm run next-start\""
+		"start-local": "concurrently \"cross-env NODE_ENV=production node app.js\" \"npm run next-start\"",
+		"test": "jest"
 	},
 	"dependencies": {
 		"bcrypt": "^5.0.1",
@@ -40,6 +41,7 @@
 	},
 	"devDependencies": {
 		"cross-env": "^7.0.3",
+		"jest": "^27.0.4",
 		"nodemon": "^2.0.7"
 	}
 }

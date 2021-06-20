@@ -27,6 +27,7 @@ export async function getServerSideProps({ locale }) {
 				"common",
 				"date",
 				"friends",
+				"register",
 				"user",
 				"validation",
 			])),
