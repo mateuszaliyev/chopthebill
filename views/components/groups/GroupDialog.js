@@ -253,8 +253,9 @@ function GroupDialog({ edit = null, onClose, open }) {
 		});
 
 		if (res.ok) {
+			const { id } = await res.json();
 			handleClose({
-				group,
+				group: { ...group, id },
 				response: "success",
 			});
 		} else {

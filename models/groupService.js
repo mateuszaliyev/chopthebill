@@ -34,7 +34,7 @@ async function createGroupService(group) {
 	const issues = groupValidate(group.name, group.description);
 
 	if (issues.length > 0) {
-		return issues;
+		return { error: issues, id: null };
 	}
 
 	const existsQuery = await db.query(
@@ -46,7 +46,7 @@ async function createGroupService(group) {
 	);
 
 	if (existsQuery.rows[0]) {
-		return ["name-taken"];
+		return { error: ["name-taken"], id: null };
 	}
 
 	const groupQuery = await db.query(
@@ -69,7 +69,7 @@ async function createGroupService(group) {
 
 	await db.query(affiliationQuery);
 
-	return null;
+	return { error: null, id };
 }
 
 /**

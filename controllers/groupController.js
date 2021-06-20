@@ -22,11 +22,11 @@ async function authGroupController(req, res) {
 
 async function createGroupController(req, res) {
 	try {
-		const error = await createGroupService(req.body);
+		const { error, id } = await createGroupService(req.body);
 		if (error) {
 			return res.status(400).json(error);
 		}
-		return res.sendStatus(201);
+		return res.status(201).send({ id });
 	} catch (err) {
 		console.error(err);
 		return res.sendStatus(500);
