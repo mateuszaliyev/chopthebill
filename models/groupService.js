@@ -82,7 +82,8 @@ async function deleteGroupService(decoded, id) {
 	const authorizationQuery = await db.query(
 		`
 		SELECT id_affiliation 
-		FROM public.affiliation a JOIN public.group g ON a.id_group = g.id_group 
+		FROM public.affiliation a
+		JOIN public.group g ON a.id_group = g.id_group 
 		WHERE a.id_user = $1 AND a.owner = TRUE AND a.valid = TRUE AND g.id_group = $2 AND g.deleted = FALSE`,
 		[decoded.id, id]
 	);
@@ -365,7 +366,8 @@ async function updateGroupService(decoded, group) {
 	}));
 
 	// Update owner and valid
-	const affiliationUpdateQuery = `
+	const affiliationUpdateQuery = 
+		`
 		UPDATE public.affiliation 
 		SET owner = CASE id_user ${affiliationUpdateData.reduce(
 			(prev, curr) => `${prev}WHEN ${curr.id} THEN ${curr.owner} `,
@@ -405,7 +407,7 @@ async function updateGroupService(decoded, group) {
 		affiliationInsertQuery,
 		[group.id].concat(
 			affiliationInsertData.reduce(
-				(params, member) => params.concat(member.id, member.owner),
+				(params, member) => params.concat(member.owner, member.id),
 				[]
 			)
 		)

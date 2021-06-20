@@ -253,11 +253,18 @@ function GroupDialog({ edit = null, onClose, open }) {
 		});
 
 		if (res.ok) {
-			const { id } = await res.json();
-			handleClose({
-				group: { ...group, id },
-				response: "success",
-			});
+			if (!edit) {
+				const { id } = await res.json();
+				handleClose({
+					group: { ...group, id },
+					response: "success",
+				});
+			} else {
+				handleClose({
+					group: { ...group },
+					response: "success",
+				});
+			}
 		} else {
 			if (res.status === 403 || res.status >= 500) {
 				handleClose({
