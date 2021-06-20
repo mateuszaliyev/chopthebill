@@ -5,8 +5,8 @@ async function obligationsService(decoded) {
 	const obligationQuery = await db.query(
 		`
 		SELECT o.id_obligation, o.amount, o.settled,
-        d.id_user AS debtor_id, d.username AS debtor_username, d.avatar AS debtor_avatar,
-        c.id_user AS creditor_id, c.username AS creditor_username, c.avatar AS creditor_avatar,
+        d.id_user AS debtor_id, d.username AS debtor_username, d.language AS debtor_language, d.avatar AS debtor_avatar,
+        c.id_user AS creditor_id, c.username AS creditor_username, c.language AS creditor_langugage, c.avatar AS creditor_avatar,
         o.id_expense, e.title AS title, e.currency AS currency, e.settled AS expense_settled
         FROM public.obligation o
         JOIN public.user d ON o.id_user_debtor = d.id_user
@@ -18,18 +18,18 @@ async function obligationsService(decoded) {
 	if (obligationQuery.rows[0]) {
 		const obligations = obligationQuery.rows.map((obligation) => {
 			return {
-				id: obligation.id_obligation,
 				amount: obligation.amount,
-				settled: obligation.settled,
-				debtor: {
-					id: obligation.debtor_id,
-					username: obligation.debtor_username,
-					avatar: obligation.debtor_avatar,
-				},
 				creditor: {
-					id: obligation.creditor_id,
-					username: obligation.creditor_username,
 					avatar: obligation.creditor_avatar,
+					id: obligation.creditor_id,
+					language: obligation.creditor_language,
+					username: obligation.creditor_username,
+				},
+				debtor: {
+					avatar: obligation.debtor_avatar,
+					id: obligation.debtor_id,
+					language: obligation.debtor_language,
+					username: obligation.debtor_username,
 				},
 				expense: {
 					id: obligation.id_expense,
@@ -37,6 +37,8 @@ async function obligationsService(decoded) {
 					currency: obligation.currency,
 					settled: obligation.expense_settled,
 				},
+				id: obligation.id_obligation,
+				settled: obligation.settled,
 			};
 		});
 		return obligations;

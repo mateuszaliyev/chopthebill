@@ -9,6 +9,8 @@
 	"expense-settled-successfully": "Wydatek został uregulowany pomyślnie",
 	"new-expense": "Nowy wydatek",
 	"notify": "Powiadom",
+	"obligation-notification-description": "{{user}} przypomina, że masz nieopłacony wydatek \"{{expense}}\" na kwotę {{amount}}.",
+	"obligation-notification-title": "Masz nieuregulowane zobowiązanie!",
 	"paid": "Zapłacono",
 	"pending": "W trakcie",
 	"received": "Otrzymano",
@@ -22,5 +24,6 @@
 	"title-length-invalid": "Nazwa wydatku musi zawierać od 3 do 63 znaków",
 	"to-pay": "Do zapłaty",
 	"to-receive": "Do otrzymania",
-	"toggle-credtor": "Przełącz wierzyciel/dłużnik"
+	"toggle-credtor": "Przełącz wierzyciel/dłużnik",
+	"user-notified-successfully": "Użytkownik został powiadomiony pomyślnie"
 }

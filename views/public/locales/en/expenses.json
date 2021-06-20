@@ -9,6 +9,8 @@
 	"expense-settled-successfully": "Expense settled successfully",
 	"new-expense": "New expense",
 	"notify": "Notify",
+	"obligation-notification-description": "{{user}} reminds you to pay {{amount}} for {{expense}}.",
+	"obligation-notification-title": "You have unsettled obligation!",
 	"paid": "Paid",
 	"pending": "Pending",
 	"received": "Received",
@@ -22,5 +24,6 @@
 	"title-length-invalid": "Expense title must be between 3 and 63 characters long",
 	"to-pay": "To pay",
 	"to-receive": "To receive",
-	"toggle-creditor": "Toggle creditor/debtor"
+	"toggle-creditor": "Toggle creditor/debtor",
+	"user-notified-successfully": "User notified successfully"
 }

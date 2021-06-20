@@ -7,6 +7,7 @@ import { get } from "idb-keyval";
 
 // Components
 import Loader from "../Loader";
+import Notifications from "../layout/Notifications";
 
 // Config
 import { host } from "../../config";
@@ -85,7 +86,7 @@ function Auth(props) {
 	}, [accessToken]);
 
 	return authenticated && user ? (
-		props.children
+		<Notifications>{props.children}</Notifications>
 	) : (
 		<main
 			style={{

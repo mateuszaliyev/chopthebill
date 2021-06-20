@@ -125,7 +125,6 @@ function AppBarMobile({ title }) {
 						<>
 							<SearchButton />
 							<NotificationButton
-								amount={1}
 								color={palette === "light" ? "error" : "primary"}
 							/>
 							<AvatarButton />
@@ -156,7 +155,7 @@ function AppBarDesktop({ title }) {
 						{title}
 					</Typography>
 					<SearchButton />
-					<NotificationButton amount={1} color="primary" />
+					<NotificationButton color="primary" />
 					<AvatarButton />
 				</Toolbar>
 			</AppBar>
