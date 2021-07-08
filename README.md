@@ -1,4 +1,4 @@
-<p align="center"><img alt="Logo" src="https://github.com/PRz-IO/P01-G01-ChopTheBill/blob/main/views/public/icons/icon.svg"></p>
+<p align="center"><img alt="Logo" src="https://github.com/mateuszaliyev/chopthebill/blob/main/views/public/icons/icon.svg"></p>
 <h1 align="center">ChopTheBill</h1>
 
 Aplikacja internetowa do łatwego podziału kosztów między ludźmi.
